@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Economics fundamentals for data and AI teams. A six-session Foundations track with no code (prices as information, incentives and elasticity, marginal thinking, when markets fail, money and interest, games and moats) and a ten-session Data and AI deep-dive in Python (demand from real rows, why the naive elasticity lies, pricing, the economics of a prediction, network effects, auctions, labour economics of AI, information economics, build-buy-rent, the bench). Free, by Phoebe Fu.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Learn Economics with Phoebe">
+<meta property="og:description" content="Same 2,216 real rows, three answers: +0.008 across products, -0.108 pooled, -1.788 when each product is compared with itself. Economics for the people who price things and the people who build the models.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn Economics with Phoebe">
+<meta name="twitter:description" content="Two tracks, one real marketplace, a bench that refits the elasticity ladder in your browser. The anti-lever gets the sign wrong.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Learn Economics with Phoebe</title>
+<link rel="stylesheet" href="assets/style.css?v=1">
+<style>
+
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(var(--shadow-rgb),.16); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--faint); font-weight: 700; }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,var(--indigo-50)); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+
+  .not-this { border: 1px solid var(--hairline); border-left: 4px solid var(--clay); border-radius: var(--radius); background: #fff; padding: 1.1rem 1.3rem; margin-top: 1.2rem; }
+  .not-this h3 { font-size: .95rem; font-weight: 800; margin-bottom: .5rem; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn with Phoebe · Entrepreneurship &amp; Business</div>
+    <h1>Learn <span class="accent">Economics</span> with Phoebe</h1>
+    <p class="sub">Economics is the study of how people respond to prices, incentives and scarcity, and a data team meets all three every week without calling them that. These sixteen sessions teach the fundamentals twice: once as ideas anyone can use, with no code, and once as numbers you can compute, on a real marketplace. The running finding is the same in both: on 203 products that repriced often enough to be read, the same 2,216 rows give a price elasticity of +0.008 when products are compared with each other, -0.108 when they are pooled, and -1.788 when each is compared with itself. A first analysis reports the second number. A pricing decision needs the third. The bench in the last session refits all of them in your browser, and the lever everyone reaches for gets the sign of the revenue decision wrong.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="16">16</b><span>sessions, two tracks</span></div>
+      <div class="stat"><b data-count="203">203</b><span>real products read</span></div>
+      <div class="stat"><b data-count="2216">2,216</b><span>rows on the bench</span></div>
+      <div class="stat"><b data-count="5">5</b><span>rungs, computed live</span></div>
+      <div class="stat"><b data-count="45">45</b><span>min per session</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Foundations track 🧭 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· six sessions, no code</span></h2>
+      <p class="plede">For anyone who prices anything, argues for a budget, or reads a number a model produced. Prices as information, incentives and elasticity, marginal thinking and opportunity cost, when markets fail, money, inflation and interest, and games and moats. The marketplace's real counts appear on every page; the code does not.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/a1-prices-are-information.html" style="--diff:#5B8C5A">
+        <span class="cicon">🏷️</span>
+        <span class="cnum">Foundations session 1 · start here</span>
+        <h3>Prices are information</h3>
+        <p>Supply and demand as a description of where a price settles, not who sets it. A price as a message carrying knowledge nobody holds in full. Along the curve, or the curve moved. Of 32,216 real products, 203 moved price often enough to say anything about response.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/a2-incentives-and-elasticity.html" style="--diff:#5B8C5A">
+        <span class="cicon">📏</span>
+        <span class="cnum">Foundations session 2</span>
+        <h3>Incentives and elasticity</h3>
+        <p>How much people respond. Elastic versus inelastic, the revenue rule, who really pays a tax, and the Olist number read as an elasticity: a range, -1.5 to -2.2, and why a range is the honest shape.</p>
+        <span class="meta"><span class="pill">the revenue rule</span></span>
+      </a>
+      <a class="course-card" href="courses/a3-marginal-thinking.html" style="--diff:#5B8C5A">
+        <span class="cicon">⚖️</span>
+        <span class="cnum">Foundations session 3</span>
+        <h3>Marginal thinking and opportunity cost</h3>
+        <p>Decisions at the margin, sunk costs and the fork, the next best use, comparative advantage, and why a physical unit, a copy of software and one more prediction have three different marginal costs.</p>
+        <span class="meta"><span class="pill">the margin, not the average</span></span>
+      </a>
+      <a class="course-card" href="courses/a4-when-markets-fail.html" style="--diff:#5B8C5A">
+        <span class="cicon">🍋</span>
+        <span class="cnum">Foundations session 4</span>
+        <h3>When markets fail</h3>
+        <p>Externalities, public goods, the market for lemons, adverse selection and moral hazard, and the metric that became a target. Applied to a data purchase where the quality cannot be seen before paying.</p>
+        <span class="meta"><span class="pill">lemons and targets</span></span>
+      </a>
+      <a class="course-card" href="courses/a5-money-inflation-and-interest.html" style="--diff:#5B8C5A">
+        <span class="cicon">🕰️</span>
+        <span class="cnum">Foundations session 5</span>
+        <h3>Money, inflation and interest</h3>
+        <p>Money as three jobs, inflation as a change in the price of money, real versus nominal, interest as the price of time, discounting, and why measured productivity lags a technology.</p>
+        <span class="meta"><span class="pill">the price of time</span></span>
+      </a>
+      <a class="course-card" href="courses/a6-games-and-moats.html" style="--diff:#5B8C5A">
+        <span class="cicon">♟️</span>
+        <span class="cnum">Foundations session 6</span>
+        <h3>Games and moats</h3>
+        <p>Strategic interaction and the prisoner's dilemma, network effects as a claim with a published rebuttal, switching costs, and when a data advantage compounds and when it does not.</p>
+        <span class="meta"><span class="pill">n squared, or n log n</span></span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Data and AI deep-dive track 🔬 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· ten sessions, Python</span></h2>
+      <p class="plede">For the people who compute the number and have to defend it. From 112,650 real order items to a panel, five ways to fit the line and why four of them are wrong for a pricing decision, then the economics of predictions, networks, auctions, labour, information and platforms, and a bench that refits everything live.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/p1-demand-from-data.html" style="--diff:#FBBF24">
+        <span class="cicon">🧾</span>
+        <span class="cnum">Deep-dive session 1 · start here</span>
+        <h3>Demand from data</h3>
+        <p>One row is one unit at one price. The three decisions, the panel, the three sieves that leave 203 of 32,216 products, the log-log fit, and why one product's slope of -10 is not an elasticity.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/p2-why-the-naive-number-lies.html" style="--diff:#FBBF24">
+        <span class="cicon">🪜</span>
+        <span class="cnum">Deep-dive session 2</span>
+        <h3>Why the naive number lies</h3>
+        <p>Same rows, five fits: +0.008 across products, -0.108 pooled, -1.788 within product, -1.854 with months, and a placebo at zero. What a fixed effect removes, and what nothing removes.</p>
+        <span class="meta"><span class="pill">the ladder</span></span>
+      </a>
+      <a class="course-card" href="courses/p3-pricing-with-the-number.html" style="--diff:#FBBF24">
+        <span class="cicon">💳</span>
+        <span class="cnum">Deep-dive session 3</span>
+        <h3>Pricing with the number</h3>
+        <p>The revenue rule with the real slope: +8.9 percent or -7.2 percent for the same 10 percent rise. Price discrimination in three degrees, versioning, and freemium as a sorting menu.</p>
+        <span class="meta"><span class="pill">the revenue table</span></span>
+      </a>
+      <a class="course-card" href="courses/p4-the-economics-of-a-prediction.html" style="--diff:#FBBF24">
+        <span class="cicon">🧮</span>
+        <span class="cnum">Deep-dive session 4</span>
+        <h3>The economics of a prediction</h3>
+        <p>Fixed versus marginal cost of inference, per-token pricing as pure marginal cost, utilisation, and the break-even volume between renting a model and owning one.</p>
+        <span class="meta"><span class="pill">rent or own</span></span>
+      </a>
+      <a class="course-card" href="courses/p5-network-effects-and-data-moats.html" style="--diff:#FBBF24">
+        <span class="cicon">🕸️</span>
+        <span class="cnum">Deep-dive session 5</span>
+        <h3>Network effects and data moats</h3>
+        <p>Direct and indirect effects, Metcalfe against n log n, two-sided platforms, and when more data compounds and when the learning curve flattens.</p>
+        <span class="meta"><span class="pill">the curve that flattens</span></span>
+      </a>
+      <a class="course-card" href="courses/p6-auctions.html" style="--diff:#FBBF24">
+        <span class="cicon">🔨</span>
+        <span class="cnum">Deep-dive session 6</span>
+        <h3>Auctions: how ads and compute are priced</h3>
+        <p>Why auctions exist, second-price and the dominant strategy of telling the truth, the generalised second-price auction that is not truthful, and spot markets for compute.</p>
+        <span class="meta"><span class="pill">bid your value</span></span>
+      </a>
+      <a class="course-card" href="courses/p7-labour-economics-of-ai.html" style="--diff:#FBBF24">
+        <span class="cicon">🧑‍🔧</span>
+        <span class="cnum">Deep-dive session 7</span>
+        <h3>Labour economics of AI</h3>
+        <p>Tasks versus jobs, displacement and reinstatement, the three task-level studies with their exact figures, and what a task study cannot say about employment.</p>
+        <span class="meta"><span class="pill">teach the disagreement</span></span>
+      </a>
+      <a class="course-card" href="courses/p8-information-economics-of-models.html" style="--diff:#FBBF24">
+        <span class="cicon">🔍</span>
+        <span class="cnum">Deep-dive session 8</span>
+        <h3>Information economics of models</h3>
+        <p>Lemons in data and model markets, benchmarks and evals as signals that decay, principal and agent with a metric between them, and the measure that became a target.</p>
+        <span class="meta"><span class="pill">signals that decay</span></span>
+      </a>
+      <a class="course-card" href="courses/p9-build-buy-or-rent.html" style="--diff:#FBBF24">
+        <span class="cicon">🏗️</span>
+        <span class="cnum">Deep-dive session 9</span>
+        <h3>Build, buy or rent a data platform</h3>
+        <p>Make-or-buy as transaction costs, total cost over a horizon, the option value of renting, and the switching-cost line the vendor did not draw.</p>
+        <span class="meta"><span class="pill">the line not drawn</span></span>
+      </a>
+      <a class="course-card" href="courses/p10-the-elasticity-bench.html" style="--diff:#F87171">
+        <span class="cicon">🎛️</span>
+        <span class="cnum">Deep-dive session 10 · bench night</span>
+        <h3>The elasticity bench, and defending a number</h3>
+        <p>2,216 real rows, five rungs, every slope computed in your browser. The anti-lever that prices on the market-wide number and gets the sign wrong, the break button, and the sentence for the meeting. Final scorecard.</p>
+        <span class="meta"><span class="pill amber">★ the bench</span><span class="pill">🔒 final scorecard</span></span>
+      </a>
+    </div>
+
+    <div class="diff-legend">
+      <span><i style="background:#5B8C5A"></i>foundations</span>
+      <span><i style="background:#FBBF24"></i>core</span>
+      <span><i style="background:#F87171"></i>bench night</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Your passport 🎫</h2>
+      <p class="plede">Clear all three quiz questions in a session and it gets stamped. Sixteen stamps means you can read a price as a message, say what an elasticity was compared with, and defend a number with its range, its mechanism and its caveat. Stamps live in this browser only.</p>
+    </div>
+    <div class="pp-strip"></div>
+  </section>
+
+  <section class="section">
+    <div class="not-this">
+      <h3>What this is not, so you land in the right place 🧭</h3>
+      <table class="clean">
+        <tr><th>If your question is</th><th>Go here instead</th></tr>
+        <tr><td>How do I read a P&amp;L, a cash flow statement, or size a funding gap?</td><td><a href="https://phoebefu6.github.io/learn-finance-with-phoebe/">Finance: Reading the Numbers ↗</a></td></tr>
+        <tr><td>How do I prove the price caused the change, not just moved with it?</td><td><a href="https://phoebefu6.github.io/learn-causal-inference-with-phoebe/">Causal Inference ↗</a></td></tr>
+        <tr><td>How do I design the price test that settles it?</td><td><a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/">Experimentation ↗</a></td></tr>
+        <tr><td>How do I choose the best plan under constraints, and what is a constraint worth?</td><td><a href="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/">Prescriptive Analytics ↗</a></td></tr>
+        <tr><td>What is a customer worth, and what did it cost to get them?</td><td><a href="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/">Customer Retention ↗</a></td></tr>
+        <tr><td><strong>I price things, or I compute numbers about prices, and I want to understand how people respond and defend what I find.</strong></td><td><strong>you are in the right place</strong></td></tr>
+      </table>
+      <p style="margin-top:.7rem;font-size:.86rem;color:var(--muted)"><strong>Economics as a data habit.</strong> The mechanisms are standard; the numbers are computed from a real marketplace for these pages; and where the literature disagrees, the page teaches the disagreement rather than picking a side.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>Choose your path 🗺️</h2>
+      <p class="plede">Three doors into the same conviction: a price is a message, an elasticity is a comparison, and a number is defended by its shape.</p>
+      <div class="path"><b>🧭 I price things and do not code</b>
+        <a class="pstep" href="courses/a1-prices-are-information.html">F1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a2-incentives-and-elasticity.html">F2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a3-marginal-thinking.html">F3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a4-when-markets-fail.html">F4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a5-money-inflation-and-interest.html">F5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a6-games-and-moats.html">F6</a>
+        <span style="font-size:.82rem;color:var(--muted)">the six ideas, the real counts, no code</span>
+      </div>
+      <div class="path"><b>🔬 I compute the number and must defend it</b>
+        <a class="pstep" href="courses/p1-demand-from-data.html">D1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p2-why-the-naive-number-lies.html">D2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p3-pricing-with-the-number.html">D3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p10-the-elasticity-bench.html">D10</a>
+        <span style="font-size:.82rem;color:var(--muted)">the panel, the ladder, the revenue rule, the bench</span>
+      </div>
+      <div class="path"><b>🧠 I build or buy AI and want the economics</b>
+        <a class="pstep" href="courses/a3-marginal-thinking.html">F3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p4-the-economics-of-a-prediction.html">D4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p5-network-effects-and-data-moats.html">D5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p7-labour-economics-of-ai.html">D7</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p8-information-economics-of-models.html">D8</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p9-build-buy-or-rent.html">D9</a>
+        <span style="font-size:.82rem;color:var(--muted)">marginal cost, moats, labour, signals, platforms</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>What is honest here 🧾</h2>
+      <p class="plede">The numeric spine is real public data, recomputed for these pages and refitted live on the bench. Where a figure comes from a paper, the page names it and says whether the paper was read at source; where nothing citable exists, the page says that instead.</p>
+    </div>
+    <table class="clean">
+      <tr><th>Claim</th><th>Status</th></tr>
+      <tr><td>Every Olist count and every slope: 32,216 to 203, the five rungs, the placebo, the category numbers</td><td><strong>Really computed</strong> from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0), delivered orders before 1 September 2018; the bench recomputes the deterministic rungs in the browser to three decimals of the offline build</td></tr>
+      <tr><td>The revenue projections for a price change</td><td><strong>Modelled</strong> under a constant-elasticity assumption, labelled so on every page that shows one</td></tr>
+      <tr><td>Whether the Olist slope is causal</td><td><strong>Not claimed.</strong> An association with a placebo behind it; product effects, month effects and the placebo remove three things, and none removes "the seller chose the price"</td></tr>
+      <tr><td>Published elasticities (gasoline, food) and the three AI task studies</td><td><strong>Reported from named papers,</strong> with the exact figure and whether the paper was read at source or through its abstract</td></tr>
+      <tr><td>Inference prices</td><td><strong>One vendor's list prices as published on 25 September 2026,</strong> three models named, with "re-check before you decide"; no GPU price anywhere</td></tr>
+      <tr><td>Beira Goods, the inference workload, the auction bidders, the learning curve, the TCO table</td><td><strong>Constructed,</strong> and the page says so each time</td></tr>
+      <tr><td>Whether AI raises or lowers employment</td><td><strong>Not claimed.</strong> The task studies measure tasks in experiments, not jobs in an economy; the page teaches the disagreement</td></tr>
+    </table>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The knowledge map 🧠</h2>
+    <p class="mm-lede">Both tracks at a glance - hover a session to spotlight its concepts, click any node to jump in.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span>Neighbours on the shelf: <a href="https://phoebefu6.github.io/learn-finance-with-phoebe/">Finance ↗</a> &nbsp;·&nbsp; <a href="https://phoebefu6.github.io/learn-causal-inference-with-phoebe/">Causal Inference ↗</a> &nbsp;·&nbsp; <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/">Experimentation ↗</a></span>
+  </footer>
+
+</main>
+
+<script>
+window.MINDMAP_DATA = {
+  title: "Economics\nfor data\nand AI",
+  centerColor: "#142944",
+  sessions: [
+    { label: "Prices are\ninformation", href: "courses/a1-prices-are-information.html", color: "#5B8C5A",
+      concepts: [
+        { label: "The crossing is a tendency", href: "courses/a1-prices-are-information.html" },
+        { label: "A price is a message", href: "courses/a1-prices-are-information.html" },
+        { label: "Along the curve, or it moved", href: "courses/a1-prices-are-information.html" } ] },
+    { label: "Incentives and\nelasticity", href: "courses/a2-incentives-and-elasticity.html", color: "#5B8C5A",
+      concepts: [
+        { label: "The revenue rule", href: "courses/a2-incentives-and-elasticity.html" },
+        { label: "Who pays a tax", href: "courses/a2-incentives-and-elasticity.html" },
+        { label: "A range, not a point", href: "courses/a2-incentives-and-elasticity.html" } ] },
+    { label: "Marginal thinking\nand opportunity cost", href: "courses/a3-marginal-thinking.html", color: "#5B8C5A",
+      concepts: [
+        { label: "Sunk cost and the fork", href: "courses/a3-marginal-thinking.html" },
+        { label: "Comparative advantage", href: "courses/a3-marginal-thinking.html" },
+        { label: "Three marginal costs", href: "courses/a3-marginal-thinking.html" } ] },
+    { label: "When markets\nfail", href: "courses/a4-when-markets-fail.html", color: "#5B8C5A",
+      concepts: [
+        { label: "The lemons spiral", href: "courses/a4-when-markets-fail.html" },
+        { label: "Private vs social cost", href: "courses/a4-when-markets-fail.html" },
+        { label: "The metric that became a target", href: "courses/a4-when-markets-fail.html" } ] },
+    { label: "Money, inflation\nand interest", href: "courses/a5-money-inflation-and-interest.html", color: "#5B8C5A",
+      concepts: [
+        { label: "Real vs nominal", href: "courses/a5-money-inflation-and-interest.html" },
+        { label: "Interest is the price of time", href: "courses/a5-money-inflation-and-interest.html" },
+        { label: "The productivity paradox", href: "courses/a5-money-inflation-and-interest.html" } ] },
+    { label: "Games and\nmoats", href: "courses/a6-games-and-moats.html", color: "#5B8C5A",
+      concepts: [
+        { label: "The 2x2 game", href: "courses/a6-games-and-moats.html" },
+        { label: "n squared vs n log n", href: "courses/a6-games-and-moats.html" },
+        { label: "Switching costs", href: "courses/a6-games-and-moats.html" } ] },
+    { label: "Demand from\ndata", href: "courses/p1-demand-from-data.html", color: "#FBBF24",
+      concepts: [
+        { label: "One row, one unit, one price", href: "courses/p1-demand-from-data.html" },
+        { label: "Three sieves: 32,216 to 203", href: "courses/p1-demand-from-data.html" },
+        { label: "The slope that is too good", href: "courses/p1-demand-from-data.html" } ] },
+    { label: "Why the naive\nnumber lies", href: "courses/p2-why-the-naive-number-lies.html", color: "#FBBF24",
+      concepts: [
+        { label: "+0.008, -0.108, -1.788", href: "courses/p2-why-the-naive-number-lies.html" },
+        { label: "What a fixed effect removes", href: "courses/p2-why-the-naive-number-lies.html" },
+        { label: "The placebo at zero", href: "courses/p2-why-the-naive-number-lies.html" } ] },
+    { label: "Pricing with\nthe number", href: "courses/p3-pricing-with-the-number.html", color: "#FBBF24",
+      concepts: [
+        { label: "+8.9 or -7.2 percent", href: "courses/p3-pricing-with-the-number.html" },
+        { label: "Three degrees of discrimination", href: "courses/p3-pricing-with-the-number.html" },
+        { label: "Versioning sorts customers", href: "courses/p3-pricing-with-the-number.html" } ] },
+    { label: "The economics of\na prediction", href: "courses/p4-the-economics-of-a-prediction.html", color: "#FBBF24",
+      concepts: [
+        { label: "Per-token is marginal cost", href: "courses/p4-the-economics-of-a-prediction.html" },
+        { label: "Utilisation", href: "courses/p4-the-economics-of-a-prediction.html" },
+        { label: "Break-even: rent or own", href: "courses/p4-the-economics-of-a-prediction.html" } ] },
+    { label: "Network effects\nand data moats", href: "courses/p5-network-effects-and-data-moats.html", color: "#FBBF24",
+      concepts: [
+        { label: "Direct vs indirect", href: "courses/p5-network-effects-and-data-moats.html" },
+        { label: "Two-sided platforms", href: "courses/p5-network-effects-and-data-moats.html" },
+        { label: "The learning curve flattens", href: "courses/p5-network-effects-and-data-moats.html" } ] },
+    { label: "Auctions", href: "courses/p6-auctions.html", color: "#FBBF24",
+      concepts: [
+        { label: "Second price, true value", href: "courses/p6-auctions.html" },
+        { label: "GSP is not truthful", href: "courses/p6-auctions.html" },
+        { label: "Spot markets for compute", href: "courses/p6-auctions.html" } ] },
+    { label: "Labour economics\nof AI", href: "courses/p7-labour-economics-of-ai.html", color: "#FBBF24",
+      concepts: [
+        { label: "Tasks, not jobs", href: "courses/p7-labour-economics-of-ai.html" },
+        { label: "Displacement and reinstatement", href: "courses/p7-labour-economics-of-ai.html" },
+        { label: "The jagged frontier", href: "courses/p7-labour-economics-of-ai.html" } ] },
+    { label: "Information economics\nof models", href: "courses/p8-information-economics-of-models.html", color: "#FBBF24",
+      concepts: [
+        { label: "Lemons in data markets", href: "courses/p8-information-economics-of-models.html" },
+        { label: "Benchmarks as signals", href: "courses/p8-information-economics-of-models.html" },
+        { label: "Principal, agent, metric", href: "courses/p8-information-economics-of-models.html" } ] },
+    { label: "Build, buy\nor rent", href: "courses/p9-build-buy-or-rent.html", color: "#FBBF24",
+      concepts: [
+        { label: "Transaction costs", href: "courses/p9-build-buy-or-rent.html" },
+        { label: "Total cost over a horizon", href: "courses/p9-build-buy-or-rent.html" },
+        { label: "The line the vendor did not draw", href: "courses/p9-build-buy-or-rent.html" } ] },
+    { label: "The elasticity\nbench", href: "courses/p10-the-elasticity-bench.html", color: "#F87171",
+      concepts: [
+        { label: "Five rungs, live", href: "courses/p10-the-elasticity-bench.html" },
+        { label: "The anti-lever's wrong sign", href: "courses/p10-the-elasticity-bench.html" },
+        { label: "The sentence for the meeting", href: "courses/p10-the-elasticity-bench.html" } ] }
+  ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>

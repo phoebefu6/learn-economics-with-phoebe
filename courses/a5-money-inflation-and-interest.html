@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Foundations session 5 of 6. Money as three jobs; inflation as a change in the price of money rather than a rise in everything else; nominal vs real, and why 21 months of marketplace prices in Brazilian reais are nominal until a price index is applied; interest as the price of time, and the discount curve that flips the order of two offers.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Money, inflation and interest - learn economics with phoebe">
+<meta property="og:description" content="Foundations session 5 of 6. The unit every price is written in, what it means when that unit moves, and what a year of waiting costs. Nominal, real, and the price of time.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a5-money-inflation-and-interest.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Money, inflation and interest - learn economics with phoebe">
+<meta name="twitter:description" content="Foundations session 5 of 6. Three jobs of money, the price of money, the price of time.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Foundations session 5 · Money, inflation and interest - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Foundations session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Foundations session 5 of 6</div>
+    <h1>Money, inflation and <span class="accent">interest</span></h1>
+    <p class="sub">Four sessions have read prices, put a number on how buyers answer them, decided at the margin, and found the three ways a price stops telling the truth. Every one of those prices was written in a unit, and tonight is about the unit. Money does three jobs, and only one of them is about time. Inflation is easiest to read not as everything getting dearer but as the money itself getting cheaper, which is why a 5 percent rise on a tag is not a 5 percent rise in anything real until you know what the money did in the same year. The marketplace prices used throughout these sessions are Brazilian reais from 2017 and 2018, and they are nominal: tonight says exactly what it would take to make them real, and does not do it. The session ends on interest as the price of time, and on two constructed offers whose order flips depending on the rate, which is the whole of discounting in one worksheet.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Leaders, product and data teams, anyone who prices anything</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Three jobs, the price of money, the price of time</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: nominal, real and discounted, on paper</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">A price table has a hidden column. Every number in it is written in some money, on some date, and the money on that date is a ruler that can change length. A January 2017 price and an August 2018 price in the same table look like they are in the same unit, and they are only in the same name. Most people know this and almost nobody adjusts for it, because the adjustment needs a second table nobody has to hand. Tonight is about what the ruler is, how it moves, and what it costs to hold a real for a year, which turns out to be a price like any other. Nothing here needs a formula longer than one division.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone works it through</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The three jobs money does and which one inflation attacks; the habit of reading a general price rise as a fall in the price of money; the difference between a nominal number and a real one, in one division; an honest sentence about 21 months of marketplace prices in Brazilian reais and what it would take to compare them across years; interest as the price of time; and a discount curve you can draw by hand, with two constructed offers whose order flips when the rate changes. Every rate on the page is invented and says so; no real inflation rate or interest rate is quoted anywhere.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers money's three jobs</span>
+      <h2>What money is for</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Money is not wealth. A warehouse of towels is wealth; the reais the towels sell for are a tool for counting the towels, moving them to someone else, and holding the proceeds until next month. Those are money's three jobs: a unit of account, a medium of exchange, a store of value. The first two are about now. The third is about later, and later is where all the trouble in tonight's session lives, because a thing that carries value through time can leak on the way, and because carrying it has a price of its own.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three sketched panels. Unit of account, with a price tag: every column in a price table is written in it, and a tag means nothing until you know the unit and the date. Medium of exchange, with two people and an arrow between them: the token that closes a trade, taken not to keep but to pass on. Store of value, filled amber, with a clock and a small tag reading the rate: carries value from now to later, inflation eats this job, and waiting has a price of its own, interest, the price of time.">
+        <defs>
+          <filter id="s5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s5aL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s5aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s5aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s5aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s5aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s5aH" x="30" y="26">THREE JOBS, AND THE ONE THAT HAS A PRICE</text>
+        <text class="s5aS" x="30" y="44">a unit to count in, a token to pay with, a store to carry value through time; the third one is charged for</text>
+
+        <g filter="url(#s5aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- panel 1: unit of account -->
+          <rect x="30" y="66" width="250" height="160" rx="10" transform="rotate(-0.5 155 146)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <path d="M60 104 L104 104 L118 116 L104 128 L60 128 Z" fill="#FFFFFF"/>
+          <circle cx="110" cy="116" r="2.5"/>
+          <!-- panel 2: medium of exchange -->
+          <rect x="300" y="66" width="250" height="160" rx="10" transform="rotate(0.6 425 146)" fill="#EEF2F8"/>
+          <circle cx="340" cy="110" r="10"/><path d="M324 138 C328 122 352 122 356 138"/>
+          <circle cx="440" cy="110" r="10"/><path d="M424 138 C428 122 452 122 456 138"/>
+          <path d="M360 118 L418 118" marker-end="url(#s5aAr)"/>
+          <!-- panel 3: store of value, the one that is priced -->
+          <rect x="570" y="66" width="250" height="160" rx="10" transform="rotate(-0.4 695 146)" fill="#FBEEDC" stroke="#A8570B"/>
+          <circle cx="620" cy="122" r="16" stroke="#A8570B"/>
+          <path d="M620 122 L620 110 M620 122 L629 127" stroke="#A8570B"/>
+          <path d="M660 110 L706 110 L720 122 L706 134 L660 134 Z" fill="#A8570B" stroke="#A8570B"/>
+        </g>
+
+        <text class="s5aH" x="46" y="90">UNIT OF ACCOUNT</text>
+        <text class="s5aS" x="46" y="150">every column in a price table</text>
+        <text class="s5aS" x="46" y="166">is written in it</text>
+        <text class="s5aS" x="46" y="182">R$ 69.90 means nothing until</text>
+        <text class="s5aS" x="46" y="198">you know the unit and the date</text>
+        <text class="s5aB" x="46" y="218">a ruler that can change length</text>
+
+        <text class="s5aH" x="316" y="90">MEDIUM OF EXCHANGE</text>
+        <text class="s5aS" x="316" y="150">the token that closes a trade</text>
+        <text class="s5aS" x="316" y="166">without a swap of goods</text>
+        <text class="s5aS" x="316" y="182">a seller takes it not to keep</text>
+        <text class="s5aS" x="316" y="198">but to pass on</text>
+        <text class="s5aB" x="316" y="218">its value is being accepted</text>
+
+        <text class="s5aH" x="586" y="90">STORE OF VALUE</text>
+        <text class="s5aW" x="686" y="126" text-anchor="middle">the rate</text>
+        <text class="s5aS" x="586" y="150">carries value from now to later</text>
+        <text class="s5aS" x="586" y="166">inflation eats this job</text>
+        <text class="s5aS" x="586" y="182">waiting has a price of its own:</text>
+        <text class="s5aS" x="586" y="198">interest, the price of time</text>
+        <text class="s5aB" x="586" y="218">the only job with a price tag</text>
+
+        <text class="s5aN" x="30" y="306">The first two jobs are about now. The third is about later, and later is what Parts 2 and 3 are about.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber panel is the job that leaks and the job that is charged for; both facts are about the same thing, time</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Unit, token, store: the three jobs and the one that fails first<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Unit of account.</strong> Money is the ruler prices are measured with. "R$ 69.90" is a length on that ruler, and like any measurement it is only meaningful next to the ruler it was taken with, on the day it was taken. Every price column in every dataset is in some unit of account, and the column header almost never says which date's version of it. That is the hidden column from Part 0, and it is the reason two years of prices in one table can be less comparable than they look.</p>
+        <p><strong>Medium of exchange.</strong> Money is the token that lets a trade happen without a swap of goods. A seller of towels does not need to find a buyer who has exactly what the seller wants; they take money, which they do not want for itself, because everyone else will take it too. The value of money in this job is entirely that it is accepted. Nothing about the paper, the coin or the entry in a database matters except that the next person will take it.</p>
+        <p><strong>Store of value.</strong> Money carries value from now to later. Sell the towels in January, hold the reais, buy stock in March. This is the job that fails first, because between January and March the ruler can shrink: the same reais buy less. It is also the job that has a price attached, because someone will pay you to let them hold your reais until March, and that payment is interest. The two facts, that the store leaks and that the store is charged for, are Parts 2 and 3 respectively, and they are about the same thing: time.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Money illusion, and why a price table is a claim about a unit<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>People reason in the unit they are shown. A 5 percent pay rise feels like a rise even in a year when the price of money fell 5 percent and nothing real changed; a price held flat for a year feels like a stable price even though it buys less of the seller's inputs than it did. That habit, treating the nominal number as the real one, is called money illusion, and it is not stupidity. It is the entirely reasonable strategy of a person who does not have the second table, the one that says what the ruler did, and so uses the only number they hold.</p>
+        <p>The data habit it gives you: a price column is a claim about a unit, not just a list of numbers. Before comparing any two prices from different dates, write down the unit and the date of each, and ask whether you have the second table. If you do not, the honest comparison is nominal and says so. That sentence, "these are nominal, and here is what it would take to make them real", is the one Part 2 writes for the marketplace data.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Every price in the Olist data is a length on the same-named ruler.</strong> The Brazilian marketplace dataset used throughout these sessions holds 2,216 product-months across 21 months, from October 2016 to August 2018, and every price is in Brazilian reais as typed by a seller on a date. The R$ 69.90 that Foundations session 1 read as a message was a January 2018 length. The R$ 103 that the same product listed at in August 2018 was a length on the August 2018 ruler, about 47 percent longer by arithmetic on the two tags. How much of that was the product getting dearer and how much was the ruler shrinking is a question the price column cannot answer on its own, and Part 2 says exactly what would answer it.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers inflation, real vs nominal</span>
+      <h2>Inflation is a change in the price of money</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">When one price rises, that thing got dearer. When every price rises together, it is more useful to say that money got cheaper: one real buys less of everything, so everything costs more reais. That flip of view, from "prices went up" to "the price of money went down", is the single most useful habit for reading any number across years, because it turns inflation into just another price, the price of a real, and a nominal number into a real one by one division: the tag divided by the price of money on that date.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Axes of price against time across one year. A solid nominal line rises 5 percent from the start of the year to an amber dot at the end, a constructed figure. Below it a hatched wedge widens towards the end of the year, the part of the rise that is only the money moving, and a dashed real line ends inside the wedge, one constructed path that could end anywhere in the band. A side panel says the Olist prices are nominal Brazilian reais over 21 months, that making them real would need a Brazilian consumer price index series with one index per month, that this is not done and no rate is quoted, and that month effects already absorb any move every product shared in a month.">
+        <defs>
+          <filter id="s5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s5bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s5bL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s5bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s5bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s5bA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s5bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s5bH" x="30" y="26">THE SAME PRICE, TWO WAYS TO READ IT ACROSS A YEAR</text>
+        <text class="s5bS" x="30" y="44">constructed: the tag says 5 percent more; how much more it buys depends on what money did meanwhile</text>
+
+        <g filter="url(#s5bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M70 270 L70 70" stroke="#1F3A5F" marker-end="url(#s5bAr)"/>
+          <path d="M70 270 L520 270" stroke="#1F3A5F" marker-end="url(#s5bAr)"/>
+          <!-- the wedge: the part of the rise that is only the money moving -->
+          <path d="M130 200 L460 160 L460 236 Z" fill="url(#s5bHc)" stroke="none"/>
+          <!-- the nominal line -->
+          <path d="M130 200 L460 160"/>
+          <!-- one constructed real path, dashed -->
+          <path d="M130 200 L460 198" stroke="#4E5A75" stroke-dasharray="5 4" stroke-width="1.6"/>
+          <!-- start and end markers -->
+          <circle cx="130" cy="200" r="6" fill="#FFFFFF"/>
+          <circle cx="460" cy="160" r="8" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="460" cy="198" r="5" fill="#FFFFFF" stroke="#4E5A75"/>
+          <!-- a price tag doodle on the nominal end -->
+          <path d="M474 132 L516 132 L528 144 L516 156 L474 156 Z" fill="#FBEEDC" stroke="#A8570B"/>
+          <circle cx="520" cy="144" r="2.5" stroke="#A8570B"/>
+          <!-- side panel -->
+          <rect x="560" y="70" width="290" height="200" rx="10" transform="rotate(0.4 705 170)" fill="#EEF2F8"/>
+        </g>
+
+        <text class="s5bA" x="80" y="66">PRICE</text>
+        <text class="s5bA" x="496" y="288">TIME</text>
+        <text class="s5bS" x="130" y="288" text-anchor="middle">start of year</text>
+        <text class="s5bS" x="440" y="288" text-anchor="middle">end of year</text>
+        <text class="s5bL" x="180" y="140">nominal: +5 percent on the tag</text>
+        <text class="s5bB" x="300" y="250" text-anchor="middle">the wedge is the money's own move</text>
+        <text class="s5bS" x="70" y="306">real: the tag divided by the price of money; the dashed line is one constructed path</text>
+        <text class="s5bS" x="70" y="322">it could end anywhere in the hatched band, depending on what money did</text>
+
+        <text class="s5bH" x="576" y="96">TO MAKE THE OLIST PRICES REAL</text>
+        <text class="s5bS" x="576" y="118">every price is nominal BRL,</text>
+        <text class="s5bS" x="576" y="134">21 months, 2016-10 to 2018-08</text>
+        <text class="s5bS" x="576" y="158">you would need: a Brazilian CPI</text>
+        <text class="s5bS" x="576" y="174">series, one index per month,</text>
+        <text class="s5bS" x="576" y="190">and divide each price by its month</text>
+        <text class="s5bB" x="576" y="214">not done here; no rate is quoted</text>
+        <text class="s5bS" x="576" y="238">month effects already absorb any</text>
+        <text class="s5bS" x="576" y="254">move every product shared in a month</text>
+
+        <text class="s5bN" x="30" y="350">Nominal is what was written on the tag. Real is what it bought. Only the second compares across years.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the tag moved 5 percent; the hatched wedge is how much of that was the ruler, and its size is unknown until a price index is applied</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Nominal, real, one division, and the honest sentence about 21 months of reais<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Nominal</strong> is the number on the tag. <strong>Real</strong> is what the tag bought. To get from one to the other you need the price of money on that date, which is what a consumer price index measures: a basket of ordinary purchases, priced every month, expressed as an index so that the ruler's length can be compared across dates. Divide a nominal price by the index for its month and you get a real price, one that can be compared with another month's real price. That is the whole arithmetic. A 5 percent rise on the tag in a year when the index also rose 5 percent is a real rise of zero; in a year when the index rose 3 percent it is a real rise of about 1.9 percent; in a year when the index rose 8 percent it is a real fall of about 2.8 percent. Those three index moves are invented for the arithmetic and the build-along works them through.</p>
+        <p><strong>The honest sentence for the Olist data.</strong> Every price on every page of these sessions is nominal Brazilian reais, over 21 months from October 2016 to August 2018. To make them real you would need a Brazilian consumer price index, month by month across that span, and you would divide each product-month's price by the index for its month. That has not been done, and no inflation figure for Brazil is quoted here, because a number typed from memory is exactly the kind of number the source map refuses. What can be said without the index is this: the elasticity from Foundations session 2 was fitted with month effects as one of its variants, and month effects remove whatever part of a month's price move every product shared. A change in the price of money is precisely a move every product shares. The within-product slope was -1.788 without month effects and -1.854 with them, so whatever the ruler did across those 21 months, allowing for it moved the elasticity a little, not a lot.</p>
+        <p><strong>Why the flip of view matters.</strong> "Prices went up 5 percent" invites the question "which prices". "The price of money fell" invites the right question: "then what did anything real do". A team that reports revenue growth across two years without the second table is reporting the ruler and the towels mixed together, and the mix is not separable after the fact without the index.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The productivity paradox, and why a real measure lags a technology<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In a book review in the New York Times on 12 July 1987, Robert Solow wrote that "You can see the computer age everywhere but in the productivity statistics". The line is reported here from a secondary citation; the original review was not opened. It names a puzzle that has come back with every general technology since: the thing is visibly everywhere, and the measured output per hour, which is a real quantity, nominal output deflated by a price index, does not move for years.</p>
+        <p>The mechanisms are worth knowing because they are about measurement, not about the technology. <strong>The fixed cost comes first:</strong> Foundations session 3 said a large fixed cost is paid before the first unit; at the economy's scale that is years of spending that show up as cost before they show up as output. <strong>Complements are needed:</strong> a new tool pays only after the work around it is reorganised, and reorganising is slow. <strong>Quality is mismeasured:</strong> when a product gets better at the same nominal price, the index treats it as unchanged, so the real gain is invisible in the deflated number. <strong>The deflator itself lags:</strong> the basket is revised slowly, so a technology that changes what people buy is measured with last decade's ruler. None of these say the gain is not there. They say the real measure is a nominal number divided by a ruler, and both halves of that division can lag. Deep-dive session 7 returns to the point when it reads the task-level studies of AI at work.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Beira Goods, a constructed seller, holds a price flat.</strong> Beira raised one item from R$ 75 to R$ 80 in Foundations session 1 after a supplier's cost rose. Suppose Beira then holds R$ 80 for a full year, as most of the 32,216 Olist products held their prices (only 203 moved enough to read). On the tag, nothing happened. If the price of money fell over that year, the flat tag was a real price cut, and Beira's margin shrank by exactly the ruler's move without anyone at Beira deciding anything. The lesson is not that Beira should have raised the price; it is that a flat nominal price is a decision to cut the real one, made by default, and it should at least be made on purpose. Beira and its reais are invented; the mechanism is not.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers interest, discounting, the discount curve</span>
+      <h2>Interest is the price of time</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">A real today is worth more than a real next year, even in a world with no inflation at all, because a real today can be used in between and a real next year cannot. The difference is a price, and the price has a name: interest. Someone who borrows your real for a year is buying a year of your waiting, and the rate is what they pay per real per year for it. Read that way, a rate is not a mysterious number set somewhere else; it is the price of time, and like every price it settles where those who want to use money now meet those willing to wait.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Axes of value today against years ahead, zero to five. Two curves start together at 100 in year zero. At a constructed 5 percent the curve falls gently to 78 by year five. At a constructed 20 percent, drawn amber, it falls steeply to 40 by year five. A clock doodle sits under the curves with the note the wait is what is charged. A line gives the rule: value today equals the amount due divided by one plus the rate, once for every year of waiting.">
+        <defs>
+          <filter id="s5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s5cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s5cL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s5cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s5cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s5cA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s5cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s5cH" x="30" y="26">WHAT 100 LATER IS WORTH TODAY, AT TWO CONSTRUCTED RATES</text>
+        <text class="s5cS" x="30" y="44">the further out, the more the rate bites; the two curves start together and end far apart</text>
+
+        <g filter="url(#s5cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M70 270 L70 70" stroke="#1F3A5F" marker-end="url(#s5cAr)"/>
+          <path d="M70 270 L560 270" stroke="#1F3A5F" marker-end="url(#s5cAr)"/>
+          <!-- year ticks -->
+          <path d="M100 266 L100 274 M184 266 L184 274 M268 266 L268 274 M352 266 L352 274 M436 266 L436 274 M520 266 L520 274" stroke="#1F3A5F"/>
+          <!-- the gentle curve, 5 percent -->
+          <path d="M100 90 L184 99 L268 107 L352 115 L436 122 L520 129"/>
+          <!-- the steep curve, 20 percent -->
+          <path d="M100 90 L184 120 L268 145 L352 166 L436 183 L520 198" stroke="#A8570B" stroke-width="2.6"/>
+          <!-- the shared start and the two ends -->
+          <circle cx="100" cy="90" r="6" fill="#FFFFFF"/>
+          <circle cx="520" cy="129" r="6" fill="#FFFFFF"/>
+          <circle cx="520" cy="198" r="8" fill="#A8570B" stroke="#A8570B"/>
+          <!-- a clock under the curves -->
+          <circle cx="300" cy="230" r="16"/>
+          <path d="M300 230 L300 220 M300 230 L308 234"/>
+        </g>
+
+        <text class="s5cA" x="80" y="66">VALUE TODAY</text>
+        <text class="s5cA" x="560" y="288">YEARS AHEAD</text>
+        <text class="s5cS" x="60" y="94" text-anchor="end">100</text>
+        <text class="s5cS" x="60" y="184" text-anchor="end">50</text>
+        <text class="s5cS" x="60" y="274" text-anchor="end">0</text>
+        <text class="s5cS" x="100" y="288" text-anchor="middle">0</text>
+        <text class="s5cS" x="184" y="288" text-anchor="middle">1</text>
+        <text class="s5cS" x="268" y="288" text-anchor="middle">2</text>
+        <text class="s5cS" x="352" y="288" text-anchor="middle">3</text>
+        <text class="s5cS" x="436" y="288" text-anchor="middle">4</text>
+        <text class="s5cS" x="520" y="288" text-anchor="middle">5</text>
+        <text class="s5cL" x="530" y="126">at 5 percent: 78</text>
+        <text class="s5cS" x="530" y="142">of every 100 due in year 5</text>
+        <text class="s5cB" x="530" y="202">at 20 percent: 40</text>
+        <text class="s5cS" x="530" y="218">of the same 100, same year</text>
+        <text class="s5cS" x="324" y="234">the wait is what is charged</text>
+
+        <text class="s5cS" x="30" y="310">value today = amount due divided by (1 + rate), once for every year of waiting</text>
+        <text class="s5cN" x="30" y="336">The 5 and 20 percent are invented for the drawing. No real rate is quoted; the shape holds for any pair.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - same 100, same five years; the only thing that differs between the two dots is the price of each year of waiting</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Discounting, the curve, and why the order of two offers can flip<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Discounting</strong> is the price of time run backwards. If a year of waiting is priced at a rate r, then 100 due in one year is worth 100 divided by (1 + r) today, and 100 due in four years is worth 100 divided by (1 + r) four times over. Draw that for every year ahead and you have the discount curve: it starts at the full amount today and falls, and how fast it falls is the rate. Two things are visible in the figure and worth saying out loud. The curves start together, so the rate does not matter for money due now. And they part further with every year, so the rate matters more the further out the money is.</p>
+        <p><strong>The flip.</strong> Offer A pays 100 in one year. Offer B pays 130 in four years. Both are constructed. At an invented 5 percent, A is worth about 95 today and B about 107, so B is the better offer. At an invented 20 percent, A is worth about 83 and B about 63, so A is the better offer. Nothing about the offers changed. The rate changed, and because B's money is further out, the higher rate charged it three extra years of waiting. Any comparison between a near payoff and a far one has a rate hidden inside it, and a person who says "B is obviously better because 130 is more than 100" has silently set the rate to zero.</p>
+        <p><strong>Nominal and real rates.</strong> A rate written on a loan is nominal: it includes the lender's expectation of what the ruler will do. What is left after the expected change in the price of money is the real rate, the true price of a year of waiting in terms of things rather than reais. The arithmetic is the same division as Part 2, applied to the rate instead of the price. The three financial statements, cash against profit, and the funding gap that a slow-paying customer opens are a different subject with their own course, <a href="https://phoebefu6.github.io/learn-finance-with-phoebe/">learn-finance-with-phoebe</a>, and nothing here reads a balance sheet.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Central banks in one page: the mechanism, with no numbers and no names<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A central bank is the institution that sets one particular price of time: the rate at which ordinary banks borrow from it, or from each other, overnight. Every other rate in the economy is priced off that one with a margin on top, so moving it moves the price of a year of waiting for everyone. The bank's stated aim, in most countries, is a slow and predictable change in the price of money: a small, steady fall in what a unit buys each year, rather than a fast one or an unpredictable one. That target is the reason the two halves of tonight meet in one building.</p>
+        <p>The mechanism runs through Part 3's curve. When the price of money is falling faster than the target, meaning prices are rising faster than intended, the bank raises the price of time. Borrowing becomes dearer, spending that would have been financed by borrowing is postponed, and with less money chasing the same goods the fall in the price of money slows. When the price of money is falling more slowly than the target, the bank does the reverse. The effect arrives with a lag of many months, because the spending decisions it changes are decisions about the future, and that lag is why the bank is always acting on a forecast and why its critics always have last year's numbers on their side. No rate, no target figure and no official is named here on purpose: all three change, and the mechanism does not.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Beira Goods, a constructed seller, is offered its money early.</strong> The marketplace Beira sells on pays out thirty days after each sale. It also offers to pay today, for a 3 percent haircut on the amount (invented). That haircut is a price of time: 3 percent for thirty days of not waiting. Roll it over twelve times and the compounded price of a year of waiting comes to about 43 percent, on the invented figure, which is far dearer than most loans Beira could find. Whether Beira should take it depends on what Beira would do with the money in those thirty days, which is Foundations session 3's opportunity cost with a rate attached. The point is the reading, not the answer: an "early payment option" is a loan, and its rate is the price of the days.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Write what one rate you deal with is the price of" data-hint="Pick one rate: a loan, an early-payment discount, a late fee, a subscription's annual-vs-monthly gap. Write what is being waited for, who is paying for the wait, and what the rate would be per year. Three lines." data-seed="" data-cta="Count it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Nominal, real and discounted, on paper</h2>
+      <span class="tag demo">★ 22 min · everyone works it through</span>
+    </div>
+    <p class="lede">No code tonight. Six worksheet steps. The price you brought from Foundations session 4's homework is the first, and it stays nominal, because the point is to write down what would make it real rather than to guess. Then the marketplace data gets its honest sentence, a constructed 5 percent rise is deflated three ways, two constructed offers are discounted at two constructed rates until their order flips, and the last step says in words what a rate is the price of. Every rate on the worksheet is invented and labelled.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four columns for a constructed 5 percent rise on a tag. In each column a light bar shows the tag's rise of 5 and an amber bar shows the real change. When money held its value the real change is also plus 5. When money lost 3 percent the real change is plus 1.9. When money lost 5 percent it is zero. When money lost 8 percent the real bar drops below the baseline to minus 2.8. A line gives the arithmetic: one plus 0.05 divided by one plus the money's move, minus one. A note says the 3, 5 and 8 are invented and no Brazilian rate is quoted.">
+        <defs>
+          <filter id="s5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s5dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s5dL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s5dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s5dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s5dV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .s5dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s5dH" x="30" y="26">A 5 PERCENT RISE ON THE TAG, READ FOUR WAYS (CONSTRUCTED)</text>
+        <text class="s5dS" x="30" y="44">same nominal move in every column; the real move depends on what the price of money did in the same year</text>
+
+        <g filter="url(#s5dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- a price tag doodle beside the heading -->
+          <path d="M790 14 L836 14 L848 26 L836 38 L790 38 Z" fill="#FBEEDC" stroke="#A8570B"/>
+          <circle cx="840" cy="26" r="2.5" stroke="#A8570B"/>
+          <!-- baseline -->
+          <path d="M40 220 L850 220" stroke="#1F3A5F"/>
+          <!-- column 1: money held its value -->
+          <rect x="60" y="160" width="60" height="60" rx="3" transform="rotate(-0.8 90 190)" fill="#EEF2F8"/>
+          <rect x="140" y="160" width="60" height="60" rx="3" transform="rotate(0.6 170 190)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- column 2: money lost 3 percent -->
+          <rect x="270" y="160" width="60" height="60" rx="3" transform="rotate(0.5 300 190)" fill="#EEF2F8"/>
+          <rect x="350" y="197" width="60" height="23" rx="3" transform="rotate(-0.7 380 208)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- column 3: money lost 5 percent -->
+          <rect x="480" y="160" width="60" height="60" rx="3" transform="rotate(-0.6 510 190)" fill="#EEF2F8"/>
+          <path d="M560 220 L620 220" stroke="#A8570B" stroke-width="4"/>
+          <!-- column 4: money lost 8 percent -->
+          <rect x="690" y="160" width="60" height="60" rx="3" transform="rotate(0.7 720 190)" fill="#EEF2F8"/>
+          <rect x="770" y="220" width="60" height="34" rx="3" transform="rotate(-0.5 800 237)" fill="#A8570B" stroke="#A8570B"/>
+        </g>
+
+        <text class="s5dH" x="130" y="100" text-anchor="middle">money held its value</text>
+        <text class="s5dS" x="130" y="116" text-anchor="middle">invented</text>
+        <text class="s5dS" x="90" y="134" text-anchor="middle">tag</text>
+        <text class="s5dS" x="170" y="134" text-anchor="middle">real</text>
+        <text class="s5dB" x="90" y="150" text-anchor="middle">+5.0</text>
+        <text class="s5dB" x="170" y="150" text-anchor="middle">+5.0</text>
+
+        <text class="s5dH" x="340" y="100" text-anchor="middle">money lost 3 percent</text>
+        <text class="s5dS" x="340" y="116" text-anchor="middle">invented</text>
+        <text class="s5dS" x="300" y="134" text-anchor="middle">tag</text>
+        <text class="s5dS" x="380" y="134" text-anchor="middle">real</text>
+        <text class="s5dB" x="300" y="150" text-anchor="middle">+5.0</text>
+        <text class="s5dB" x="380" y="187" text-anchor="middle">+1.9</text>
+
+        <text class="s5dH" x="550" y="100" text-anchor="middle">money lost 5 percent</text>
+        <text class="s5dS" x="550" y="116" text-anchor="middle">invented</text>
+        <text class="s5dS" x="510" y="134" text-anchor="middle">tag</text>
+        <text class="s5dS" x="590" y="134" text-anchor="middle">real</text>
+        <text class="s5dB" x="510" y="150" text-anchor="middle">+5.0</text>
+        <text class="s5dB" x="590" y="210" text-anchor="middle">0.0</text>
+
+        <text class="s5dH" x="760" y="100" text-anchor="middle">money lost 8 percent</text>
+        <text class="s5dS" x="760" y="116" text-anchor="middle">invented</text>
+        <text class="s5dS" x="720" y="134" text-anchor="middle">tag</text>
+        <text class="s5dS" x="800" y="134" text-anchor="middle">real</text>
+        <text class="s5dB" x="720" y="150" text-anchor="middle">+5.0</text>
+        <text class="s5dB" x="800" y="270" text-anchor="middle">-2.8</text>
+
+        <text class="s5dB" x="30" y="298">real change = (1 + 0.05) divided by (1 + the money's move), minus 1; in words: what the tag says, less what money did</text>
+        <text class="s5dN" x="30" y="326">The 3, 5 and 8 are invented. No Brazilian rate is quoted; the Olist prices stay nominal on every page.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the light bars are identical in every column; only the amber ones move, and they move with the ruler, not with the product</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Write your price as nominal.</strong> The one you brought: the price, the year you first knew it, the money it was in. Then write what you would need to make it real, and do not guess the answer. The honest form of a price you cannot deflate is a nominal price with its date attached.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · one price, written honestly</span>the price:                ______________   in ______ (currency)   in ______ (year)
+its name today:           "nominal ______, as of ______"
+
+to make it real I would need:  a consumer price index for that currency, monthly or yearly,
+                               with the index for ______ (then) and ______ (now)
+do I have it to hand?          [ yes ]  [ no ]
+if no, the sentence I use:     "______ in ______ money. I have not deflated it."</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · The marketplace's honest sentence.</strong> Copy it, then check each clause against what you know from Foundations sessions 1 and 2: the span, the unit, the thing that would be needed, and the one thing that can be said without it.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the Olist prices, nominal and said so</span>"Every price is nominal Brazilian reais, typed by a seller, across 21 months from October 2016 to August 2018.
+ To compare a January 2017 price with an August 2018 price in real terms we would need a Brazilian consumer
+ price index, one value per month, and we would divide each price by the index for its month.
+ We have not done that, and we quote no inflation figure.
+ What we can say: the elasticity's month-effects variant removes any price move that every product shared in a
+ month, which is what a change in the price of money is; the slope went from -1.788 to -1.854 when it was added."
+
+clause check:  span ______   unit ______   needed ______   said without it ______</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Deflate a constructed rise three ways.</strong> The tag rose 5 percent across a year. Fill the real change for each invented move in the price of money, using the one division. Then say in a sentence why the third row is not "the price did not change".</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · one division, three times (all invented)</span>rise on the tag:  +5 percent            real change = (1 + 0.05) / (1 + money's move) - 1
+
+money held its value (0 percent):   1.05 / 1.00 - 1 =  +5.0 percent
+money lost 3 percent:               1.05 / 1.03 - 1 =  +1.9 percent
+money lost 5 percent:               1.05 / 1.05 - 1 =   0.0 percent
+money lost 8 percent:               1.05 / 1.08 - 1 =  -2.8 percent
+
+the third row in words:  "The tag moved 5 percent and the ruler moved 5 percent, so the thing costs the same
+                          in real terms; the nominal price changed, the real price did not."
+
+now your Step 1 price, IF you find the index:  ______ / ______ - 1 = ______ percent real</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Discount two offers at two rates.</strong> Offer A: 100 in one year. Offer B: 130 in four years. Both constructed. Work each at an invented 5 percent and an invented 20 percent, and watch the order flip. Then write the rate at which the two are worth the same, to the nearest whole percent, by trying values.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the flip (all figures invented)</span>                       at 5 percent                    at 20 percent
+A: 100 in 1 year       100 / 1.05        = 95.2        100 / 1.20        = 83.3
+B: 130 in 4 years      130 / 1.05^4      = 106.9       130 / 1.20^4      = 62.7
+better today:          B                               A
+
+why it flipped:  B's money is three years further out, and each of those years is charged at the rate;
+                 at a low rate three extra years cost little, at a high rate they cost half the money.
+
+the rate where A and B tie (try values):  about ______ percent
+your own near-vs-far choice:  near ______ in ______ yrs   far ______ in ______ yrs   rate assumed ______</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · Say what a rate is the price of.</strong> For three rates you meet, write the thing being waited for, who is paying for the wait, and the price per year. The early-payment haircut from Part 3 is the model; a subscription's annual-versus-monthly gap and a late fee work the same way.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the price of time, three times</span>a rate is the price of:  a year of waiting, per unit of money waited for
+
+rate 1: ______________   who waits ______   who pays for the wait ______   price per year ______
+rate 2: ______________   who waits ______   who pays for the wait ______   price per year ______
+rate 3: ______________   who waits ______   who pays for the wait ______   price per year ______
+
+the Beira early-payment offer (invented): 3 percent for 30 days; rolled twelve times, about 43 percent a year</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 6 · The sentence for a leader.</strong> One sentence that carries the unit, the date, whether the number is nominal or real, and the rate hidden in any near-versus-far comparison. Practise it on the marketplace data first, then on the number you brought.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · the sentence</span>"These are nominal reais across 21 months; we have not deflated them and we quote no rate.
+ Any growth figure across the two years mixes the ruler with the product, and the mix is not separable without a price index.
+ Where we compare a payoff next year with one in four years, the rate we assumed is ______, and at ______ the order flips."
+
+Now yours:  unit ______  date ______  nominal or real ______  rate assumed ______  flips at ______</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the two divisions as your standing rule.</strong> A nominal number divided by the price of money on its date is a real number. An amount due divided by one plus the rate, once per year of waiting, is its value today. Any number that crosses years without the first division is mixing the ruler with the thing; any comparison of near and far without the second has set the price of time to zero.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Foundations session 6</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Find the index.</strong> For the price you wrote in Step 1, find the consumer price index for its currency in its year and now, from an official statistics source, and do the one division. Write the nominal and the real side by side, and the source of the index next to them.</li>
+      <li><strong>Find one growth number your team reports across years</strong> and write whether it is nominal or real. If nobody can say, that is the finding; write the sentence that says so and what would fix it.</li>
+      <li><strong>Find one rate you pay or charge without calling it a rate:</strong> an early-payment discount, a late fee, an annual-versus-monthly gap. Convert it to a price per year of waiting, invented arithmetic if you must, and say whether it is dearer or cheaper than a loan you could actually get.</li>
+      <li><strong>Bring one decision where your best move depends on what a rival does:</strong> a price, a launch date, a feature. Foundations session 6 is about strategic interaction, when a market's tendency to compete away a margin can be resisted, and when a claimed moat is a claim.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Foundations session 5 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Every price on a marketplace rose about 5 percent across a year. What is the most useful reading, and what would you need to say what happened to any one product?</p>
+      <button class="qopt" type="button">A · Every product got 5 percent dearer, so demand for each must have fallen by the elasticity times 5 percent</button>
+      <button class="qopt" type="button">B · The price of money most likely fell: a move shared by every price is the ruler moving, and to say what any one product did in real terms you would divide its price by a price index for its month, which needs a second table</button>
+      <button class="qopt" type="button">C · Sellers colluded, because prices do not move together on their own</button>
+      <button class="qopt" type="button">D · Nothing can be said, because inflation makes all price data meaningless</button>
+      <p class="qwhy">A rise in one price is that thing getting dearer; a rise shared by all prices is money getting cheaper. Nominal becomes real by one division, the tag over the index for its date, and without the index the honest label is "nominal, not deflated".</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · Which statement about the Olist prices used across these sessions is correct?</p>
+      <button class="qopt" type="button">A · They have been deflated to real terms using the Brazilian consumer price index, so 2017 and 2018 prices are directly comparable</button>
+      <button class="qopt" type="button">B · They are nominal, but that does not matter because 21 months is too short for the price of money to move</button>
+      <button class="qopt" type="button">C · They are real by construction, because a marketplace price is set by supply and demand</button>
+      <button class="qopt" type="button">D · They are nominal Brazilian reais over 21 months; making them real would need a monthly Brazilian price index applied to each product-month, which has not been done and no rate is quoted; the month-effects variant of the elasticity already absorbs any move every product shared in a month, and it moved the slope from -1.788 to -1.854</button>
+      <p class="qwhy">The honest sentence has four clauses: the unit and span, what would be needed, that it was not done, and the one thing that can be said without it. Month fixed effects remove whatever moved every product's price together in a month, and a change in the price of money is exactly that kind of move.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Offer A pays 100 in one year; Offer B pays 130 in four years (both constructed). At an invented 5 percent B is worth more today; at an invented 20 percent A is. Why does the order flip?</p>
+      <button class="qopt" type="button">A · Because B's money is three years further out and each year of waiting is charged at the rate; at 5 percent three extra years cost little, at 20 percent they cost roughly half the amount, so the far offer loses more than the near one as the rate rises</button>
+      <button class="qopt" type="button">B · Because 130 is more than 100, so B should always win and the 20 percent case is an arithmetic error</button>
+      <button class="qopt" type="button">C · Because inflation is higher at 20 percent, which makes the 130 worth less in real terms</button>
+      <button class="qopt" type="button">D · Because a higher rate makes money due sooner worth less, so A falls faster than B</button>
+      <p class="qwhy">The discount curves start together and part further with every year ahead. A rate is the price of a year of waiting, and B buys four of them against A's one; the higher the price of a year, the more the extra three cost. Anyone comparing near and far money without naming a rate has set it to zero.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Money as unit of account, medium of exchange, store of value; money illusion</span><span class="note">Standard economics, no single source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Inflation as a change in the price of money; nominal vs real by one division; real vs nominal rates</span><span class="note">Standard economics, no single source; the 3, 5 and 8 percent index moves and the 5 percent tag rise are constructed and the page says so; no inflation rate for Brazil or anywhere is quoted</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The Olist prices are nominal BRL: 2,216 product-months, 21 months, October 2016 to August 2018; R$ 69.90 in January 2018 and R$ 103 in August 2018 for the headline product; within-product slope -1.788, with month effects -1.854</span><span class="note">Computed from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0); the 47 percent is arithmetic on the two tags; no price index was applied and the page says so</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Interest as the price of time; discounting; the discount curve; the order flip between a near and a far offer</span><span class="note">Standard economics, no single source; the 5 and 20 percent rates, the 100-in-one-year and 130-in-four-years offers, and the 3 percent thirty-day haircut are constructed and labelled</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The productivity paradox: "You can see the computer age everywhere but in the productivity statistics"</span><span class="note">Solow, New York Times Book Review, 12 July 1987; reported from a secondary citation, the original review was not opened; the four lag mechanisms are standard and carry no figure</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Central banks in one page</span><span class="note">Mechanism only: the overnight rate, the pass-through, the lag, the target as a slow change in the price of money; no rate, no target figure, no official is named</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The three statements, cash vs profit, funding gaps</span><span class="note">Owned by learn-finance-with-phoebe; linked once, not taught</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Beira Goods</span><span class="note">Constructed seller; every Beira number is invented and the page says so</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Foundations session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Three jobs, one that leaks</b><span>Unit of account, medium of exchange, store of value. Inflation attacks the third; interest is what the third is charged.</span></div>
+      <div class="cheat-item"><b>Inflation is the price of money falling</b><span>One price up: that thing got dearer. Every price up: the ruler shrank. Ask what anything real did.</span></div>
+      <div class="cheat-item"><b>Nominal to real is one division</b><span>The tag over the price index for its date. A 5 percent tag rise is 5, 1.9, 0 or -2.8 real, depending on the ruler (constructed).</span></div>
+      <div class="cheat-item"><b>The Olist prices are nominal reais</b><span>21 months, not deflated, no rate quoted. Month effects absorb what every product shared: -1.788 to -1.854.</span></div>
+      <div class="cheat-item"><b>A rate is the price of a year of waiting</b><span>Value today = amount due over (1 + rate), once per year. The curves start together and part with distance.</span></div>
+      <div class="cheat-item"><b>Near vs far hides a rate</b><span>100 in 1 year vs 130 in 4 (constructed): B wins at 5 percent, A at 20. "130 is more" sets the rate to zero.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You can now read a number across years and price a year of waiting. Foundations session 6 is the last, and it is about the case every earlier session set aside: when your best move depends on what a rival does. The prisoner's dilemma and the dominant strategy; why two sellers who would both be better off holding a price each cut it anyway; network effects as a claim, with the n log n rebuttal to Metcalfe; switching costs drawn as a wall with a door; Vickrey's auction in a page; and a constructed pricing game between an Olist seller and a rival, worked move by move.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Foundations session 5 of 6 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a4-when-markets-fail.html">← Prev: When markets fail</a> &nbsp;·&nbsp; <a href="a6-games-and-moats.html">Next: Games and moats →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

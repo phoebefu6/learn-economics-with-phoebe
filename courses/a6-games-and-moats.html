@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Foundations session 6 of 6. Strategic interaction and the prisoner's dilemma on a marketplace shelf, network effects taught as a claim with its published rebuttal (n squared against n log n), switching costs as a wall with a door, and why the winner takes most rather than all. Worked on paper, no code.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Games and moats - learn economics with phoebe">
+<meta property="og:description" content="Foundations session 6 of 6. When the other player moves too: the 2x2 game, the network law that was rebutted, and the wall every switching cost builds.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a6-games-and-moats.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Games and moats - learn economics with phoebe">
+<meta name="twitter:description" content="Foundations session 6 of 6. The 2x2 game, the two network laws, the wall with a door.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Foundations session 6 · Games and moats - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Foundations session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Foundations session 6 of 6</div>
+    <h1>Games and <span class="accent">moats</span></h1>
+    <p class="sub">Five sessions have treated the price as a message and the buyer as the one who answers it. Tonight the other seller answers too. When a rival can see your price and reply, the best move depends on what they will do, and what they will do depends on what they think you will do. That loop is a game, and the smallest one, two players and two moves, explains why two sellers who would both be better off holding their prices end up cutting them. From there the session goes to the claims that get made about size: that a network's value grows with the square of its members, which has a published rebuttal; that switching costs are a moat, which is true until you look for the door; and that the winner takes all, when on most marketplaces the winner takes most and the rest multi-home.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Leaders, product and data teams, anyone who prices against a rival</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Games, networks, walls</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the pricing standoff</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Every number so far has had one decision-maker behind it. Foundations session 2's elasticity, between -1.5 and -2.2 on the 203 Olist products that can be read, says how buyers answer when one seller moves a price and everybody else does whatever they were doing. It does not say what the seller across the shelf does next, because no panel of past prices contains the rival's reply. Game theory is the habit of writing the reply down before you move. It is also where the popular stories about "moats" come from, and most of those stories are claims wearing the costume of laws. Tonight separates the mechanism, which is real, from the slogan, which is often not.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone works it through</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A 2x2 table you can write for any standoff in under two minutes, the word "dominant" used correctly, the difference between a network effect that is direct and one that is indirect, the arithmetic that separates n squared from n log n when a network doubles, and a habit for every "we have a moat" sentence: ask where the door is.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers strategic interaction, the 2x2 game</span>
+      <h2>When the other player moves too</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Two sellers list the same kind of product on the same marketplace. Each can hold their price or cut it. If both hold, both do fine. If one cuts, the buyers slide across the shelf and the cutter does very well while the holder does badly. If both cut, both sell the same units as before at a lower price and both do worse than if both had held. Write those four outcomes in a square and you have the prisoner's dilemma, and the square tells you something uncomfortable: each seller cuts, whatever the other does, and both end up in the cell neither wanted.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn two by two payoff table for two constructed sellers, Beira Goods and Duarte Supply. Each can hold or cut price. Both hold pays 100 and 100. Beira cuts alone pays 130 to Beira and 60 to Duarte. Duarte cuts alone pays 60 and 130. Both cut pays 80 and 80, and that cell is filled amber. An arrow beside the rows shows that cutting pays more for Beira in both columns. A side panel walks the reasoning: cut is dominant for each, so both land at 80 when both holding paid 100.">
+        <defs>
+          <filter id="s6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s6aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s6aL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s6aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s6aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s6aV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .s6aW { font: 800 16px Inter, sans-serif; fill: #FFFFFF; }
+          .s6aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s6aH" x="30" y="26">TWO SELLERS, TWO MOVES, FOUR CELLS</text>
+        <text class="s6aS" x="290" y="26">Beira Goods and Duarte Supply are constructed; every payoff is invented</text>
+
+        <g filter="url(#s6aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the grid -->
+          <rect x="150" y="96" width="300" height="140" rx="4" transform="rotate(-0.4 300 166)" fill="#FFFFFF"/>
+          <path d="M300 96 L300 236 M150 166 L450 166" stroke="#C9D2E2"/>
+          <!-- the cell nobody wanted -->
+          <rect x="304" y="170" width="142" height="62" rx="3" fill="#A8570B" stroke="#A8570B"/>
+          <!-- the dominant-strategy arrow beside the rows -->
+          <path d="M118 128 L118 196" stroke="#A8570B" stroke-width="2.4" marker-end="url(#s6aAr)"/>
+          <!-- side panel -->
+          <rect x="500" y="70" width="350" height="190" rx="10" transform="rotate(0.4 675 165)" fill="#EEF2F8"/>
+          <!-- two sellers doodle -->
+          <circle cx="180" cy="294" r="11"/><path d="M162 328 C166 310 194 310 198 328"/>
+          <circle cx="222" cy="294" r="11"/><path d="M204 328 C208 310 236 310 240 328"/>
+        </g>
+
+        <text class="s6aL" x="300" y="66" text-anchor="middle">DUARTE SUPPLY</text>
+        <text class="s6aS" x="225" y="86" text-anchor="middle">holds price</text>
+        <text class="s6aS" x="375" y="86" text-anchor="middle">cuts price</text>
+        <text class="s6aL" x="34" y="126">BEIRA</text>
+        <text class="s6aS" x="34" y="142">holds</text>
+        <text class="s6aL" x="34" y="196">BEIRA</text>
+        <text class="s6aS" x="34" y="212">cuts</text>
+        <text class="s6aV" x="225" y="136" text-anchor="middle">100 · 100</text>
+        <text class="s6aV" x="375" y="136" text-anchor="middle">60 · 130</text>
+        <text class="s6aV" x="225" y="206" text-anchor="middle">130 · 60</text>
+        <text class="s6aW" x="375" y="206" text-anchor="middle">80 · 80</text>
+        <text class="s6aS" x="150" y="258">Beira's payoff · Duarte's payoff, in thousands of constructed reais a month</text>
+        <text class="s6aS" x="252" y="300">two sellers, one shelf</text>
+
+        <text class="s6aH" x="516" y="96">WHY BOTH END UP AT 80</text>
+        <text class="s6aS" x="516" y="118">If Duarte holds, Beira cutting earns 130 not 100.</text>
+        <text class="s6aS" x="516" y="136">If Duarte cuts, Beira cutting earns 80 not 60.</text>
+        <text class="s6aS" x="516" y="154">Cut wins in both columns: a dominant strategy.</text>
+        <text class="s6aS" x="516" y="172">Duarte reads the same table from the other side.</text>
+        <text class="s6aB" x="516" y="198">Both cut. Each earns 80. Both holding paid 100.</text>
+        <text class="s6aS" x="516" y="220">The pair that would be best for both is the one</text>
+        <text class="s6aS" x="516" y="236">neither can hold alone.</text>
+
+        <text class="s6aN" x="30" y="350">A dominant strategy is a move that is best whatever the other player does. When both players have one, the game has only one place to land.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber cell is where both sellers land, and the white cell above it is where both would rather be</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The prisoner's dilemma on a shelf: dominant strategy and the cell nobody wanted<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A <strong>game</strong> is any situation where what you get depends on what somebody else chooses as well as on what you choose. A <strong>strategy</strong> is a full plan of what you will do. A strategy is <strong>dominant</strong> when it is your best plan no matter which plan the other player picks. Most games have no dominant strategy, which is why they are hard. The prisoner's dilemma is famous because each player has one, and following it makes both worse off.</p>
+        <p>Read the table by columns. Suppose Duarte holds: Beira earns 100 by holding and 130 by cutting, so cut. Suppose Duarte cuts: Beira earns 60 by holding and 80 by cutting, so cut again. Cut wins in both columns; it is dominant. Duarte, reading the rows, reaches the same conclusion. Both cut, both earn 80, and the 100 each would have earned by holding is gone. <strong>Nobody made a mistake.</strong> Each played the best reply to what the other would do, and the outcome is worse for both than a pair of moves neither can hold on their own.</p>
+        <p>The data habit this gives you is the one Foundations session 2's number cannot: an elasticity says how buyers answer, and only buyers. Before any price move, write the rival's reply in the next cell, and ask whether the number you computed still describes the world after they make it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Repeated play, and why a standoff sometimes holds after all<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The table is played once. Real sellers face each other every month, and that changes the arithmetic without changing the table. If Beira cuts this month, Duarte can match next month, and then both sit at 80 for as long as they both remember. A seller who expects to be on the shelf next year weighs 130 now against 80 forever, and holding starts to look better than the single-round table says. <strong>Repetition is what lets two sellers hold a price without ever agreeing to</strong>, and it is why the standoff you can see on many shelves is quieter than the dilemma predicts.</p>
+        <p>Two conditions have to be true for the quiet to last. The rival must be able to see the cut, which on a marketplace with public prices they can, and the rival must be expected to stay, which on a marketplace with 3,095 sellers is not always true for any one of them. When either condition fails the game collapses back to the single round, and the cut comes.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Beira Goods and Duarte Supply, both constructed.</strong> Beira, the small marketplace seller from the earlier sessions, lists a bath towel at R$ 100. Duarte, an invented rival, lists a near-identical one at the same price. Beira's analyst brings the within-product elasticity from the real panel, about -1.8, and says a cut will move units. She is right about the buyers. What she has not written down is the next cell: Duarte sees the cut on the same page the buyers do, and can match it by lunchtime. Every price in this story is invented. The fact that a rival's reply is not in any elasticity is not.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers network effects as a claim</span>
+      <h2>Metcalfe's law, and the rebuttal</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A network effect is real: a marketplace with more buyers is worth more to a seller, and a marketplace with more sellers is worth more to a buyer. What is not settled is how much more. The popular claim, Metcalfe's law, says the value of a network grows with the square of its members, because that is how the number of possible pairs grows. Briscoe, Odlyzko and Tilly published a rebuttal in IEEE Spectrum in 2006 titled "Metcalfe's Law is Wrong", arguing that value grows in proportion to n log n instead. The two laws agree that bigger is better. They disagree by a lot about how much a doubling is worth, and that difference is the whole of a valuation argument.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three hand-drawn networks. Left, four members with all six pairs linked. Middle, eight members with all twenty-eight pairs linked, labelled n squared: every pair counts. Right, eight members with only their nearest links drawn, labelled n log n: only the useful links count. Values below: n squared goes from 16 to 64, four times; n log n in base two goes from 8 to 24, three times. A note says at a thousand members doubling gives four times under one law and 2.2 times under the other.">
+        <defs>
+          <filter id="s6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s6bL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s6bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s6bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s6bV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .s6bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s6bH" x="30" y="26">n = 4</text>
+        <text class="s6bS" x="80" y="26">six pairs</text>
+        <text class="s6bH" x="330" y="26">2n = 8, EVERY PAIR COUNTS</text>
+        <text class="s6bS" x="330" y="44">Metcalfe: value grows as n squared</text>
+        <text class="s6bH" x="610" y="26">2n = 8, ONLY USEFUL LINKS COUNT</text>
+        <text class="s6bS" x="610" y="44">Briscoe, Odlyzko and Tilly: n log n</text>
+
+        <g filter="url(#s6bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- left: K4 -->
+          <path d="M172 138 L88 138 M172 138 L88 222 M172 138 L172 222 M88 138 L88 222 M88 138 L172 222 M88 222 L172 222" stroke="#2C4F7C" stroke-width="1.6"/>
+          <circle cx="172" cy="138" r="9" fill="#FFFFFF"/><circle cx="88" cy="138" r="9" fill="#FFFFFF"/>
+          <circle cx="88" cy="222" r="9" fill="#FFFFFF"/><circle cx="172" cy="222" r="9" fill="#FFFFFF"/>
+          <!-- middle: K8, all 28 pairs -->
+          <path d="M500 180 L477 123 M500 180 L420 100 M500 180 L363 123 M500 180 L340 180 M500 180 L363 237 M500 180 L420 260 M500 180 L477 237 M477 123 L420 100 M477 123 L363 123 M477 123 L340 180 M477 123 L363 237 M477 123 L420 260 M477 123 L477 237 M420 100 L363 123 M420 100 L340 180 M420 100 L363 237 M420 100 L420 260 M420 100 L477 237 M363 123 L340 180 M363 123 L363 237 M363 123 L420 260 M363 123 L477 237 M340 180 L363 237 M340 180 L420 260 M340 180 L477 237 M363 237 L420 260 M363 237 L477 237 M420 260 L477 237" stroke="#2C4F7C" stroke-width="1.2"/>
+          <circle cx="500" cy="180" r="9" fill="#FFFFFF"/><circle cx="477" cy="123" r="9" fill="#FFFFFF"/><circle cx="420" cy="100" r="9" fill="#FFFFFF"/><circle cx="363" cy="123" r="9" fill="#FFFFFF"/>
+          <circle cx="340" cy="180" r="9" fill="#FFFFFF"/><circle cx="363" cy="237" r="9" fill="#FFFFFF"/><circle cx="420" cy="260" r="9" fill="#FFFFFF"/><circle cx="477" cy="237" r="9" fill="#FFFFFF"/>
+          <!-- right: 8 members, the ring and the next-nearest chords only -->
+          <path d="M780 180 L757 123 L700 100 L643 123 L620 180 L643 237 L700 260 L757 237 Z" stroke="#2C4F7C" stroke-width="1.6"/>
+          <path d="M780 180 L700 100 M757 123 L643 123 M700 100 L620 180 M643 123 L643 237 M620 180 L700 260 M643 237 L757 237 M700 260 L780 180 M757 237 L757 123" stroke="#C9D2E2" stroke-width="1.2"/>
+          <circle cx="780" cy="180" r="9" fill="#FFFFFF"/><circle cx="757" cy="123" r="9" fill="#FFFFFF"/><circle cx="700" cy="100" r="9" fill="#FFFFFF"/><circle cx="643" cy="123" r="9" fill="#FFFFFF"/>
+          <circle cx="620" cy="180" r="9" fill="#FFFFFF"/><circle cx="643" cy="237" r="9" fill="#FFFFFF"/><circle cx="700" cy="260" r="9" fill="#FFFFFF"/><circle cx="757" cy="237" r="9" fill="#FFFFFF"/>
+          <!-- the one thing: the marginal member's value under n log n -->
+          <circle cx="700" cy="100" r="9" fill="#A8570B" stroke="#A8570B"/>
+          <!-- arrows between panels -->
+          <path d="M210 180 L300 180" marker-end="url(#s6bAr)"/>
+          <path d="M530 180 L590 180" marker-end="url(#s6bAr)"/>
+        </g>
+
+        <text class="s6bV" x="130" y="298" text-anchor="middle">16 · 8</text>
+        <text class="s6bS" x="130" y="316" text-anchor="middle">n squared · n log n (base 2)</text>
+        <text class="s6bV" x="420" y="298" text-anchor="middle">64, four times</text>
+        <text class="s6bS" x="420" y="316" text-anchor="middle">28 pairs; 8 squared is 64</text>
+        <text class="s6bV" x="700" y="298" text-anchor="middle">24, three times</text>
+        <text class="s6bS" x="700" y="316" text-anchor="middle">8 members with 3 useful links each</text>
+        <text class="s6bB" x="722" y="96">the new member's links</text>
+        <text class="s6bB" x="722" y="110">are worth less each</text>
+
+        <text class="s6bN" x="30" y="350">At a thousand members, doubling gives four times the value under n squared and 2.2 times under n log n. Same network,</text>
+        <text class="s6bN" x="30" y="368">two claims, and the second was published as a rebuttal of the first. Neither is a measurement of any particular marketplace.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the middle network counts every pair; the right one counts only the links a member would actually use, and that is the whole disagreement</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>n squared, n log n, and what each predicts when the network doubles<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Metcalfe's law</strong> counts pairs. With n members there are about n squared over two possible connections, so if every connection is worth the same, value grows as n squared. Doubling the members quadruples the value. It is a clean story and it is why the phrase "network effects" turns up in pitch decks as if it were arithmetic.</p>
+        <p><strong>The rebuttal</strong> attacks the assumption that every connection is worth the same. Briscoe, Odlyzko and Tilly argued that a member's connections fall off in value the way most things do: the most useful link is worth a lot, the tenth is worth a tenth of that, the hundredth a hundredth. Sum a series like that and each member gets about log n of value, so the network as a whole is worth about n log n. Doubling from a thousand members then gives 2.2 times the value, not four. That is pure arithmetic on the two claims, and it is the only number on this page about network size.</p>
+        <p>The honest position is that <strong>both are claims</strong>. The mechanism, that a bigger network is worth more to each member, is real and is why marketplaces exist. The exponent is not a law of nature and has never been measured on the marketplace whose data runs through these sessions. When somebody quotes a square, ask them which of the two they mean, and whether they can show a single connection that is worth the same as the first one.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Direct and indirect network effects, and the marketplace as a two-sided one<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A network effect is <strong>direct</strong> when a member gains from more members of the same kind: a messaging app is worth more to you when your friends are on it. It is <strong>indirect</strong> when a member gains from more members of the other kind: a buyer gains from more sellers, a seller from more buyers, and a seller gains nothing, or less than nothing, from another seller. A marketplace runs almost entirely on the indirect kind, which is why it is called two-sided, and why it has a chicken-and-egg problem at birth: nobody sells where nobody buys, and nobody buys where nobody sells.</p>
+        <p>The distinction matters for the claim in Part 2. Pairs of sellers are not connections anyone values, so counting all pairs among all members overstates a marketplace's network even before the log n argument arrives. The connections that carry value cross the platform from one side to the other. Deep-dive session 5 draws both sides with the real counts and does the arithmetic at ten times the members rather than two.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The marketplace has two sides, and the counts are lopsided.</strong> The Olist dataset behind every session carries 3,095 sellers and 96,096 customer ids, counted in the RFM course on the same export, and 32,216 products with at least one sale. A seller's network is the buyers, thirty-odd of them for each seller on average; a buyer's network is the sellers. Nobody on either side gains from a pair on their own side, and the 203 products that can be read for elasticity are a reminder that most of what a big number contains is quiet: most products never repriced, or sold too little to say. Size is a fact. What it is worth is the claim.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers switching costs, winner-take-most, multi-homing</span>
+      <h2>Walls, doors, and the winner who takes most</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">A switching cost is everything a customer, or a seller, would have to give up or redo to move from where they are to a rival. It is a wall, and walls are where the word "moat" comes from. But every wall has a door, because the rival's whole business is building one: a catalogue importer, a contract buyout, a migration team. And on many marketplaces the door is already open, because the seller lists on two platforms at once. That is multi-homing, and it is the reason the winner takes most and not all.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 348" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn seller stands beside a box labelled where they are, holding listings, reviews and rank. A tall hatched wall separates it from a box labelled where the rival is. The wall has an amber door at its foot, labelled the cost of walking through. Beside the wall a list names the bricks: catalogue re-upload, reviews left behind, contract notice, team habits, rank earned over time. A second seller stands in the doorway, already listing on both sides, labelled multi-homing.">
+        <defs>
+          <filter id="s6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s6cL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s6cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s6cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s6cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s6cH" x="30" y="26">A SWITCHING COST IS A WALL, AND EVERY WALL HAS A DOOR</text>
+
+        <g filter="url(#s6cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the seller -->
+          <circle cx="80" cy="150" r="12"/><path d="M60 190 C64 170 96 170 100 190"/>
+          <!-- where they are -->
+          <rect x="130" y="110" width="200" height="100" rx="8" transform="rotate(-0.5 230 160)" fill="#EEF2F8"/>
+          <!-- the wall -->
+          <rect x="410" y="60" width="34" height="240" rx="2" transform="rotate(0.3 427 180)" fill="url(#s6cHc)"/>
+          <!-- the door -->
+          <rect x="412" y="210" width="30" height="90" rx="2" fill="#FBEEDC" stroke="#A8570B"/>
+          <circle cx="436" cy="258" r="2" stroke="#A8570B"/>
+          <!-- where the rival is -->
+          <rect x="520" y="110" width="200" height="100" rx="8" transform="rotate(0.6 620 160)" fill="#FFFFFF"/>
+          <!-- arrows to and through the door -->
+          <path d="M334 170 C370 190 384 230 402 252" marker-end="url(#s6cAr)"/>
+          <path d="M452 252 C470 230 486 200 514 184" marker-end="url(#s6cAr)"/>
+          <!-- the multi-homing seller in the doorway -->
+          <circle cx="480" cy="262" r="10" stroke="#A8570B"/><path d="M462 294 C466 278 494 278 498 294" stroke="#A8570B"/>
+          <path d="M456 270 L440 270" stroke="#A8570B" marker-end="url(#s6cAr)"/>
+          <path d="M504 270 L520 270" stroke="#A8570B" marker-end="url(#s6cAr)"/>
+        </g>
+
+        <text class="s6cS" x="44" y="214">a seller on</text>
+        <text class="s6cS" x="44" y="228">one marketplace</text>
+        <text class="s6cH" x="146" y="140">WHERE THEY ARE</text>
+        <text class="s6cS" x="146" y="160">listings, reviews, a rank,</text>
+        <text class="s6cS" x="146" y="176">orders, and a habit</text>
+        <text class="s6cH" x="536" y="140">WHERE THE RIVAL IS</text>
+        <text class="s6cS" x="536" y="160">the same buyers, maybe,</text>
+        <text class="s6cS" x="536" y="176">and zero reviews on day one</text>
+        <text class="s6cB" x="427" y="318" text-anchor="middle">the door: what it costs to walk through</text>
+        <text class="s6cL" x="740" y="96">BRICKS IN THE WALL</text>
+        <text class="s6cS" x="740" y="118">catalogue re-upload</text>
+        <text class="s6cS" x="740" y="136">reviews left behind</text>
+        <text class="s6cS" x="740" y="154">contract notice</text>
+        <text class="s6cS" x="740" y="172">team habits</text>
+        <text class="s6cS" x="740" y="190">rank earned over time</text>
+        <text class="s6cB" x="560" y="262">multi-homing: already on both sides,</text>
+        <text class="s6cB" x="560" y="278">the wall is behind them</text>
+
+        <text class="s6cN" x="30" y="340">The height of the wall is set by the incumbent. The width of the door is set by the rival. Both are choices, and neither is permanent.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the hatched wall is real and so is the door at its foot; the amber seller in the doorway never had to climb</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What a switching cost is made of, and why multi-homing lowers the wall<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Write a switching cost as a list and it stops being a slogan. For a seller on a marketplace: the hours to re-upload a catalogue, the reviews that stay behind, the search rank earned over months of sales, a contract's notice period, the team's habits. Each brick has a price, and the sum is the wall. <strong>The incumbent builds the wall; the rival builds the door</strong>: an importer for the catalogue, a launch promotion that stands in for the missing rank, a buyout of the notice period. The wall's height is therefore not a property of the market. It is an ongoing contest.</p>
+        <p><strong>Winner-take-most</strong> is what network effects and switching costs together produce when they work: the biggest platform is worth the most to join and the most expensive to leave, so it keeps growing. The limit on it is <strong>multi-homing</strong>. A seller who lists on two marketplaces at once has no wall to climb; they are already on both sides. A buyer with two apps on their phone is the same. Where multi-homing is cheap, the biggest platform still wins the most, but the second and third survive on the same sellers and the same buyers, and "all" never happens.</p>
+        <p>The test for any moat claim is one question: <strong>where is the door, and who is building it?</strong> If nobody can name the door, the claim is probably true for now. If the door is already open, as it is wherever multi-homing is common, the moat is a wall with a queue walking through it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Vickrey's auction in one page: why bidding your true value is the dominant strategy<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Part 1's word, dominant, has one famous application beyond the dilemma. In a sealed-bid auction where the highest bidder wins but pays the <em>second</em> highest bid, the best thing to do is bid exactly what the item is worth to you, whatever anybody else bids. Bid more, and the only time it changes anything is when you win at a price above your value and lose money. Bid less, and the only time it changes anything is when you lose an item you would have paid for. Truthful bidding is dominant. That result is Vickrey, in the Journal of Finance, 1961, volume 16, issue 1, pages 8 to 37.</p>
+        <p>Why it belongs in a session on games: it is the cleanest case of a mechanism designed so that the game has a dominant strategy, which removes the guessing. Most auctions people actually meet, including the ones that price ads, are not designed that way, and deep-dive session 6 shows what goes wrong when they are not.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Commitment and credibility; when a data advantage compounds and when it does not<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Commitment.</strong> In the dilemma, Beira would love to promise "I will hold if you hold". The promise is worthless because holding is not Beira's best reply once Duarte holds. A commitment only changes a game if it is <strong>credible</strong>: if breaking it costs more than keeping it. A public price-match guarantee is a credible commitment to cut, which oddly makes cutting less attractive for the rival, because they know the reply arrives automatically. The lesson is that words move nothing; what moves a game is a change in the payoffs behind the words.</p>
+        <p><strong>Data as a moat.</strong> The most common moat claim in a data business is "we have more data, so our model is better, so we win more customers, so we get more data". The loop is real at the start. It stops being real for a mechanical reason: <strong>learning curves flatten</strong>. Early rows teach a model the common cases and accuracy climbs fast; later rows are mostly common cases again, and what is left to learn is rare. Each doubling of data buys less than the doubling before it. Once both you and a rival are on the flat part, a rival with a fraction of your data is a few points behind, not a generation behind. Where the loop does keep compounding is where the data itself is hard to get, or where it is tied to a switching cost that keeps the customer producing it for you. That is a wall again, and the door question applies. Deep-dive session 5 fits the curve to constructed data and reads where it flattens; no published exponent is quoted here because none is on file for these pages.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Beira's 400 reviews, constructed.</strong> Beira Goods has 40 products and, say, 400 reviews earned over two years on its marketplace. A rival platform offers a launch fee waiver and an importer that moves the catalogue in an afternoon. The catalogue brick is gone; the reviews brick is not, and it is the one buyers look at. Beira's answer is the multi-homer's: list on both, keep the reviews where they are, and let the second platform earn its own. The wall never got climbed. It got walked around, which is what most sellers on most marketplaces do. The numbers are invented; the walk-around is how switching costs are usually beaten.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Name a moat you have heard claimed, then find its door" data-hint="One line for the claim as it was said. One line for the bricks in the wall. One line for who is building the door and whether it is already open. Three lines." data-seed="" data-cta="Count it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>The pricing standoff, worked on paper</h2>
+      <span class="tag demo">★ 22 min · everyone works it through</span>
+    </div>
+    <p class="lede">No code tonight. Three worksheets, each a few lines, and each one turns a slogan from the session into something you have written down for your own situation. The first is the 2x2 for a constructed pricing standoff, with the payoffs invented so that the reasoning is the point. The second and third are about your own network effects and your own switching costs, which are the two things every moat claim you will ever hear is made of.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 316" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four hand-drawn cards in a row showing the constructed standoff over four rounds. Round one, both hold at 100 reais and earn 100 each. Round two, Beira cuts to 90 and earns 130 while Duarte earns 60. Round three, Duarte matches at 90 and both earn 80; that card is amber and labelled the trap. Round four asks the way back: raising alone earns 60, raising together earns 100, and nobody moves first. A note says the within-product elasticity says nothing about the rival's reply.">
+        <defs>
+          <filter id="s6dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s6dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s6dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s6dL { font: 700 12px Inter, sans-serif; fill: #16213A; }
+          .s6dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s6dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s6dV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .s6dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s6dX { font: 800 16px Inter, sans-serif; fill: #FFFFFF; }
+          .s6dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s6dH" x="30" y="26">FOUR ROUNDS ON ONE SHELF</text>
+        <text class="s6dS" x="230" y="26">Beira Goods against Duarte Supply, both constructed, every number invented</text>
+
+        <g filter="url(#s6dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="70" width="190" height="150" rx="8" transform="rotate(-0.6 125 145)" fill="#FFFFFF"/>
+          <rect x="240" y="70" width="190" height="150" rx="8" transform="rotate(0.5 335 145)" fill="#EEF2F8"/>
+          <rect x="450" y="70" width="190" height="150" rx="8" transform="rotate(-0.4 545 145)" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="660" y="70" width="190" height="150" rx="8" transform="rotate(0.6 755 145)" fill="#FFFFFF" stroke-dasharray="6 4"/>
+          <path d="M224 145 L236 145" marker-end="url(#s6dAr)"/>
+          <path d="M434 145 L446 145" marker-end="url(#s6dAr)"/>
+          <path d="M644 145 L656 145" marker-end="url(#s6dAr)"/>
+          <!-- a price tag doodle on the cut card -->
+          <path d="M380 82 L410 82 L420 92 L410 102 L380 102 Z" fill="#FBEEDC" stroke="#A8570B"/>
+          <circle cx="414" cy="92" r="2" stroke="#A8570B"/>
+        </g>
+
+        <text class="s6dL" x="44" y="96">ROUND 1 · both hold</text>
+        <text class="s6dS" x="44" y="118">Beira R$ 100 · Duarte R$ 100</text>
+        <text class="s6dV" x="44" y="150">payoff 100 · 100</text>
+        <text class="s6dS" x="44" y="176">the quiet shelf</text>
+        <text class="s6dS" x="44" y="192">nobody has moved yet</text>
+
+        <text class="s6dL" x="254" y="96">ROUND 2 · Beira cuts</text>
+        <text class="s6dS" x="254" y="118">Beira R$ 90 · Duarte R$ 100</text>
+        <text class="s6dV" x="254" y="150">payoff 130 · 60</text>
+        <text class="s6dS" x="254" y="176">buyers slide across</text>
+        <text class="s6dS" x="254" y="192">the elasticity was right</text>
+
+        <text class="s6dW" x="464" y="96">ROUND 3 · Duarte matches</text>
+        <text class="s6dW" x="464" y="118">Beira R$ 90 · Duarte R$ 90</text>
+        <text class="s6dX" x="464" y="150">payoff 80 · 80</text>
+        <text class="s6dW" x="464" y="176">the trap, and it holds:</text>
+        <text class="s6dW" x="464" y="192">same units, lower price</text>
+
+        <text class="s6dL" x="674" y="96">ROUND 4 · the way back</text>
+        <text class="s6dS" x="674" y="118">both raise to R$ 100?</text>
+        <text class="s6dV" x="674" y="150">alone 60 · together 100</text>
+        <text class="s6dS" x="674" y="176">whoever raises first</text>
+        <text class="s6dS" x="674" y="192">is the one at 60</text>
+
+        <text class="s6dS" x="30" y="250">What the real number says: the within-product elasticity on the Olist panel, about -1.8, tells Beira its units will answer a cut.</text>
+        <text class="s6dS" x="30" y="268">It says nothing about round 3. No panel of past prices holds the rival's reply, because the rival is not a buyer.</text>
+
+        <text class="s6dN" x="30" y="304">Every price and payoff on these cards is invented. The order of the rounds is not; it is the order most shelf wars run in.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber card is where the elasticity stops being the whole story, and the dashed card is why the shelf stays there</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Worksheet 1 · Write the 2x2 for a standoff.</strong> Take Beira and Duarte, or two sellers you know. Invent the four payoffs, and say so at the top of the page. Then read it by columns: for each thing the rival might do, which of your moves pays more? If the same move wins both columns, it is dominant, and you already know where the shelf lands.</p>
+        <div class="prompt-box good"><span class="label">★ Worksheet 1 · the 2x2, payoffs invented</span>Sellers:   ______________ (me)   vs   ______________ (rival)
+Moves:     hold / cut
+
+                        rival holds        rival cuts
+   I hold             ____ · ____        ____ · ____
+   I cut              ____ · ____        ____ · ____
+
+If the rival holds, my better move is: ______
+If the rival cuts,  my better move is: ______
+Dominant for me? ______   For the rival? ______   Where we land: ____ · ____
+The cell we would both prefer: ____ · ____   Can either of us hold it alone? ______</div>
+      </div>
+      <div class="step">
+        <p><strong>Worksheet 2 · Name a network effect you rely on.</strong> One product or platform you use because other people use it. Then the question that separates the two kinds: do you gain from more people <em>like you</em> joining (direct), or from more people <em>unlike you</em>, on the other side (indirect)? A marketplace is the second kind, and a pair on your own side is a competitor, not a connection.</p>
+        <div class="prompt-box good"><span class="label">★ Worksheet 2 · direct or indirect</span>The product or platform:          ______________________________
+I gain when more of these join:   ______________________________
+They are (circle): people like me / people on the other side
+So the effect is (circle): direct / indirect
+If it doubled its members, my honest guess for how much more it is worth to me:
+   (circle) about four times / about twice / not much more / I cannot say</div>
+      </div>
+      <div class="step">
+        <p><strong>Worksheet 3 · Name a switching cost you have paid.</strong> A tool, a bank, a supplier, a platform you moved away from, or nearly did. List the bricks: what you had to redo, what you left behind, what you had to wait out. Then name the door: what the place you moved to did to make it easier, and whether you were multi-homing before you moved.</p>
+        <div class="prompt-box good"><span class="label">★ Worksheet 3 · the wall and the door</span>What I moved from / nearly moved from:   ______________________________
+Bricks in the wall (the things I had to redo, leave, or wait out):
+   1. ______________________   2. ______________________   3. ______________________
+The door (what the other side did to make it easier):  ______________________________
+Was I already using both before I moved? ______
+One sentence: the moat was ______ high, and the door was ______ wide.</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the three questions as a standing habit.</strong> Before a price move: what is the rival's reply, in the next cell? Before a network claim: direct or indirect, and n squared or n log n? Before a moat claim: where is the door, and who is building it? Any moat that arrives without a door named is a wall somebody has not walked around yet.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before the deep-dive track</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Finish all three worksheets</strong> for your own situation, with the payoffs in the first one labelled as invented. Keep the page; deep-dive session 5 fits the learning curve behind the data-moat claim and session 6 runs the auction from the Vickrey self-study.</li>
+      <li><strong>Find one "network effects" claim</strong> in a deck, an article or a pitch you have seen, and write down which law it assumes. If it assumes a square, write the n log n number next to it for the same doubling: four times against 2.2 times.</li>
+      <li><strong>Re-read Foundations session 2's elasticity</strong> and write one sentence on what it does and does not say about a rival. The number is about buyers; the rival's reply is the next cell, not the slope.</li>
+      <li><strong>Bring the six sessions' passport stamps.</strong> The deep-dive track starts from the 112,650 real order items and rebuilds every count the Foundations track quoted, line by line.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Foundations session 6 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Two sellers can each hold or cut. Both holding pays 100 each; one cutting alone pays the cutter 130 and the holder 60; both cutting pays 80 each. What happens, and why?</p>
+      <button class="qopt" type="button">A · Both hold, because 100 each is the best total outcome and sellers can see that</button>
+      <button class="qopt" type="button">B · Both cut, because cutting pays more whichever move the rival makes (130 over 100 if they hold, 80 over 60 if they cut), so it is dominant for each, and the two dominant moves land on the cell both would rather avoid</button>
+      <button class="qopt" type="button">C · Whoever has the lower elasticity holds, and the other cuts</button>
+      <button class="qopt" type="button">D · Nothing can be said without the real payoffs</button>
+      <p class="qwhy">A dominant strategy is best whatever the other player does. The payoffs are invented, but the reasoning only needs their order, and any table where cutting alone beats holding together and both cutting beats being undercut has the same answer. Repeated play can change it; a single round cannot.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · A deck says a platform's value will quadruple when its members double, "by Metcalfe's law". What is the honest response?</p>
+      <button class="qopt" type="button">A · Agree; the number of pairs grows with the square of the members, so value does too</button>
+      <button class="qopt" type="button">B · Disagree; network effects are a myth and value does not grow with members at all</button>
+      <button class="qopt" type="button">C · Metcalfe's law is a claim, not a measurement. Briscoe, Odlyzko and Tilly published a rebuttal in IEEE Spectrum in 2006 arguing value grows as n log n, because a member's links are not all worth the same; at a thousand members that doubling gives about 2.2 times, not four, and neither law has been measured on this platform</button>
+      <button class="qopt" type="button">D · Ask for the elasticity instead, since that is the only number that matters</button>
+      <p class="qwhy">The mechanism, that a bigger network is worth more to each member, is real. The exponent is the disputed part, and the difference between the two claims at one doubling, four times against 2.2 times, is exactly the difference between two valuations of the same deck.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A platform says its switching costs are a moat. Which observation weakens the claim most?</p>
+      <button class="qopt" type="button">A · Most of its sellers already list on a rival platform as well, so they are multi-homing: they never have to climb the wall because they are already on both sides, and the winner takes most rather than all</button>
+      <button class="qopt" type="button">B · Its sellers have many reviews on the platform, which they cannot take with them</button>
+      <button class="qopt" type="button">C · Its contracts have a long notice period</button>
+      <button class="qopt" type="button">D · Its catalogue format is proprietary and hard to export</button>
+      <p class="qwhy">Reviews, notice periods and proprietary formats are bricks in the wall; they strengthen the claim. Multi-homing is the open door: where sellers and buyers are already on two platforms, the switching cost is never paid, and the moat is a wall with a queue walking through it.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Strategic interaction, the prisoner's dilemma, dominant strategy, the 2x2 game, repeated play</span><span class="note">Standard game theory, no single source; the payoffs on the page are invented and say so</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Network effects as a claim: Metcalfe's n squared, and the n log n rebuttal</span><span class="note">Briscoe, Odlyzko and Tilly 2006, IEEE Spectrum, "Metcalfe's Law is Wrong", read at source; the 4x against 2.2x at a thousand members is arithmetic on the two claims, not a measurement</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Switching costs, winner-take-most, multi-homing; direct and indirect network effects</span><span class="note">Standard economics, no single source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The marketplace's two sides: 3,095 sellers, 96,096 customer ids, 32,216 products with a sale, 203 that can be read</span><span class="note">Counted from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0); the seller and customer counts are the RFM course's on the same export</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Beira Goods and Duarte Supply</span><span class="note">Constructed sellers; every price, payoff and review count is invented and the page says so</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Vickrey's second-price auction, truthful bidding dominant</span><span class="note">Vickrey 1961, Journal of Finance 16(1) 8-37; one page in self-study, the mechanics are deep-dive session 6</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Commitment and credibility; learning curves flatten</span><span class="note">Taught as mechanisms in self-study; no published exponent is quoted, and deep-dive session 5 fits the curve on constructed data</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Foundations session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Write the rival's reply in the next cell</b><span>An elasticity is about buyers. The rival is not a buyer, and no panel of past prices holds their move.</span></div>
+      <div class="cheat-item"><b>Dominant means best whatever they do</b><span>Read the 2x2 by columns. If one move wins every column, you know where the shelf lands.</span></div>
+      <div class="cheat-item"><b>Metcalfe is a claim</b><span>n squared says doubling is 4x. The published rebuttal says n log n, about 2.2x at a thousand. Neither is measured.</span></div>
+      <div class="cheat-item"><b>Direct or indirect</b><span>Gain from more people like you, or from more on the other side. A marketplace is the second; a pair on your side is a competitor.</span></div>
+      <div class="cheat-item"><b>Every wall has a door</b><span>List the bricks, then ask who is building the door. The incumbent sets the height, the rival sets the width.</span></div>
+      <div class="cheat-item"><b>Winner takes most, not all</b><span>Multi-homing is the open door. Sellers on two platforms never pay the switching cost.</span></div>
+    </div>
+  </section>
+
+  <div class="callout win">
+    <p><strong>🎫 The last Foundations stamp.</strong> Clearing the three questions above stamps Foundations session 6, and with it the six-stamp Foundations row of your passport is complete. The passport holds sixteen stamps across both tracks, and the top rung of the elasticity bench in deep-dive session 10 opens when all sixteen are in. There is no scorecard here; the final one lives on that bench, after the deep-dive track has rebuilt every number the six Foundations sessions quoted.</p>
+  </div>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>That closes the Foundations track: prices as messages, elasticity as the answer, margins and opportunity cost, the ways markets fail, money and time, and tonight the other player. Every number the six sessions quoted came from one panel of real marketplace rows, and the deep-dive track starts by building that panel from scratch. <a href="p1-demand-from-data.html">Deep-dive session 1, Demand from data</a>, begins with 112,650 real order items, applies the three sieves you met in session 1 line by line, and fits the first log-log line: one product's slope of -10 that is not an elasticity at all, and the reason the panel, not the product, is the unit.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Foundations session 6 of 6 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a5-money-inflation-and-interest.html">← Prev: Money, inflation and interest</a> &nbsp;·&nbsp; <a href="../index.html">Course home →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

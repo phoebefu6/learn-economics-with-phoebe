@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 5 of 10. Direct and indirect network effects on a two-sided marketplace with 3,095 sellers and 96,096 customer ids; Metcalfe's n squared against the published n log n rebuttal, with the arithmetic done at n and 10n; and data network effects: the learning curve that flattens, fitted in numpy on constructed data, and why 'we have the data' is often not a moat.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Network effects and data moats - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 5 of 10. Two sides, two laws, one curve that flattens. Fit it, find the flat, and read how far behind a rival with a tenth of your data really is.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p5-network-effects-and-data-moats.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Network effects and data moats - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 5 of 10. n squared, n log n, and the learning curve that flattens.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 5 · Network effects and data moats - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 5 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 5 of 10</div>
+    <h1>Network effects and <span class="accent">data moats</span></h1>
+    <p class="sub">Four sessions have priced one product at a time. Tonight is about the claims that get made when a business says its value comes from size: more members, more sellers, more rows. Three of those claims are worth taking apart with arithmetic rather than opinion. The first is that a marketplace runs on a network effect, which is true, and the session says which kind. The second is Metcalfe's law, that value grows with the square of the members, which has a published rebuttal that says n log n, and the two disagree by a factor of seven at one tenfold of members. The third is the data moat, "we have more data so our model is better so we win", which is true on the steep part of a learning curve and quietly stops being true on the flat part. The build-along fits that curve in numpy on constructed data, reads where it flattens, and measures how far behind a rival with a tenth of the rows actually is at two places on it.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Analysts, product and strategy teams</span>
+      <span class="chip audience">Python, numpy</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Two sides, two laws, one curve</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: fit the curve, find the flat</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">A network effect is a fact about the demand curve of the previous sessions: the curve for a marketplace shifts right when the marketplace gets bigger, because each member values it more. That is all it is, and it is enough to build a business on. What is not a fact is the exponent. Every "network effects" slide carries an unstated law about how much a doubling is worth, and every "data moat" slide carries an unstated learning curve about how much a doubling of rows is worth. Tonight makes both laws explicit, does the arithmetic where it is arithmetic, and fits the curve where it is a curve. Foundations session 6 met the same ideas without code; the deep-dive does the numbers.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The difference between a direct and an indirect network effect and which one a marketplace runs on, the arithmetic of n squared against n log n at n and at 10n done by hand, a learning curve fitted in six lines of numpy with the point where the next doubling buys under one point of accuracy read off it, and one sentence about a data advantage that says how big it is and where on the curve it was measured.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers direct and indirect effects, the two-sided marketplace</span>
+      <h2>Two kinds of network, and a marketplace with two sides</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A network effect is direct when a member gains from more members of the same kind, and indirect when a member gains from more members of the other kind. A marketplace is almost entirely the second: a buyer gains from more sellers and a seller gains from more buyers, while a seller gains nothing from another seller except competition. The marketplace dataset behind every session carries 3,095 sellers and 96,096 customer ids, counted in the RFM course on the same export, and the value in it crosses the platform from one side to the other. That is what two-sided means, and it is why the platform's first problem is which side to fill first.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 342" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn two-sided platform. On the left a box of sellers, 3,095 of them; on the right a box of customers, 96,096 ids; in the middle an amber box for the marketplace with 32,216 products. Short arrows carry listings and choice across the top and orders and rank back across the bottom. Two long arcs, one over the top and one under the bottom, carry the indirect effect: more sellers means more choice for every buyer, and more buyers means more orders for every seller.">
+        <defs>
+          <filter id="d5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d5cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d5cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d5cL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .d5cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d5cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d5cV { font: 800 18px Inter, sans-serif; fill: #142944; }
+          .d5cW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .d5cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d5cH" x="30" y="26">TWO SIDES, ONE PLATFORM</text>
+
+        <g filter="url(#d5cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- sellers -->
+          <rect x="40" y="80" width="150" height="170" rx="8" transform="rotate(-0.6 115 165)" fill="#EEF2F8"/>
+          <circle cx="75" cy="130" r="10"/><path d="M58 160 C62 146 88 146 92 160"/>
+          <circle cx="115" cy="130" r="10"/><path d="M98 160 C102 146 128 146 132 160"/>
+          <circle cx="155" cy="130" r="10"/><path d="M138 160 C142 146 168 146 172 160"/>
+          <!-- customers -->
+          <rect x="690" y="80" width="150" height="170" rx="8" transform="rotate(0.6 765 165)" fill="#EEF2F8"/>
+          <circle cx="725" cy="130" r="10"/><path d="M708 160 C712 146 738 146 742 160"/>
+          <circle cx="765" cy="130" r="10"/><path d="M748 160 C752 146 778 146 782 160"/>
+          <circle cx="805" cy="130" r="10"/><path d="M788 160 C792 146 818 146 822 160"/>
+          <!-- the marketplace -->
+          <rect x="330" y="110" width="220" height="110" rx="10" transform="rotate(-0.4 440 165)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- short arrows across -->
+          <path d="M196 140 L322 140" marker-end="url(#d5cAr)"/>
+          <path d="M558 140 L684 140" marker-end="url(#d5cAr)"/>
+          <path d="M684 190 L558 190" marker-end="url(#d5cAr)"/>
+          <path d="M322 190 L196 190" marker-end="url(#d5cAr)"/>
+          <!-- the indirect effect: long arcs -->
+          <path d="M115 76 C300 20 580 20 765 76" stroke="#A8570B" stroke-width="2.4" marker-end="url(#d5cAr)"/>
+          <path d="M765 256 C580 316 300 316 115 256" stroke="#A8570B" stroke-width="2.4" marker-end="url(#d5cAr)"/>
+        </g>
+
+        <text class="d5cV" x="115" y="200" text-anchor="middle">3,095</text>
+        <text class="d5cL" x="115" y="218" text-anchor="middle">sellers</text>
+        <text class="d5cS" x="115" y="238" text-anchor="middle">the RFM course's count</text>
+        <text class="d5cV" x="765" y="200" text-anchor="middle">96,096</text>
+        <text class="d5cL" x="765" y="218" text-anchor="middle">customer ids</text>
+        <text class="d5cS" x="765" y="238" text-anchor="middle">same export, same count</text>
+        <text class="d5cW" x="440" y="152" text-anchor="middle">THE MARKETPLACE</text>
+        <text class="d5cW" x="440" y="174" text-anchor="middle">32,216 products</text>
+        <text class="d5cW" x="440" y="192" text-anchor="middle">with at least one sale</text>
+        <text class="d5cS" x="259" y="128" text-anchor="middle">listings</text>
+        <text class="d5cS" x="621" y="128" text-anchor="middle">choice</text>
+        <text class="d5cS" x="621" y="210" text-anchor="middle">orders, reviews</text>
+        <text class="d5cS" x="259" y="210" text-anchor="middle">orders, rank</text>
+        <text class="d5cB" x="440" y="56" text-anchor="middle">more sellers: more choice for every buyer</text>
+        <text class="d5cB" x="440" y="286" text-anchor="middle">more buyers: more orders for every seller</text>
+
+        <text class="d5cN" x="30" y="332">The two long arcs are the indirect effect: each side gains when the other side grows, not when its own does.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the short arrows are the trade; the two long amber arcs are the network effect, and neither of them starts and ends on the same side</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Direct, indirect, and which one a marketplace runs on<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Direct.</strong> A messaging app is worth more to you when the people you message are on it. Every new member of your own kind makes the thing better for you. The demand curve for the app shifts right with each member, and the members are the same kind of person.</p>
+        <p><strong>Indirect.</strong> A marketplace is worth more to a buyer when there are more sellers, and more to a seller when there are more buyers. Every new member of the <em>other</em> kind makes it better for you; a new member of your own kind is a rival for the same buyers or the same sellers. The two demand curves, one per side, shift right when the other side grows, and that is the whole mechanism of a platform.</p>
+        <p>The distinction matters for every number that follows. If you count pairs among all members, as Metcalfe's law does, you are counting seller-seller pairs, which carry no value, and buyer-buyer pairs, which carry none either. On a two-sided platform the connections that count cross the middle. With 3,095 sellers and 96,096 customer ids the lopsidedness is the point: a seller's network is about 31 buyers on average, and a buyer's network is the sellers. The average is pure arithmetic on the two counts; what any one of those connections is worth is the claim Part 2 takes apart.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The chicken-and-egg problem in one page<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>An indirect network effect has a cruel start. Nobody sells where nobody buys, and nobody buys where nobody sells, so a two-sided platform at birth has two empty sides and no reason for either to fill. Every platform that exists solved this somehow, and the solutions all amount to <strong>subsidising one side</strong> until the other side has a reason to arrive: free listings for sellers, a discount for the first buyers, a supply the platform provides itself, or a single category served so well that both sides show up for it before the platform is general.</p>
+        <p>The data habit: when a platform's early numbers look strange, one side growing while the other is flat, or a category dominating the whole, the strangeness is usually the subsidy, not a finding. The Olist panel's 21 months run from October 2016 with gaps, and the early months are thin on both sides; that is what the start of a two-sided platform looks like in rows, and it is one reason the elasticity sessions asked for six months with a sale before reading any product.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Two sides in one export.</strong> The Olist dataset carries 3,095 sellers, 96,096 customer ids and 32,216 products with at least one sale; the RFM course counted the first two on the same export and the elasticity sessions counted the third. Only 203 of those products can be read for a price response, which says something about the seller side that the count alone does not: most sellers listed, sold a little, and never repriced. A platform's "network" is often mostly quiet members, and the arcs in the figure are drawn by the ones who trade.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers Metcalfe as a claim, the n log n rebuttal</span>
+      <h2>n squared, n log n, and the arithmetic at 10n</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Metcalfe's law says the value of a network grows with the square of its members, because that is how the number of possible pairs grows. Briscoe, Odlyzko and Tilly published a rebuttal in IEEE Spectrum in 2006, titled "Metcalfe's Law is Wrong", arguing that value grows in proportion to n log n, because a member's connections are not all worth the same. Both are claims. The useful thing to do with two claims about the same quantity is to compute both at two sizes and see how far apart they are. At n and at 10n they are apart by a factor of seven, and that factor is a valuation argument in one number.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 352" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn log-log sketch with two straight lines rising from the left, n squared steep and n log n shallow, marked at n equals one thousand with white dots and at ten n equals ten thousand with amber dots. A side panel does the arithmetic: at a thousand members n squared is one million and n ln n is 6,908; at ten thousand n squared is one hundred million and n ln n is 92,103; n squared grew a hundred times and n log n grew 13.3 times.">
+        <defs>
+          <filter id="d5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d5aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d5aL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .d5aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d5aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d5aV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .d5aA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d5aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d5aH" x="30" y="26">TWO LAWS, ONE TENFOLD OF MEMBERS</text>
+        <text class="d5aS" x="290" y="26">both axes are log scale, so each claim is a straight line</text>
+
+        <g filter="url(#d5aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M70 280 L70 60" stroke="#1F3A5F" marker-end="url(#d5aAr)"/>
+          <path d="M70 280 L540 280" stroke="#1F3A5F" marker-end="url(#d5aAr)"/>
+          <!-- n squared: slope 2 decades per decade -->
+          <path d="M120 185 L500 70" stroke="#2C4F7C" stroke-width="2.4"/>
+          <!-- n log n: slope just over 1 -->
+          <path d="M120 252 L500 189"/>
+          <!-- guides at n and 10n -->
+          <path d="M200 280 L200 150" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M440 280 L440 80" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <!-- the points -->
+          <circle cx="200" cy="161" r="6" fill="#FFFFFF"/>
+          <circle cx="200" cy="239" r="6" fill="#FFFFFF"/>
+          <circle cx="440" cy="88" r="7" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="440" cy="199" r="7" fill="#A8570B" stroke="#A8570B"/>
+          <!-- side panel -->
+          <rect x="570" y="60" width="280" height="230" rx="10" transform="rotate(0.4 710 175)" fill="#EEF2F8"/>
+          <!-- a dial doodle: one claim, two readings -->
+          <circle cx="820" cy="40" r="14"/><path d="M820 40 L829 31"/>
+        </g>
+
+        <text class="d5aA" x="80" y="56">VALUE, log scale</text>
+        <text class="d5aA" x="468" y="298">MEMBERS</text>
+        <text class="d5aS" x="200" y="298" text-anchor="middle">n = 1,000</text>
+        <text class="d5aS" x="440" y="298" text-anchor="middle">10n = 10,000</text>
+        <text class="d5aL" x="452" y="92">n squared</text>
+        <text class="d5aL" x="452" y="203">n log n</text>
+        <text class="d5aS" x="130" y="176">the square: every pair counts</text>
+        <text class="d5aS" x="130" y="270">n log n: the k-th link is worth 1/k</text>
+
+        <text class="d5aH" x="586" y="86">THE ARITHMETIC</text>
+        <text class="d5aL" x="586" y="110">at n = 1,000</text>
+        <text class="d5aS" x="586" y="128">n squared</text><text class="d5aS" x="834" y="128" text-anchor="end">1,000,000</text>
+        <text class="d5aS" x="586" y="144">n ln n</text><text class="d5aS" x="834" y="144" text-anchor="end">6,908</text>
+        <text class="d5aL" x="586" y="170">at 10n = 10,000</text>
+        <text class="d5aS" x="586" y="188">n squared</text><text class="d5aS" x="834" y="188" text-anchor="end">100,000,000</text>
+        <text class="d5aS" x="586" y="204">n ln n</text><text class="d5aS" x="834" y="204" text-anchor="end">92,103</text>
+        <text class="d5aB" x="586" y="232">n squared grew 100x. n log n grew 13.3x.</text>
+        <text class="d5aS" x="586" y="250">Log base does not change the ratio.</text>
+        <text class="d5aS" x="586" y="266">Two claims about one tenfold of members.</text>
+
+        <text class="d5aN" x="30" y="340">Briscoe, Odlyzko and Tilly 2006: value grows as n log n, because a member's links are not all worth the same.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two amber dots are the same ten thousand members under two laws, a hundred times and 13.3 times, and the gap between them is a valuation</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The arithmetic, done once by hand so nobody has to trust a slide<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Take n = 1,000. <strong>n squared</strong> is 1,000,000. <strong>n ln n</strong> is 1,000 times 6.908, which is 6,908. Now take 10n = 10,000. n squared is 100,000,000, a hundred times more. n ln n is 10,000 times 9.210, which is 92,103, and 92,103 over 6,908 is 13.3. So a tenfold in members is a hundredfold in value under one law and a 13-fold under the other, and the two disagree by a factor of 7.5 on the same tenfold. The base of the logarithm does not matter: base 2 or base 10 scales both n log n figures by the same constant, and the ratio 13.3 survives.</p>
+        <p>Why 13.3 and not 10: the log term itself grows, from 6.908 to 9.210, so n log n grows a little faster than n. That is the whole of the rebuttal's shape. Value grows faster than the member count, so a bigger network really is worth more per member, but not much faster, and nothing like the square.</p>
+        <p>What neither number is: a measurement. Nobody has measured the exponent on the marketplace whose rows run through these sessions, and the map of every number on these pages says so. When a deck says "network effects" and draws a curve, the honest question is which of the two lines in the figure it drew, and what it would take to tell them apart. A doubling gives 4x under the square and 2.2x under n log n; a tenfold gives 100x against 13.3x. Ask which one the forecast assumed.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why n log n: the argument about the k-th most valuable link<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Metcalfe's square rests on one assumption: every possible connection is worth the same. The rebuttal replaces it with a ranking. Each member has a most valuable connection, a second most valuable, and so on, and Briscoe, Odlyzko and Tilly's argument is that the k-th one is worth about 1/k of the first, the way the k-th most common word or the k-th biggest city is about 1/k of the first. Summing 1 + 1/2 + 1/3 + ... + 1/n gives about ln n. So each member gets about log n of value, and n members get about n log n.</p>
+        <p>The marginal reading is the useful one. Under the square, the thousandth member adds about as much as the first, because they add a thousand new pairs. Under n log n, the thousandth member's own connections are worth log n, and they add a little to everybody else's log n, which is much less than a thousand equal pairs. That is why the two laws diverge so fast, and why the argument between them is really an argument about whether a new member's links are worth the same as an old member's.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>A constructed deck, with the two lines drawn on it.</strong> Imagine a platform pitch that shows members going from 1,000 to 10,000 in three years and says value will follow "by Metcalfe's law". Draw the n log n line on the same slide. The square promises a hundredfold; the rebuttal promises about thirteen. Everything in the deck that depends on the hundredfold, the valuation, the hiring plan, the price of the next round, is standing on the difference between those two lines, and neither has been measured for this platform. The deck is invented. The gap between the lines is arithmetic.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers data network effects, learning curves, switching costs</span>
+      <h2>When more data compounds, and when it plateaus</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The data moat is a loop: more customers give more data, more data gives a better model, a better model wins more customers. The loop is real at the start. It stops being a moat for a mechanical reason: each doubling of data buys less accuracy than the doubling before it, because the early rows teach the common cases and the later rows are mostly common cases again. That is a learning curve that flattens, and once an incumbent and a rival are both on the flat part, a rival with a tenth of the rows is a few points behind rather than a generation behind. The build-along constructs a series with that shape, fits it, and reads where the flat begins.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 352" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn learning curve of accuracy against rows of training data, with each step on the horizontal axis a doubling from one thousand rows to five hundred and twelve thousand. The curve climbs steeply then flattens. The points a doubling buys are written above each step: 7.7, 5.9, 4.5, 3.4, 2.6, 1.9, 1.5, 1.1, then 0.8. The last two dots are amber, where a doubling buys under one point. Every number is constructed.">
+        <defs>
+          <filter id="d5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d5bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d5bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d5bL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .d5bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d5bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d5bA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d5bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d5bH" x="30" y="26">THE CURVE THAT FLATTENS</text>
+        <text class="d5bS" x="220" y="26">constructed series: error falls as a power of the rows, plus noise</text>
+
+        <g filter="url(#d5bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M70 280 L70 60" stroke="#1F3A5F" marker-end="url(#d5bAr)"/>
+          <path d="M70 280 L560 280" stroke="#1F3A5F" marker-end="url(#d5bAr)"/>
+          <!-- the flat region, hatched -->
+          <rect x="474" y="80" width="80" height="200" fill="url(#d5bHc)" stroke="none"/>
+          <!-- the curve -->
+          <path d="M90 254 L138 212 L186 180 L234 155 L282 138 L330 123 L378 113 L426 105 L474 99 L522 94" stroke="#2C4F7C" stroke-width="2.4"/>
+          <!-- the dots -->
+          <circle cx="90" cy="254" r="5" fill="#FFFFFF"/>
+          <circle cx="138" cy="212" r="5" fill="#FFFFFF"/>
+          <circle cx="186" cy="180" r="5" fill="#FFFFFF"/>
+          <circle cx="234" cy="155" r="5" fill="#FFFFFF"/>
+          <circle cx="282" cy="138" r="5" fill="#FFFFFF"/>
+          <circle cx="330" cy="123" r="5" fill="#FFFFFF"/>
+          <circle cx="378" cy="113" r="5" fill="#FFFFFF"/>
+          <circle cx="426" cy="105" r="5" fill="#FFFFFF"/>
+          <circle cx="474" cy="99" r="6" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="522" cy="94" r="6" fill="#A8570B" stroke="#A8570B"/>
+          <!-- side panel -->
+          <rect x="600" y="60" width="250" height="220" rx="10" transform="rotate(-0.4 725 170)" fill="#EEF2F8"/>
+        </g>
+
+        <text class="d5bA" x="80" y="56">ACCURACY, percent</text>
+        <text class="d5bS" x="90" y="296" text-anchor="middle">1k</text>
+        <text class="d5bS" x="186" y="296" text-anchor="middle">4k</text>
+        <text class="d5bS" x="282" y="296" text-anchor="middle">16k</text>
+        <text class="d5bS" x="378" y="296" text-anchor="middle">64k</text>
+        <text class="d5bS" x="474" y="296" text-anchor="middle">256k</text>
+        <text class="d5bS" x="522" y="296" text-anchor="middle">512k</text>
+        <text class="d5bA" x="560" y="316" text-anchor="end">ROWS, each step doubles</text>
+        <text class="d5bB" x="114" y="222" text-anchor="middle">+7.7</text>
+        <text class="d5bB" x="162" y="184" text-anchor="middle">+5.9</text>
+        <text class="d5bB" x="210" y="156" text-anchor="middle">+4.5</text>
+        <text class="d5bB" x="258" y="135" text-anchor="middle">+3.4</text>
+        <text class="d5bB" x="306" y="119" text-anchor="middle">+2.6</text>
+        <text class="d5bB" x="354" y="107" text-anchor="middle">+1.9</text>
+        <text class="d5bB" x="402" y="98" text-anchor="middle">+1.5</text>
+        <text class="d5bB" x="450" y="91" text-anchor="middle">+1.1</text>
+        <text class="d5bB" x="498" y="84" text-anchor="middle">+0.8</text>
+
+        <text class="d5bH" x="616" y="86">READ THE STEPS</text>
+        <text class="d5bL" x="616" y="110">each doubling buys less</text>
+        <text class="d5bS" x="616" y="130">7.7, 5.9, 4.5, 3.4, 2.6, 1.9,</text>
+        <text class="d5bS" x="616" y="146">1.5, 1.1, then 0.8 points</text>
+        <text class="d5bB" x="616" y="172">the flat starts where a</text>
+        <text class="d5bB" x="616" y="188">doubling buys under a point:</text>
+        <text class="d5bB" x="616" y="204">here, at 256,000 rows</text>
+        <text class="d5bS" x="616" y="232">every number is constructed</text>
+        <text class="d5bS" x="616" y="248">the shape is the mechanism</text>
+
+        <text class="d5bN" x="30" y="340">What remains to learn after many rows is the rare cases; the next batch of rows is mostly the common cases again.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the hatched band is the flat: from there a doubling of rows buys under one point, and a rival with a tenth of your data is standing on the same shelf</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The learning curve flattens, and the rival's gap shrinks with it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Draw accuracy against rows, with each step on the horizontal axis a doubling. The first doublings buy a lot: the model is learning the common cases, and every batch of rows is full of them. Later doublings buy less, because the common cases are learned and what is left is rare, and a batch of new rows contains the rare cases at the same low rate as before. On the constructed curve in the figure the nine doublings buy 7.7, 5.9, 4.5, 3.4, 2.6, 1.9, 1.5, 1.1 and 0.8 points; the exact numbers are invented, the shape is what every learning curve shares. The published literature on this shape reports a range of exponents that differ by task, and none of them is quoted here because none has been checked at source for these pages.</p>
+        <p>Now put a rival on the same curve with a tenth of your rows. On the steep part the gap is large: on the constructed curve, 1,000 rows against 10,000 is about 19 points apart. On the flat part it is small: 25,600 rows against 256,000 is about 5 points apart. <strong>Same tenfold advantage in data, a quarter of the advantage in accuracy</strong>, and the gap keeps shrinking as both of you reach the flat. That is what "we have ten times the data" is worth, and it depends entirely on where on the curve it is measured.</p>
+        <p>The same flattening lives inside the elasticity sessions in another costume. One product's 13 rows gave a slope of -10.17 that was noise; the panel of 2,216 rows gave -1.788 with a naive standard error of 0.149. More rows turned noise into a range, which is the steep part. More rows after that narrow the standard error at a square-root pace, which is the flat part: the answer stops changing, it just gets a tighter interval, and a rival with a smaller panel gets nearly the same answer.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "we have the data" is often not a moat: switching costs and multi-homing<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A data advantage is a moat under two conditions, and the learning curve is why. Either the rival cannot get to the steep part at all, because the data is genuinely unobtainable: it is produced by a process only you run, or it is tied to customers who would have to leave you to produce it for somebody else. Or the curve for your task has not flattened at the sizes anyone has, so every doubling still pays. The first condition is a <strong>switching cost</strong> wearing a data costume: the data is a moat because the customer is walled in, not because of the rows. The second is rare and temporary, since the curve flattens eventually for every task anyone has measured.</p>
+        <p>Where neither condition holds, the moat claim fails on arithmetic. A rival with public data, or with a tenth of yours bought or collected, sits a few points behind on the flat, and a few points is what a better model architecture, a cleaner label set or a lower price can close. And where customers <strong>multi-home</strong>, using your product and the rival's at once, they produce data for both, and the rival's curve climbs on your customers. Foundations session 6 drew the wall and the door; the data version is that the rows are the bricks, and the door is that the customer can produce the same rows for somebody else.</p>
+        <p>The honest sentence for a leader has three parts: how big the advantage is in points, where on the curve it was measured, and what would let a rival reach the same shelf. A sentence with only the first part is a slogan.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>A constructed model team, and the number they did not ask for.</strong> Imagine a team with 256,000 labelled rows and a rival with 25,600. The team's slide says "ten times the data". On the constructed curve the accuracy gap at that point is about 5 points, and the next doubling of their own rows would buy under one. Their advantage is real, measured, and standing on the flat part of the curve, where the rival's next doubling buys more than theirs does. The team is invented, the curve is constructed, and the sentence they should have written is the one the build-along prints: how big, where on the curve, and what closes it.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Write the three-part sentence for a data advantage you have heard claimed" data-hint="How big is it, in points or in whatever the model is scored on. Where on the curve was it measured: does the next doubling still pay? What would let a rival reach the same place. Three lines." data-seed="" data-cta="Count it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Fit a learning curve to constructed data, and read where it flattens</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Six steps in numpy. The data is constructed: a series of accuracy readings at doubling row counts, with the error falling as a power of the rows plus a little noise, which is the shape learning curves share. Nothing here is measured on any real model, so every printed output on this page says "your numbers will differ", and the constants at the top are yours to change. The point is the reading, not the numbers: a fit in logs, the points each doubling buys, the first doubling that buys under one, and a rival's gap measured at two places on the curve.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 226" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as a hand-drawn track of six stations: construct the series, look at it, fit a line in logs, compute the points each doubling buys, measure a rival's gap at a tenth of the rows, and write the sentence. The doublings station is amber and the rival's gap station is navy.">
+        <defs>
+          <filter id="d5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d5dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d5dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d5dL { font: 700 11px Inter, sans-serif; fill: #16213A; }
+          .d5dS { font: 400 10.5px Inter, sans-serif; fill: #4E5A75; }
+          .d5dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d5dW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .d5dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d5dH" x="30" y="26">SIX STATIONS</text>
+        <text class="d5dS" x="140" y="26">every number produced along the track is constructed</text>
+
+        <g filter="url(#d5dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 120 L820 120" stroke="#C9D2E2"/>
+          <rect x="40" y="90" width="120" height="60" rx="8" transform="rotate(-0.6 100 120)" fill="url(#d5dHc)"/>
+          <rect x="170" y="90" width="120" height="60" rx="8" transform="rotate(0.5 230 120)" fill="#FFFFFF"/>
+          <rect x="300" y="90" width="120" height="60" rx="8" transform="rotate(-0.4 360 120)" fill="#EEF2F8"/>
+          <rect x="430" y="90" width="120" height="60" rx="8" transform="rotate(0.6 490 120)" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="560" y="90" width="120" height="60" rx="8" transform="rotate(-0.5 620 120)" fill="#1F3A5F" stroke="#1F3A5F"/>
+          <rect x="690" y="90" width="120" height="60" rx="8" transform="rotate(0.4 750 120)" fill="#FFFFFF"/>
+          <path d="M162 120 L166 120" marker-end="url(#d5dAr)"/>
+          <path d="M292 120 L296 120" marker-end="url(#d5dAr)"/>
+          <path d="M422 120 L426 120" marker-end="url(#d5dAr)"/>
+          <path d="M552 120 L556 120" marker-end="url(#d5dAr)"/>
+          <path d="M682 120 L686 120" marker-end="url(#d5dAr)"/>
+        </g>
+
+        <text class="d5dL" x="52" y="112">1 · construct</text>
+        <text class="d5dS" x="52" y="128">rows x2 nine times</text>
+        <text class="d5dS" x="52" y="142">error falls, noisy</text>
+        <text class="d5dL" x="182" y="112">2 · look</text>
+        <text class="d5dS" x="182" y="128">print the table</text>
+        <text class="d5dS" x="182" y="142">numbers differ</text>
+        <text class="d5dL" x="312" y="112">3 · fit in logs</text>
+        <text class="d5dS" x="312" y="128">log err vs log n</text>
+        <text class="d5dS" x="312" y="142">slope = exponent</text>
+        <text class="d5dW" x="442" y="112">4 · doublings</text>
+        <text class="d5dW" x="442" y="128">points a doubling</text>
+        <text class="d5dW" x="442" y="142">buys; first under 1</text>
+        <text class="d5dW" x="572" y="112">5 · rival's gap</text>
+        <text class="d5dW" x="572" y="128">tenth of the rows</text>
+        <text class="d5dW" x="572" y="142">early vs late</text>
+        <text class="d5dL" x="702" y="112">6 · the sentence</text>
+        <text class="d5dS" x="702" y="128">flat starts at n</text>
+        <text class="d5dS" x="702" y="142">gap shrinks</text>
+
+        <text class="d5dS" x="40" y="74">Station 1 is the only one that knows the true curve. Stations 3 to 6 see only the noisy readings, which is what a real project sees.</text>
+        <text class="d5dN" x="30" y="208">Change the two constants at the top and run it again. The flat moves; the reading does not.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the hatched station is the only one that knows the truth; the amber station is the one that makes the moat claim measurable</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Construct the series.</strong> Rows double nine times from 1,000 to 256,000. The true error falls as a power of the rows, which a real project never sees; what it sees is the noisy accuracy readings. Every constant is labelled and yours to change.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · construct, and say so</span>import numpy as np
+
+# CONSTRUCTED: an accuracy-vs-rows series with diminishing returns.
+# Nothing below is measured on any real model. Change the constants freely.
+SEED  = 20260925
+START = 0.32      # error at 1,000 rows
+DECAY = 0.40      # how fast error falls: the exponent on the rows
+NOISE = 0.006     # measurement noise on each accuracy reading
+
+rng  = np.random.default_rng(SEED)
+rows = 1000 * 2 ** np.arange(9)                    # 1,000 to 256,000, one doubling per step
+err  = START * (rows / 1000) ** (-DECAY)           # the true curve; a real project never sees it
+acc  = 1 - err + rng.normal(0, NOISE, len(rows))   # what a real project sees: noisy readings</div>
+      </div>
+      <div class="step">
+        <p><strong>Look before fitting.</strong> Print the table and read the steps by eye first. The gaps between consecutive readings should shrink; if they do not, the noise is too large for the series and the fit will say so later.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · look</span>for n, a in zip(rows, acc):
+    print(f"{n:&gt;8,} rows   accuracy {100 * a:5.1f}")   # constructed; your numbers will differ</div>
+      </div>
+      <div class="step">
+        <p><strong>Fit a line in logs.</strong> A straight line through log error against log rows is a power law in levels, which is a saturating curve in accuracy. The slope is the exponent, the thing the moat claim quietly depends on. It is the same trick as the elasticity fit: a slope in logs is a percentage answer.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · fit in logs</span># log(error) = c + b * log(rows): a straight line in logs, a power law in levels
+b, c = np.polyfit(np.log(rows), np.log(1 - acc), 1)
+print(round(b, 3))          # the fitted exponent; near -DECAY here, your numbers will differ
+
+def fitted_err(n):
+    return np.exp(c) * n ** b</div>
+      </div>
+      <div class="step">
+        <p><strong>Read what each doubling buys.</strong> Extend the fitted curve past the data and compute the points of accuracy each doubling adds. The first doubling that buys under one point is where the flat begins, and it is the number to write on the slide instead of "we have the data".</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the doublings</span>grid = 1000 * 2 ** np.arange(12)                             # 1,000 to 2,048,000 rows
+gain = 100 * (fitted_err(grid[:-1]) - fitted_err(grid[1:]))   # points bought by each doubling
+for n, g in zip(grid[:-1], gain):
+    print(f"{n:&gt;10,} to {2 * n:&gt;10,}   +{g:4.2f} points")     # your numbers will differ
+
+flat = grid[:-1][gain &lt; 1][0]
+print("first doubling that buys under one point starts at", f"{flat:,}", "rows")</div>
+      </div>
+      <div class="step">
+        <p><strong>Measure the rival's gap at two places.</strong> A rival with a tenth of the rows is a fixed ratio behind in data and a shrinking distance behind in accuracy. Compute the distance early on the curve and at the flat. On the noiseless constructed curve those are about 19 points at 10,000 rows and about 5 at 256,000; your fitted values will sit near them.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the rival's gap</span>def gap_points(n_big):
+    # how far behind a rival with a tenth of the rows sits, in points, at this place on the curve
+    return 100 * (fitted_err(n_big / 10) - fitted_err(n_big))
+
+print(round(gap_points(10_000), 1), round(gap_points(256_000), 1))   # your numbers will differ
+# same tenfold in data, a fraction of the gap in accuracy: the moat is where on the curve you stand</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the sentence.</strong> Three parts: how big, where on the curve, and what it means for a rival. Print it from the fitted numbers so that changing a constant changes the sentence and not just a chart.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · the sentence</span>print(f"On this constructed series, accuracy stops paying for rows at about {flat:,}: "
+      f"the next doubling buys under one point. A rival with a tenth of our rows is "
+      f"{gap_points(flat):.0f} points behind there, against {gap_points(10_000):.0f} points "
+      f"behind at 10,000 rows. The advantage shrinks as both of us reach the flat.")
+# your numbers will differ; the shape of the sentence should not</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the two constants at the top and the sentence at the bottom.</strong> When somebody says "but our task is different", change the decay and run it again. A steeper decay moves the flat earlier and shrinks the rival's gap faster; a shallower one moves it later. Either way the sentence has the same three parts, and a slide that cannot fill all three is a slogan.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before deep-dive session 6</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Run the six steps</strong> and then change the decay to 0.25 and to 0.60. Write down where the flat starts and the rival's gap at the flat for each. Three rows, and you have the whole range a moat claim can honestly occupy on this shape.</li>
+      <li><strong>Do the n and 10n arithmetic</strong> for a platform you know, with n set to its real member count if you have it. Write the n squared and n log n values at n and at 10n and the two ratios. Then write which one the platform's own forecast assumed.</li>
+      <li><strong>Find a real learning curve</strong> in a paper or a model card, if you can, and read whether the last doubling shown bought more or less than one point. Write one sentence on where on the curve the headline number was measured.</li>
+      <li><strong>Bring the sentence.</strong> Session 6 is auctions, and the first thing an ad auction prices is a slot on a platform whose value somebody once quoted as a square.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 5 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · A marketplace with 3,095 sellers and 96,096 customer ids says it has "strong network effects". Which kind, and what follows for counting them?</p>
+      <button class="qopt" type="button">A · Direct: every member gains from every other member, so the value is the number of pairs among all 99,191 members</button>
+      <button class="qopt" type="button">B · Indirect: a buyer gains from more sellers and a seller from more buyers, while a seller gains nothing from another seller; the connections that carry value cross the platform, so counting pairs among all members overstates the network before any exponent is argued</button>
+      <button class="qopt" type="button">C · Neither: network effects only exist for messaging apps</button>
+      <button class="qopt" type="button">D · Direct on the buyer side and indirect on the seller side, so the two should be added</button>
+      <p class="qwhy">A marketplace is two-sided. Seller-seller pairs are rivalry, not value, and buyer-buyer pairs are nothing. The average of about 31 buyers per seller is arithmetic on the two counts; what one of those connections is worth is a claim, and the chicken-and-egg problem at birth is why the early rows of any platform look strange.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · A platform goes from 1,000 to 10,000 members. What do the two laws say about its value, and what is the honest reading?</p>
+      <button class="qopt" type="button">A · Both say about ten times, since value follows members</button>
+      <button class="qopt" type="button">B · Metcalfe says a hundred times and the rebuttal agrees, because n log n at large n is close to n squared</button>
+      <button class="qopt" type="button">C · n squared goes from 1,000,000 to 100,000,000, a hundred times; n ln n goes from 6,908 to 92,103, 13.3 times; the two claims disagree by a factor of about 7.5 on the same tenfold, and neither has been measured on the platform, so the forecast should say which line it drew</button>
+      <button class="qopt" type="button">D · The rebuttal says value falls with size, because each new member's links are worth less</button>
+      <p class="qwhy">The arithmetic is the whole answer, and it is the same in any log base. The rebuttal, Briscoe, Odlyzko and Tilly 2006, does not say value falls; it says value grows faster than members but nothing like the square, because a member's k-th link is worth about 1/k of the first.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A team has ten times the training rows of its rival and says that is its moat. What does the learning curve say?</p>
+      <button class="qopt" type="button">A · It depends where on the curve both sit. On the steep part a tenfold in rows is a large accuracy gap; on the flat part, where a doubling buys under one point, the same tenfold is a few points, and the gap keeps shrinking, so the claim needs the size in points, the place on the curve, and what would let the rival reach the same shelf</button>
+      <button class="qopt" type="button">B · Ten times the data is always ten times the accuracy, so the moat is real</button>
+      <button class="qopt" type="button">C · Data never matters once a model is chosen, so there is no moat</button>
+      <button class="qopt" type="button">D · The moat is real if the team also has a switching cost, and only then, regardless of the curve</button>
+      <p class="qwhy">On the constructed curve the gap is about 19 points at 10,000 rows and about 5 at 256,000, a quarter of the advantage for the same tenfold. A switching cost or unobtainable data can make a data advantage durable, but that is a wall, not the rows, and the door question from Foundations session 6 applies.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Direct and indirect network effects, the two-sided platform, switching costs, multi-homing</span><span class="note">Standard economics, no single source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">3,095 sellers and 96,096 customer ids; 32,216 products with a sale; 203 eligible; 2,216 panel rows over 21 months; rung 3 slope -1.788, naive se 0.149; the headline product's -10.17</span><span class="note">Counted from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0); the seller and customer counts are the RFM course's on the same export, the rest computed for these pages</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Metcalfe's law as a claim; the n log n rebuttal; the arithmetic at n = 1,000 and 10n = 10,000 (100x against 13.3x), and at one doubling (4x against 2.2x)</span><span class="note">Briscoe, Odlyzko and Tilly 2006, IEEE Spectrum, "Metcalfe's Law is Wrong", read at source; the figures are arithmetic on the two claims, not a measurement of any platform</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The learning curve that flattens; the rival's gap of about 19 points at 10,000 rows and about 5 at 256,000; the flat at 256,000 rows</span><span class="note">Constructed series (error 0.32 at 1,000 rows, exponent 0.40, noise 0.006); every number is invented and the page says so; no published exponent is quoted</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The constructed deck and the constructed model team</span><span class="note">Invented; the page says so</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The chicken-and-egg problem, subsidising one side</span><span class="note">Self-study, one page; no case figures claimed</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Auctions, Vickrey, GSP</span><span class="note">Named as deep-dive session 6; not taught here</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Direct or indirect</b><span>Gain from your own kind, or from the other side. A marketplace is indirect: pairs on one side are rivals, not value.</span></div>
+      <div class="cheat-item"><b>The arithmetic at 10n</b><span>n squared: 1,000,000 to 100,000,000, 100x. n ln n: 6,908 to 92,103, 13.3x. Log base does not change the ratio.</span></div>
+      <div class="cheat-item"><b>Both laws are claims</b><span>The mechanism is real, the exponent is not measured. Ask which line the forecast drew.</span></div>
+      <div class="cheat-item"><b>Fit in logs</b><span>polyfit(log rows, log error, 1). The slope is the exponent; the curve is a power law, a saturating curve in accuracy.</span></div>
+      <div class="cheat-item"><b>The flat is where a doubling buys under one point</b><span>Read it off the fitted curve. On the constructed series, 256,000 rows.</span></div>
+      <div class="cheat-item"><b>A data advantage has three parts</b><span>How big in points, where on the curve, what lets the rival reach the same shelf. Constructed: 19 points early, 5 on the flat.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You can now say what a network is worth under two laws and how far a data advantage really reaches. Deep-dive session 6 is about the mechanism that prices most of what a platform sells: the auction. Why auctions exist when values are unknown; first-price against second-price; Vickrey's 1961 result that in a second-price sealed bid, bidding your true value is the dominant strategy; the generalised second-price auction that prices search ads and Edelman, Ostrovsky and Schwarz's 2007 finding that it is not truthful; and spot markets for compute as auctions in disguise. The build-along runs a second-price auction with constructed bidders in twenty lines and checks that shading a bid loses.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 5 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p4-the-economics-of-a-prediction.html">← Prev: The economics of a prediction</a> &nbsp;·&nbsp; <a href="p6-auctions.html">Next: Auctions: how ads and compute are priced →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

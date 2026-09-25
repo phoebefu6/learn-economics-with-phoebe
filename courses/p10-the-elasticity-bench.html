@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 10 of 10. The elasticity bench: 2,216 real product-month rows from Olist, five ways to fit a line, every slope computed in your browser. The anti-lever that prices on the market-wide number and gets the sign wrong, the break button that shuffles prices and watches the signal vanish, and the sentence that defends the number in a meeting.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The elasticity bench, and defending a number - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 10 of 10. Same 2,216 rows, five rungs, one anti-lever with the wrong sign, and a break button. Every number computed live.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p10-the-elasticity-bench.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The elasticity bench, and defending a number - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 10 of 10. Five rungs, live, on real rows. Then the sentence for the meeting.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 10 · The elasticity bench, and defending a number - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 10 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 10 of 10</div>
+    <h1>The elasticity bench, and <span class="accent">defending a number</span></h1>
+    <p class="sub">Nine sessions have built one claim: on 203 real products, the price elasticity is about -1.8 when each product is compared with itself, between -1.5 and -2.2 depending on choices that are yours to make, and it is neither the -0.1 a first analysis reports nor the zero that comparing across products produces. Tonight the claim sits on a bench. Every slope is refitted in your browser from the 2,216 rows the moment you touch a control, so the ladder is not a table to believe but a machine to work. There is an anti-lever, the choice everyone reaches for, and it gets the sign of the revenue decision wrong. There is a break button that shuffles prices inside every product and watches the signal fall to zero, because a number you cannot make disappear is a number you do not understand. And there is the sentence you say in the meeting, which is shorter than any of this.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Bench night</span>
+      <span class="chip audience">Analysts, pricing and growth teams, and the leaders they report to</span>
+      <span class="chip audience">Browser only, no code needed</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-14 · Reading the ladder</span>
+      <span class="a3" style="flex:6">14-40 · The bench, then the sentence</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">A bench is not a dashboard. A dashboard shows you a number; a bench lets you break it. Everything on this page is recomputed from the same 2,216 real product-month rows that deep-dive session 1 built and session 2 fitted, and the point of doing it live is that you can move the four filters, pick any rung, shift every price by any amount, and watch which numbers move and which do not. A slope that survives the filters and dies under the shuffle is a slope you can defend.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Bench = every number computed in your browser</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A ladder you have worked with your own hands, the anti-lever you can now name when somebody proposes it, the placebo that tells you how far a slope is from noise, and one sentence for a leader that carries the range, the mechanism and the caveat without a single decimal that is not earned.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the five rungs and what each removes</span>
+      <h2>Reading the ladder</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">Five ways to fit a line through the same rows. Each rung removes one thing the rung below could not, and the number changes by a factor of sixteen on the way up. The bench below has the four fits as buttons and the fifth as a break button, because the fifth is not a fit, it is a test.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn ladder with five rungs. Rung 1 across products, slope plus 0.008: cheap products are not popular products. Rung 2 pooled rows, minus 0.108: a small number that is not an elasticity. Rung 3 each product with itself, minus 1.788: the product's own mean removed. Rung 4 product and month, minus 1.854: the month's mean removed too. Rung 5 the placebo: prices shuffled inside each product, slope near zero. A side note lists what each rung removes.">
+        <defs>
+          <filter id="d10aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d10aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d10aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d10aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d10aL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .d10aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d10aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d10aV { font: 800 18px Inter, sans-serif; fill: #142944; }
+          .d10aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .d10aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d10aH" x="30" y="26">FIVE RUNGS, ONE SET OF ROWS</text>
+        <text class="d10aS" x="270" y="26">the slope on each rung is what the bench computes when you press that button</text>
+
+        <g filter="url(#d10aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the two rails -->
+          <path d="M120 320 L120 50" stroke-width="3"/>
+          <path d="M470 320 L470 50" stroke-width="3"/>
+          <!-- rungs, bottom to top -->
+          <rect x="120" y="282" width="350" height="26" rx="6" transform="rotate(-0.4 295 295)" fill="url(#d10aHc)"/>
+          <rect x="120" y="224" width="350" height="26" rx="6" transform="rotate(0.3 295 237)" fill="#EEF2F8"/>
+          <rect x="120" y="166" width="350" height="26" rx="6" transform="rotate(-0.3 295 179)" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="120" y="108" width="350" height="26" rx="6" transform="rotate(0.4 295 121)" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="120" y="50" width="350" height="26" rx="6" transform="rotate(-0.2 295 63)" fill="#FEF2F2" stroke="#991B1B"/>
+          <!-- a small person climbing, left of the ladder -->
+          <circle cx="70" cy="200" r="11"/>
+          <path d="M70 211 L70 240 M70 220 L54 232 M70 220 L86 210 M70 240 L58 262 M70 240 L84 260"/>
+          <!-- side note panel -->
+          <rect x="530" y="50" width="320" height="258" rx="10" transform="rotate(0.3 690 179)" fill="#FFFFFF" stroke="#C9D2E2"/>
+        </g>
+
+        <text class="d10aL" x="132" y="300">1 · across products</text>
+        <text class="d10aV" x="458" y="302" text-anchor="end">+0.008</text>
+        <text class="d10aL" x="132" y="242">2 · pooled rows</text>
+        <text class="d10aV" x="458" y="244" text-anchor="end">-0.108</text>
+        <text class="d10aW" x="132" y="184">3 · each product with itself</text>
+        <text class="d10aW" x="458" y="184" text-anchor="end">-1.788</text>
+        <text class="d10aW" x="132" y="126">4 · product and month</text>
+        <text class="d10aW" x="458" y="126" text-anchor="end">-1.854</text>
+        <text class="d10aB" x="132" y="68">5 · prices shuffled within product</text>
+        <text class="d10aB" x="458" y="68" text-anchor="end">about 0</text>
+
+        <text class="d10aH" x="548" y="76">WHAT EACH RUNG REMOVES</text>
+        <text class="d10aS" x="548" y="100">1 · nothing: cheap products are</text>
+        <text class="d10aS" x="548" y="116">simply not popular products</text>
+        <text class="d10aS" x="548" y="140">2 · nothing, but rows not products,</text>
+        <text class="d10aS" x="548" y="156">so a little within-product signal leaks in</text>
+        <text class="d10aS" x="548" y="180">3 · "this product is cheap and popular":</text>
+        <text class="d10aS" x="548" y="196">each product's own mean, subtracted</text>
+        <text class="d10aS" x="548" y="220">4 · "the marketplace grew this month":</text>
+        <text class="d10aS" x="548" y="236">each month's mean, subtracted too</text>
+        <text class="d10aB" x="548" y="262">5 · the cause: with prices shuffled,</text>
+        <text class="d10aB" x="548" y="278">a real signal must vanish, and it does</text>
+
+        <text class="d10aN" x="30" y="346">Rung 3 is the answer and rung 5 is the reason to believe it. Rungs 1 and 2 are the numbers a first analysis reports.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the factor of sixteen between rung 2 and rung 3 is the whole difference between comparing products with each other and with themselves</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>How to read a rung, and the one question to ask of any elasticity<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every elasticity anyone reports was fitted on some rows in some way, and the question that sorts the useful ones from the rest is: <strong>what was compared with what?</strong> Across products (rung 1) compares a bath towel with a phone case, and the slope of +0.008 says price tells you nothing about that comparison, which is true and useless. Pooled (rung 2) throws all product-months in one cloud, and the -0.108 is mostly rung 1 with a little within-product signal leaking through. Within product (rung 3) subtracts each product's own mean price and mean units before fitting, so the only variation left is a product moving against itself. That is the comparison a pricing decision is about, and it reads -1.788.</p>
+        <p>Rung 4 subtracts each month's mean too, which takes out the marketplace growing, and moves the slope to -1.854. That it moves so little is itself a finding: the growth every product shared was already mostly absorbed by comparing products with themselves. Rung 5 is not a fit. It shuffles the prices inside every product, so that each product keeps its own prices and its own units but the pairing between them is destroyed, and refits rung 3. Two hundred times over, the slope averages -0.002 with a standard deviation of 0.159. The real slope is more than eleven of those standard deviations away.</p>
+        <p>The standard errors on the bench are the naive kind, computed as if every row were independent, and the page says so. They are a floor on the uncertainty, not a ceiling. The placebo is the honest measure of how far the answer sits from noise, and it is why the break button exists.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The four filters, and what each one is a test of<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Weight months by units</strong> makes a month with 121 sales count for more than a month with 2, and moves rung 3 to -2.216. <strong>Price includes freight</strong> swaps the seller's price for the buyer's cost, and moves it to -1.881. <strong>Drop single-unit months</strong> removes the 16.5 percent of rows where one sale happened, and moves it to -1.480. <strong>Category</strong> restricts the panel to one shelf, where the within-product slope runs from -1.283 (garden tools, 13 products) to -3.883 (bed, bath and table, 22 products) with standard errors wide enough that most of the categories cannot be told apart.</p>
+        <p>None of the four is the right setting. Together they are the range: -1.5 to -2.2, about -1.8 at the default. A number that stays in that band whatever you press is a number with a shape you can describe, and describing the shape is what defending it means.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section" id="bench">
+    <div class="section-kicker">
+      <span class="klabel">Build-along · the bench</span>
+      <h2>Five rungs, computed in front of you</h2>
+      <span class="tag demo">★ 20 min · the main event</span>
+    </div>
+    <p class="lede">Work the rungs in order, one to four. For each, read the verdict line, the six readouts, and the cloud the rung fitted. Then set the price slider to +10 percent and read the revenue line on rung 2 and on rung 3. Then press the anti-lever, and then press the break button on rung 3. Say out loud what changed each time before moving on.</p>
+
+    <div id="econ-bench"></div>
+
+    <div class="callout tip">
+      <p><strong>Read it in this order.</strong> Slope, then the placebo standard deviation, then the two modelled lines. The first two are computed from the rows and carry the "computed" tag; the last two are arithmetic under a constant-elasticity assumption and carry "modelled", because a 10 percent rise has never been run on these products and the line is a projection, not a measurement.</p>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two bars for the same 10 percent price rise. Under the market-wide slope of minus 0.108, revenue is projected up 8.9 percent, drawn as a bar rising above the line. Under the within-product slope of minus 1.788, revenue is projected down 7.2 percent, drawn as a bar falling below the line. A note says the rows are the same and only the comparison changed.">
+        <defs>
+          <filter id="d10bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="103" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d10bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d10bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d10bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d10bL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .d10bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d10bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d10bR { font: 800 11px Inter, sans-serif; fill: #991B1B; }
+          .d10bV { font: 800 20px Inter, sans-serif; fill: #142944; }
+          .d10bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d10bH" x="30" y="26">THE ANTI-LEVER GETS THE SIGN WRONG</text>
+        <text class="d10bS" x="320" y="26">every price up 10 percent · projected revenue under two slopes · constant elasticity, modelled</text>
+
+        <g filter="url(#d10bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the zero line -->
+          <path d="M80 170 L560 170"/>
+          <!-- bar up (anti) -->
+          <rect x="150" y="90" width="120" height="80" rx="4" transform="rotate(-0.5 210 130)" fill="#FEF2F2" stroke="#991B1B"/>
+          <!-- bar down (within) -->
+          <rect x="360" y="170" width="120" height="65" rx="4" transform="rotate(0.4 420 202)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- a lever doodle -->
+          <path d="M640 200 L760 140" stroke="#991B1B" stroke-width="3"/>
+          <path d="M700 170 L700 214" stroke-width="3"/>
+          <path d="M670 214 L730 214" stroke-width="3"/>
+          <circle cx="760" cy="140" r="8" fill="#FEF2F2" stroke="#991B1B"/>
+        </g>
+
+        <text class="d10bR" x="210" y="76" text-anchor="middle">market-wide slope -0.108</text>
+        <text class="d10bV" x="210" y="136" text-anchor="middle">+8.9%</text>
+        <text class="d10bS" x="210" y="154" text-anchor="middle">units -1.0%</text>
+        <text class="d10bB" x="420" y="262" text-anchor="middle">within-product slope -1.788</text>
+        <text class="d10bV" x="420" y="212" text-anchor="middle">-7.2%</text>
+        <text class="d10bS" x="420" y="188" text-anchor="middle">units -15.7%</text>
+        <text class="d10bS" x="60" y="174" text-anchor="end">0</text>
+
+        <text class="d10bH" x="620" y="76">THE LEVER EVERYONE PULLS</text>
+        <text class="d10bS" x="620" y="98">"Use the overall number, it has</text>
+        <text class="d10bS" x="620" y="114">more data behind it." It does, and</text>
+        <text class="d10bS" x="620" y="130">the data is about the wrong comparison.</text>
+        <text class="d10bR" x="620" y="246">Same rows. Opposite sign.</text>
+
+        <text class="d10bN" x="30" y="288">A first analysis reports the +8.9. The bench shows it next to the -7.2 so that the choice of comparison is visible as a choice.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the red bar is what the anti-lever projects; on the bench, press it and read the revenue line, then press rung 3</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the break button proves, and what it cannot<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Press it on rung 3. Inside every product the prices are shuffled among that product's own months, so the set of prices and the set of units are unchanged and only their pairing is destroyed. The slope collapses to somewhere within about 0.16 of zero. Press it again and the real pairing returns with the real slope. A detector that cannot be made to fail has not been tested; this one fails on demand, in the direction it should.</p>
+        <p>What it cannot prove is causation. The shuffle shows that the pairing of price and units inside a product carries the slope. It does not show that the price caused the units rather than the seller reading the units and setting the price. Product effects remove "cheap and popular", month effects remove "the marketplace grew", the placebo removes "chance", and none of the three removes "the seller chose". That last step needs a price that was changed for a reason unrelated to demand, which is what an experiment is, and the experimentation course owns it.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the sentence for the meeting</span>
+      <h2>Defending the number</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">A number is defended by its shape, not its decimals. The shape of this one is: a range, a mechanism, and a caveat. The range is -1.5 to -2.2 with -1.8 at the default. The mechanism is "each product compared with itself, on 203 products that repriced". The caveat is "an association with a placebo behind it, not an experiment". Anyone who asks for a single decimal is asking you to remove the shape, and the correct answer is the shape again, slower.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn histogram of 200 placebo slopes, a narrow hump centred on zero between about minus 0.5 and plus 0.5. Far to the left, at minus 1.79, a single amber marker for the real slope with a bracket reading more than eleven standard deviations away. A note gives the sentence for the meeting.">
+        <defs>
+          <filter id="d10cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="109" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d10cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d10cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d10cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d10cL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .d10cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d10cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d10cV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .d10cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d10cH" x="30" y="26">WHERE THE REAL SLOPE SITS AGAINST 200 SHUFFLES</text>
+        <text class="d10cS" x="420" y="26">placebo: prices shuffled within product, refit, 200 times · mean -0.002, sd 0.159</text>
+
+        <g filter="url(#d10cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 220 L840 220"/>
+          <!-- the placebo hump around x=700 (zero) -->
+          <rect x="640" y="212" width="14" height="8" fill="url(#d10cHc)"/>
+          <rect x="656" y="196" width="14" height="24" fill="url(#d10cHc)"/>
+          <rect x="672" y="160" width="14" height="60" fill="url(#d10cHc)"/>
+          <rect x="688" y="110" width="14" height="110" fill="url(#d10cHc)"/>
+          <rect x="704" y="104" width="14" height="116" fill="url(#d10cHc)"/>
+          <rect x="720" y="154" width="14" height="66" fill="url(#d10cHc)"/>
+          <rect x="736" y="194" width="14" height="26" fill="url(#d10cHc)"/>
+          <rect x="752" y="210" width="14" height="10" fill="url(#d10cHc)"/>
+          <!-- the real slope far left -->
+          <path d="M150 90 L150 220" stroke="#A8570B" stroke-width="3"/>
+          <circle cx="150" cy="90" r="9" fill="#A8570B" stroke="#A8570B"/>
+          <!-- bracket from real to hump -->
+          <path d="M162 130 L680 130" stroke="#A8570B" stroke-dasharray="6 4" marker-end="url(#d10cAr)"/>
+        </g>
+
+        <text class="d10cB" x="150" y="76" text-anchor="middle">rung 3: -1.788</text>
+        <text class="d10cV" x="420" y="120" text-anchor="middle">more than 11 placebo sd away</text>
+        <text class="d10cS" x="150" y="240" text-anchor="middle">-1.8</text>
+        <text class="d10cS" x="420" y="240" text-anchor="middle">-0.9</text>
+        <text class="d10cS" x="704" y="240" text-anchor="middle">0</text>
+        <text class="d10cS" x="800" y="240" text-anchor="middle">+0.4</text>
+        <text class="d10cL" x="580" y="88">the widest shuffle</text>
+        <text class="d10cS" x="580" y="104">reached 0.444</text>
+
+        <text class="d10cN" x="30" y="272">"Between -1.5 and -2.2, about -1.8, each product against itself on 203 that repriced; an association with a placebo behind it, not a test."</text>
+        <text class="d10cN" x="30" y="290">That is the sentence. It has a range, a mechanism and a caveat, and nobody can take a decimal off it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the hump is what chance produces on these rows; the amber dot is what the rows produce</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The sentence, and the three questions it survives<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>"So what is the number?"</strong> Between -1.5 and -2.2, about -1.8 at the default. A 10 percent rise across the board projects to lose 7 percent of revenue, not gain 9. The range is not hedging; it is the four filters on the bench, and each end of it is a setting somebody could reasonably choose.</p>
+        <p><strong>"How do you know it is real?"</strong> Because it disappears when it should. Shuffle prices inside every product and the slope falls to zero within 0.16. The real slope is more than eleven of those standard deviations away. And because it holds when the rows are cut four ways.</p>
+        <p><strong>"So we should raise prices, or not?"</strong> The number says a uniform rise loses revenue on these products. It does not say why buyers respond, it does not say which product to move, and it does not rule out that sellers were reading demand and setting price after it. The next step is a price test on a few products, which the experimentation course designs, not a spreadsheet extrapolation from this slope.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the bench does not show, so you do not claim it<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It does not show an elasticity for the marketplace: the 203 are the products that sold a lot and repriced, and the honest scope is "for the products that can be read". It does not show a per-product elasticity, because deep-dive session 1 found that a third of those are noise. It does not show a causal effect, for the reason in the break button card. And it does not show what happens at prices outside the range the sellers actually tried, which within a product was a median max-to-min ratio of 1.29; a 30 percent rise is a projection past the data.</p>
+      </div>
+    </details>
+
+    <div class="scorecard" data-title="The number's ship gate" data-msgs="Sixteen of sixteen. The number has a range, a mechanism, a placebo and a scope, and somebody else can rebuild it from the panel alone; it goes in the deck.|Close, and not yet. Any row under 2 is a question you will be asked in the meeting and cannot yet answer; write it down before the deck is sent.|Half the gate is open. The rows at 0 are usually the placebo and the scope; those two take an hour on the bench and they are the ones that turn a number into a claim.|Do not put this number in a deck yet. Go back to the session each low row names and work the bench until the row is solid." data-foot="Score every row 0 for not yet, 1 for partly, 2 for solid. This gate is strict: anything under 16 of 16 does not go in a deck, because a number with no placebo behind it is a belief wearing decimals. A row at 0 or 1 is the next thing to do, and it names the session to go back to.">
+      <div class="sc-row"><div class="sc-q">I can say which rows the number was fitted on: which orders, which price column, which grain, and the three sieves with their counts. <em>Deep-dive session 1. On Olist: delivered before 1 September 2018, the seller's item price, product by month, 30 items and 3 prices and 6 months, 32,216 to 203.</em></div></div>
+      <div class="sc-row"><div class="sc-q">I can say what was compared with what, and I have the across-products and pooled numbers next to the within-product one so the comparison is visible as a choice. <em>Deep-dive session 2. +0.008, -0.108, -1.788 on the same rows.</em></div></div>
+      <div class="sc-row"><div class="sc-q">I have a placebo, I know its standard deviation, and I can say how many of them the real slope is from zero. <em>Deep-dive session 2 and the bench. 200 within-product shuffles, sd 0.159, the real slope more than 11 away.</em></div></div>
+      <div class="sc-row"><div class="sc-q">I have cut the rows at least three ways and I quote the range those cuts produce, not the number at one setting. <em>The bench. Weighted -2.216, freight -1.881, single-unit months dropped -1.480: between -1.5 and -2.2.</em></div></div>
+      <div class="sc-row"><div class="sc-q">Every revenue projection on the page carries the word "modelled" and the assumption it rests on. <em>Deep-dive session 3. Constant elasticity; a 10 percent rise has never been run on these products.</em></div></div>
+      <div class="sc-row"><div class="sc-q">I can say the scope in one clause: for which products, over which months, on which marketplace. <em>The bench, Part 2. "For the 203 products that repriced, over 21 months, on one marketplace."</em></div></div>
+      <div class="sc-row"><div class="sc-q">I can name the anti-lever when somebody proposes it, and I have the two projected revenue figures side by side. <em>The bench. "Use the overall number": +8.9 percent against -7.2 percent on the same rows.</em></div></div>
+      <div class="sc-row"><div class="sc-q">I have written the sentence with its range, its mechanism and its caveat, and I have said what the next step is and that it is a test, not an extrapolation. <em>The bench, Part 2. Link the experimentation course, do not extrapolate the slope.</em></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>After the bench</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Find the setting that moves the slope most</strong> and the one that moves it least. Write both down with their numbers. That pair is the first thing to say when somebody asks how sure you are.</li>
+      <li><strong>Pick a category</strong> and read its slope and standard error. Say whether it is distinguishable from the all-products number, in one sentence, with the standard error as the reason.</li>
+      <li><strong>Run the anti-lever</strong> at -10 percent instead of +10 and read both revenue lines. Write what a price cut is projected to do under each slope, and which one a first analysis would have reported.</li>
+      <li><strong>Write the sentence for your own catalogue,</strong> in the shape from Part 2, with blanks where you do not yet have the number. The blanks are the work plan.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 10 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · A colleague proposes pricing on "the overall number, because it uses all the data". What does the bench say?</p>
+      <button class="qopt" type="button">A · Agree; more rows always means a better estimate</button>
+      <button class="qopt" type="button">B · Disagree; only per-product slopes should ever be used</button>
+      <button class="qopt" type="button">C · The overall number is -0.108 and projects +8.9 percent revenue for a 10 percent rise; the within-product number on the same rows is -1.788 and projects -7.2 percent; the rows are the same and the comparison is different, so "all the data" is data about the wrong comparison</button>
+      <button class="qopt" type="button">D · Split the difference and use -0.9</button>
+      <p class="qwhy">The anti-lever gets the sign of the decision wrong. Per-product slopes are not the alternative either: a third of them are noise. The panel with product effects is the comparison a pricing decision is about.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · What does the break button demonstrate, and what does it not?</p>
+      <button class="qopt" type="button">A · It shows the slope depends on the pairing of price and units inside each product, because shuffling that pairing sends the slope to about zero; it does not show that price caused units rather than the seller setting price after reading demand</button>
+      <button class="qopt" type="button">B · It proves the elasticity is causal, because the effect disappears when the cause is removed</button>
+      <button class="qopt" type="button">C · It shows the data is corrupted, because a real slope should survive a shuffle</button>
+      <button class="qopt" type="button">D · It shows the standard error was wrong</button>
+      <p class="qwhy">A detector that cannot be made to fail has not been tested; the shuffle is the failing state. Removing chance is not the same as removing the seller's choice, which only a price test removes.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · Which is the sentence that defends the number?</p>
+      <button class="qopt" type="button">A · "The elasticity is -1.788."</button>
+      <button class="qopt" type="button">B · "Demand is elastic, so we should cut prices."</button>
+      <button class="qopt" type="button">C · "The elasticity is somewhere between 0 and -2, depending."</button>
+      <button class="qopt" type="button">D · "Between -1.5 and -2.2, about -1.8, each product compared with itself on 203 products that repriced over 21 months; an association with a placebo behind it, not a test; a uniform 10 percent rise projects to lose about 7 percent of revenue under a constant-elasticity assumption, and the next step is a price test on a few products."</button>
+      <p class="qwhy">A range, a mechanism, a caveat, a scope, and the next step. Option A removes the shape; option C has a range with no mechanism, and "0 to -2" includes the anti-lever's number as if it were a candidate.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Every slope, standard error, row count and placebo figure on the bench</span><span class="note">Computed in the browser from the 2,216-row panel derived from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0); the same code agrees with the offline build to three decimals on every deterministic rung, and the placebo to within 0.02</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The two revenue projections</span><span class="note">Modelled under a constant-elasticity assumption and labelled so on the bench</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Naive standard errors, and the placebo as the honest measure of distance from noise</span><span class="note">Standard practice; the page says the errors are computed as if rows were independent</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Causal identification and the price test</span><span class="note">Named, not taught; the causal inference and experimentation courses own them</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 10 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>What was compared with what?</b><span>The one question. Across products +0.008, pooled -0.108, within product -1.788, with months -1.854.</span></div>
+      <div class="cheat-item"><b>The range is the four filters</b><span>Weighted -2.2, freight -1.9, no single-unit months -1.5. Quote -1.5 to -2.2, about -1.8.</span></div>
+      <div class="cheat-item"><b>The placebo is the proof</b><span>Shuffle within product: mean -0.002, sd 0.159. The real slope is more than 11 sd away.</span></div>
+      <div class="cheat-item"><b>The anti-lever</b><span>"Use the overall number": +8.9 percent projected revenue against -7.2 on the same rows.</span></div>
+      <div class="cheat-item"><b>Computed vs modelled</b><span>Slopes are computed. Revenue lines are arithmetic under constant elasticity. Say which.</span></div>
+      <div class="cheat-item"><b>The sentence</b><span>Range, mechanism, caveat, scope, next step. Nobody can take a decimal off it.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Both tracks</span>
+    <p>That is the deep-dive track. The Foundations track is the same six ideas without code, for the people you will say the sentence to: prices as information, incentives and elasticity, marginal thinking, when markets fail, money and interest, and games and moats. If you came here first, start there next; if you came from there, you now have the number you were promised in Foundations session 2, and the bench that makes it yours.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 10 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p9-build-buy-or-rent.html">← Prev: Build, buy or rent a data platform</a> &nbsp;·&nbsp; <a href="../index.html">Course home</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/econ-sample.js?v=1"></script>
+<script src="../assets/econ-live.js?v=1"></script>
+<script src="../assets/econ-bench.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

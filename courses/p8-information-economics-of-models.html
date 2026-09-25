@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 8 of 10. A dataset or a model is a good whose quality cannot be seen before purchase, which is Akerlof's lemons problem (1970) wearing a model card. Benchmarks, evals and audits as signals, why a public benchmark decays once it becomes a target (Strathern 1997 wording), and the principal, the agent and the metric between them inside an ML team. Python build-along: a constructed simulation of a public score drifting away from a held-out score, and a model card read as a checklist of signals.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Information economics of models - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 8 of 10. A model is a lemon until proven otherwise. What a benchmark signals, what happens when it becomes a target, and what a model card cannot say.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p8-information-economics-of-models.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Information economics of models - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 8 of 10. Lemons, signals, and the metric that became a target.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 8 · Information economics of models - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 8 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 8 of 10</div>
+    <h1>Information economics of <span class="accent">models</span></h1>
+    <p class="sub">You cannot tell a good dataset from a bad one by looking at the invoice, and you cannot tell a good model from a bad one by reading its headline score. Both are goods whose quality is hidden until after you have paid, and economics has had a name for that market since 1970: it is a market for lemons, and left alone it drives the good sellers out. Everything the industry does to fight that, benchmarks, evals, audits, model cards, is a signal, and every signal has a shelf life, because the moment a measure becomes the thing people are paid on it stops measuring. The same problem sits inside every ML team, where a leader who wants a business outcome and a team that is judged on a metric are a principal and an agent with a number between them. Tonight names the mechanisms, draws them, and ends with a constructed simulation of a public benchmark drifting away from the truth and a checklist for reading a model card as what it is: a signal, sent by someone with a reason to send it.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Analysts, ML leads, anyone who buys data or models</span>
+      <span class="chip audience">Python, numpy</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Lemons, signals, the metric in the middle</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: a benchmark drifts, a card is read</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Deep-dive session 7 ended on a frontier the consultants could not see: which side of it a task sat on was invisible until the output was checked. Tonight makes that invisibility the subject. When one side of a trade knows the quality and the other does not, the price cannot reward quality, and the market does something predictable and unpleasant. Data and model markets have this shape almost perfectly, and so does the relationship between a leader and the team whose work she cannot inspect line by line. The fixes are all versions of one idea, make quality visible through a costly signal, and they all decay for the same reason, which Goodhart's law names and Strathern's sentence states.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The lemons spiral drawn for datasets and models, with the step at which the good sellers leave; the difference between a signal and a screen and where benchmarks, evals, audits and model cards each sit; the reason a public benchmark decays and the exact attribution of the sentence everyone quotes about it; the principal, the agent and the metric between them as a picture you can put in front of a leader; a numpy simulation, labelled constructed, in which a public score climbs while a held-out score flattens; and a checklist that reads any model card as a set of signals and lists the four things no card can carry.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers adverse selection in data and model markets</span>
+      <h2>A model is a lemon until proven otherwise</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Akerlof 1970, "The Market for Lemons", Quarterly Journal of Economics 84(3) 488-500, describes a used-car market where sellers know which cars are bad and buyers cannot tell. Buyers pay a price for the average car; sellers of above-average cars will not sell at that price and withdraw; the average falls; the price falls; more good sellers leave; and the process does not stop until only lemons are left. Replace "car" with "labelled dataset" or "fine-tuned model" and nothing in the argument changes, because the one assumption that drives it, quality hidden until after purchase, is truer of data than it ever was of cars.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 364" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five hand-drawn boxes descending diagonally from top left to bottom right, joined by elbow arrows: quality is hidden until after purchase; buyers pay the average quality; the good sellers walk away, drawn amber; the average falls; buyers pay less than before. A return arrow loops from the last box over the top back to the second, labelled and round again, lower each time. A magnifier doodle sits beside the first box.">
+        <defs>
+          <filter id="d8aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="81" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d8aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d8aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d8aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d8aL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d8aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d8aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d8aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d8aH" x="30" y="26">THE LEMONS SPIRAL, REDRAWN FOR DATASETS AND MODELS</text>
+
+        <g filter="url(#d8aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- five steps down -->
+          <rect x="30" y="64" width="150" height="46" rx="6" transform="rotate(-1 105 87)" fill="#FFFFFF"/>
+          <rect x="190" y="112" width="150" height="46" rx="6" transform="rotate(0.8 265 135)" fill="#EEF2F8"/>
+          <rect x="350" y="160" width="150" height="46" rx="6" transform="rotate(-0.7 425 183)" fill="#FBEEDC" stroke="#A8570B"/>
+          <rect x="510" y="208" width="150" height="46" rx="6" transform="rotate(0.6 585 231)" fill="#EEF2F8"/>
+          <rect x="670" y="256" width="150" height="46" rx="6" transform="rotate(-0.8 745 279)" fill="url(#d8aHc)"/>
+          <!-- elbow arrows between steps -->
+          <path d="M105 112 L105 135 L186 135" marker-end="url(#d8aAr)"/>
+          <path d="M265 160 L265 183 L346 183" marker-end="url(#d8aAr)"/>
+          <path d="M425 208 L425 231 L506 231" marker-end="url(#d8aAr)"/>
+          <path d="M585 256 L585 279 L666 279" marker-end="url(#d8aAr)"/>
+          <!-- the loop back over the top -->
+          <path d="M745 254 L745 50 L265 50 L265 108" stroke="#A8570B" stroke-dasharray="6 4" marker-end="url(#d8aAr)"/>
+          <!-- magnifier beside box 1: cannot see quality -->
+          <circle cx="204" cy="78" r="9"/>
+          <path d="M211 85 L222 96"/>
+        </g>
+
+        <text class="d8aL" x="40" y="84">1 · quality is hidden</text>
+        <text class="d8aS" x="40" y="100">until after purchase</text>
+        <text class="d8aL" x="200" y="132">2 · buyers pay the</text>
+        <text class="d8aS" x="200" y="148">average quality</text>
+        <text class="d8aB" x="360" y="180">3 · the good sellers</text>
+        <text class="d8aB" x="360" y="196">walk away</text>
+        <text class="d8aL" x="520" y="228">4 · the average falls</text>
+        <text class="d8aS" x="520" y="244">so does the price</text>
+        <text class="d8aL" x="680" y="276">5 · only lemons left</text>
+        <text class="d8aS" x="680" y="292">and no one to blame</text>
+        <text class="d8aB" x="420" y="66">and round again, lower each time</text>
+
+        <text class="d8aS" x="30" y="328">The spiral is Akerlof 1970, The Market for Lemons, QJE 84(3) 488-500, redrawn for goods whose quality is a column nobody can see.</text>
+        <text class="d8aN" x="30" y="354">Where quality cannot be seen before purchase, price cannot reward it, and the best goods leave first.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber step is the one that does the damage: nobody cheats, the honest sellers simply leave, and the average falls behind them</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Adverse selection: why the honest sellers leave first<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The setup needs only two facts.</strong> Quality varies between sellers, and the buyer cannot observe it before paying. With those two, a buyer's best offer is the price of the average good, because that is the expected value of what she is about to receive. That offer is a bargain for the seller of a bad good and an insult to the seller of a good one, so the good one withdraws. Now the average is lower, the buyer's best offer is lower, and the next-best seller withdraws. Akerlof's contribution was to show that this does not settle at some middling equilibrium; under simple assumptions it unravels all the way, and the market for good goods disappears even though there are buyers who would pay for them and sellers who would sell.</p>
+        <p><strong>Datasets fit the setup exactly.</strong> A labelled dataset's quality is its label accuracy, its coverage of the cases you care about, its freshness and its provenance, and none of those is on the listing. You find out after you have trained on it. A vendor with clean labels and a vendor with labels produced by an underpaid contractor at speed both say "high-quality, human-annotated", and both charge what the market will bear for that sentence. The clean vendor's costs are higher. At a price set by the average, she is the one who cannot make it work.</p>
+        <p><strong>Models fit it too,</strong> with one twist. A model's headline score is visible, so it looks as if quality is observable. But the score is on a benchmark the seller chose, possibly trained toward, and the buyer's data is not that benchmark. What the buyer needs, performance on her own cases, is hidden until she has integrated the thing. The visible score is not quality; it is a signal of quality, sent by the seller, which is the subject of Part 2.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What stops the spiral, in theory and in the data market<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Akerlof's paper lists the counteracting institutions: guarantees, brand names, chains, licensing. Each is a way of making quality partly observable or of making the seller bear the cost of a lemon. The data market has grown the same set under different names. A guarantee is a service-level agreement on label accuracy with a refund clause. A brand is a vendor whose past datasets you or people you trust have used. Licensing is an audit by a third party who is paid by neither side. Each one costs something, and that cost is the point: a signal that is free to send carries no information, because the lemon seller sends it too.</p>
+        <p>The institution that matters most for data and is hardest to build is the <strong>sample</strong>. A buyer who can inspect a random slice of the dataset before paying, labelled, with the sampling done by the buyer and not the seller, has converted a hidden quality into a measured one, and the spiral stops for her. The reason it is hard is that the sample has to be drawn by the buyer from the whole, not selected by the seller from the best part, which requires the seller to hand over the whole before the sale, which is the thing being sold. The workable compromises, escrow, a third party who draws the sample, are the data market's version of the used-car inspection.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The annotation vendor who stopped bidding.</strong> A constructed story with a real mechanism. Three vendors quote for a labelling job. Two quote low, one quotes forty percent higher and explains that her quote includes a second annotator on every item and an adjudicated disagreement rate. The buyer's procurement process compares price per label, and she loses. The next quarter she does not bid. The quarter after that, the buyer's model quality has fallen, and the post-mortem is about the model architecture. The market did exactly what Akerlof said it would: the price was set by the average, the above-average seller left, and nothing in the buyer's process could see it happen because label quality was not a column in the comparison.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers signalling, screening and the decaying benchmark</span>
+      <h2>Signals, and what happens when a signal becomes a target</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A signal is an action the informed side takes to reveal quality: a warranty, a published score, a third-party audit, a detailed model card. A screen is a mechanism the uninformed side designs to make the informed side reveal it: a held-out test set the buyer controls, a trial period, a menu of contracts. Both work only if they are costly to fake, and the cost is what decays. A public benchmark is a signal that starts out expensive to score well on, because scoring well requires a good model, and becomes cheap, because scoring well comes to require only a model tuned to the benchmark. That decay is not fraud. It is the predictable result of paying people on the number.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand-drawn axes of score against rounds. Two constructed curves start together at the left; a dashed vertical line marks the round at which the benchmark became the target. After it the public benchmark score keeps rising to the top right while the held-out score flattens at a lower level. An amber bracket at the right edge spans the gap between the two, with a note that the gap is what optimising the public score bought, not ability. A small target doodle sits near the top left.">
+        <defs>
+          <filter id="d8bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d8bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d8bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d8bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d8bL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d8bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d8bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d8bA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d8bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d8bH" x="30" y="26">THE BENCHMARK THAT BECAME A TARGET</text>
+        <text class="d8bS" x="300" y="26">two constructed curves; the shape is the mechanism, the values are invented</text>
+
+        <g filter="url(#d8bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M80 250 L80 60" stroke="#1F3A5F" marker-end="url(#d8bAr)"/>
+          <path d="M80 250 L830 250" stroke="#1F3A5F" marker-end="url(#d8bAr)"/>
+          <!-- the round at which the benchmark became the target -->
+          <path d="M400 72 L400 250" stroke="#C9D2E2" stroke-dasharray="5 4"/>
+          <!-- the public score: keeps rising -->
+          <path d="M80 230 C300 190, 500 140, 800 80" stroke="#1F3A5F" stroke-width="2.6"/>
+          <!-- the held-out score: flattens -->
+          <path d="M80 230 C250 180, 380 142, 460 138 L800 134" stroke="#4E5A75" stroke-width="2.2" stroke-dasharray="7 4"/>
+          <!-- the gap bracket: amber -->
+          <path d="M806 80 L814 80 L814 134 L806 134" stroke="#A8570B" stroke-width="2.2"/>
+          <!-- leader from the gap note to the bracket -->
+          <path d="M800 184 L805 138" stroke="#A8570B" marker-end="url(#d8bAr)"/>
+          <!-- target doodle -->
+          <circle cx="150" cy="96" r="14"/>
+          <circle cx="150" cy="96" r="8"/>
+          <circle cx="150" cy="96" r="2.5" fill="#16213A"/>
+        </g>
+
+        <text class="d8bA" x="86" y="56">SCORE</text>
+        <text class="d8bA" x="822" y="236" text-anchor="end">ROUNDS OF TUNING</text>
+        <text class="d8bS" x="400" y="64" text-anchor="middle">the benchmark becomes the target</text>
+        <text class="d8bL" x="540" y="82">public score, keeps rising</text>
+        <text class="d8bS" x="540" y="166">held-out score, flattens</text>
+        <text class="d8bB" x="610" y="200">gap: the public score was optimised</text>
+        <text class="d8bS" x="80" y="272">round 1</text>
+        <text class="d8bS" x="800" y="272" text-anchor="end">round 20 (invented)</text>
+
+        <text class="d8bS" x="30" y="302">Both curves are constructed to show the shape; the build-along generates them with a labelled random draw.</text>
+        <text class="d8bN" x="30" y="322">Before the line the two curves agree and the score is a signal. After it they part, and the score is a target.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber bracket is the entire cost of paying on the number: a rising public score bought nothing on the held-out set once the tuning started chasing it</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Benchmarks, evals and audits as signals, and what each one costs to fake<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>A published benchmark score</strong> is a signal the seller sends. When the benchmark is new, scoring well is expensive: it takes a model that is actually good at the thing. That cost is what makes the score informative, because a seller of a lemon cannot afford to send it. The cost then falls, for three reasons that all happen at once. The test set leaks into training data, on purpose or by scraping. Tuning choices get made by watching the score, which fits the model to the benchmark's quirks. And the benchmark's own gaps become known, so effort goes where the score is and not where the buyer's cases are. At the end of that process the score is cheap to send and everyone sends it.</p>
+        <p><strong>A private eval</strong> is a screen the buyer controls. A held-out set the seller has never seen, drawn from the buyer's own distribution, cannot be tuned toward, and it measures the thing the buyer will actually get. It costs the buyer something to build, which is why so few buyers do, and that cost is exactly what makes it work: a signal that was free would be sent by everyone. The mechanics of building one, what to hold out, how to score it, how it drifts, are the subject of the AI evals course at <a href="https://phoebefu6.github.io/learn-ai-evals-with-phoebe/">learn-ai-evals-with-phoebe</a>, and tonight does not teach them; it teaches why the eval is the buyer's side of the contract.</p>
+        <p><strong>An audit by a third party</strong> is a signal with a borrowed cost. The seller pays for it, but the auditor's reputation is what is at stake, so the seller cannot make the audit say what she likes. It is informative in proportion to the auditor's independence and to how much of the model the auditor actually got to see, both of which the buyer should ask about before trusting the stamp.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Goodhart, Strathern, and the exact wording<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The sentence everyone quotes is "when a measure becomes a target, it ceases to be a good measure". It is almost always attributed to Charles Goodhart, and the law does carry his name, but that wording is not his. It is Marilyn Strathern's, in "Improving ratings: audit in the British University system", European Review 5(3) 305-321 (1997), where she was summarising the idea in the context of academic audit. Goodhart's own 1975 formulation was about monetary policy and is phrased quite differently. The distinction matters for the same reason every citation on these pages matters: attributing a sentence to someone who did not write it is a small lemon of its own, and a reader who catches it will discount the rest.</p>
+        <p>The mechanism the sentence names is the one in the figure. A measure is useful because it correlates with the thing you care about. Make it a target, pay on it, and the people being paid find the cheapest way to move it, which is usually not the way that moves the thing you care about. The correlation that made the measure useful was never a law of nature; it held only while nobody was pushing on it. The public benchmark curve keeps rising because pushing on it is what everyone is paid to do. The held-out curve flattens because nobody can push on it, which is the only reason it is still a measure.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Screening against signalling: who moves first<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The two words get used interchangeably and they are not. In <strong>signalling</strong>, the informed party moves first: the vendor publishes the score, writes the model card, commissions the audit. The buyer reads the signal and infers. The signal works if sending it is cheaper for a good seller than for a bad one, so that only good sellers find it worth sending. In <strong>screening</strong>, the uninformed party moves first: the buyer designs a test, a trial, a menu of contracts, and the seller's choice among them reveals what the seller knows. A vendor offered "flat fee" or "fee contingent on held-out accuracy" and choosing the flat fee has told the buyer something without a word being said.</p>
+        <p>The practical difference is who bears the cost and who controls the instrument. A signal is on the seller's terms: her benchmark, her card, her auditor. A screen is on the buyer's: her held-out set, her trial period, her contract. Data and model buyers who rely only on signals are reading what the seller chose to show. The buyers who do well add one screen, and the cheapest screen that works is a held-out set of their own cases that the seller never sees.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The eval as a contract<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Put the two halves together and a private eval is not a technical artefact; it is a contract term. The buyer says: performance on this set, which you will not see, at this threshold, is what I am paying for. The seller who accepts has revealed that she believes her model generalises, which is exactly what a headline score could not tell you. The seller who negotiates the set down to something she has seen, or the threshold down to something the benchmark already guarantees, has revealed something else.</p>
+        <p>Inside a company the same contract exists between an ML team and the leader who funds it, and it has the same failure mode: if the team can see the eval, it becomes a benchmark, and the curve in the figure starts. The held-out set stays a measure only while it is held out from the people being judged on it, which in practice means it is drawn and scored by someone who is not on the team, refreshed on a schedule, and never used for tuning. Every one of those conditions costs something, and each cost is the reason the measure still works.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The leaderboard that stopped ranking.</strong> A pattern, not a named case. A public benchmark is released, the first models on it score modestly, and for a year the ranking tracks what practitioners find when they try the models on their own work. Then the ranking compresses at the top, new entrants arrive with scores a fraction above the previous best, and practitioners report that the top three are indistinguishable on real tasks, or that the one ranked fifth is better on theirs. Nothing dishonest need have happened. The benchmark became a target, the signal became cheap, and the leaderboard now measures skill at the leaderboard. The response that works is not a better public benchmark, which will decay the same way; it is a held-out set the buyer draws herself.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Name one signal and one screen you use when buying a model or dataset" data-hint="One thing the seller shows you, and one test you control. For each, write what it would cost a lemon seller to fake. If the answer is nothing, it is not a signal. Three lines." data-seed="" data-cta="Write it"></div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers principal, agent and the metric between them</span>
+      <h2>Principal, agent, and the number between them</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A leader wants a business outcome: fewer fraudulent transactions approved, more customers retained, a support queue that clears. She cannot inspect the model that is supposed to deliver it, so she pays the team on a metric that stands in for the outcome. The team can see the metric and cannot see the outcome either, so it optimises the metric. That is the principal-agent problem, and the metric in the middle is the same object as the public benchmark in Part 2, with the same fate: the moment it is what the team is judged on, it stops being what the leader wanted.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two hand-drawn figures face each other across an amber box labelled the metric. The left figure is the principal, who wants the real goal; the right figure is the agent, who wants the reward. An arrow from the principal to the metric reads rewards on the metric; an arrow from the agent to the metric reads optimises the metric. Above the metric a dashed box reads the real goal, unobservable, with a short arrow down to the metric labelled measures part of it. Below, Strathern's 1997 wording is quoted with its citation.">
+        <defs>
+          <filter id="d8cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d8cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d8cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d8cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d8cL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d8cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d8cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d8cW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .d8cA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d8cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d8cH" x="30" y="26">TWO PEOPLE, ONE NUMBER, AND THE GOAL NEITHER CAN SEE</text>
+
+        <g filter="url(#d8cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the real goal, dashed, above -->
+          <rect x="270" y="44" width="340" height="36" rx="8" transform="rotate(-0.5 440 62)" stroke-dasharray="6 4" fill="#FFFFFF"/>
+          <path d="M440 82 L440 104" marker-end="url(#d8cAr)"/>
+          <!-- the metric: the one amber thing -->
+          <rect x="340" y="110" width="200" height="56" rx="8" transform="rotate(0.6 440 138)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- the principal, left -->
+          <circle cx="120" cy="112" r="11"/>
+          <path d="M120 123 L120 156 M120 132 L104 146 M120 132 L136 146 M120 156 L108 178 M120 156 L132 178"/>
+          <!-- the agent, right -->
+          <circle cx="760" cy="112" r="11"/>
+          <path d="M760 123 L760 156 M760 132 L744 146 M760 132 L776 146 M760 156 L748 178 M760 156 L772 178"/>
+          <!-- arrows to the metric -->
+          <path d="M150 138 L332 138" marker-end="url(#d8cAr)"/>
+          <path d="M730 138 L548 138" marker-end="url(#d8cAr)"/>
+        </g>
+
+        <text class="d8cS" x="440" y="66" text-anchor="middle">the real goal: fewer bad approvals, unobservable</text>
+        <text class="d8cS" x="452" y="98">measures part of it</text>
+        <text class="d8cW" x="440" y="134" text-anchor="middle">the metric</text>
+        <text class="d8cW" x="440" y="150" text-anchor="middle">offline AUC (constructed)</text>
+        <text class="d8cL" x="241" y="126" text-anchor="middle">rewards on the metric</text>
+        <text class="d8cL" x="639" y="126" text-anchor="middle">optimises the metric</text>
+        <text class="d8cA" x="120" y="204" text-anchor="middle">PRINCIPAL</text>
+        <text class="d8cS" x="120" y="220" text-anchor="middle">wants the real goal</text>
+        <text class="d8cA" x="760" y="204" text-anchor="middle">AGENT</text>
+        <text class="d8cS" x="760" y="220" text-anchor="middle">wants the reward</text>
+
+        <text class="d8cS" x="30" y="258">Strathern 1997, European Review 5(3) 305-321: when a measure becomes a target, it ceases to be a good measure.</text>
+        <text class="d8cN" x="30" y="286">The agent is not cheating. The agent is doing exactly what the contract pays for; the contract is the problem.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber box is the only thing both people can see, and it is a proxy chosen because the real goal could not be measured in time; the dashed box is what was wanted</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The problem is the contract, not the people<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The principal</strong> has a goal and cannot observe effort or, in time, the outcome. <strong>The agent</strong> has effort to allocate and a reward that depends on something observable. A contract that pays on a proxy metric solves the observability problem and creates the Goodhart problem in the same stroke. The offline score in the figure is constructed; the pattern is not. A fraud model rewarded on offline AUC will be tuned for offline AUC, on the historical distribution, with the thresholds that flatter it, and the business outcome, bad approvals next quarter on a distribution that has shifted, is a different quantity that nobody was paid on.</p>
+        <p><strong>The honest framing</strong> is that no one is behaving badly. The team is optimising the number the contract named. The leader chose the number because it was available. Both are doing what the structure asks, and the structure is what has to change. The economics gives three levers and none of them is "ask people to care about the real goal". Pay on something closer to the outcome, at the cost of a longer lag. Hold out a measure the agent cannot see, at the cost of building and refreshing it. Or accept the proxy and pay less on it, so the incentive to game is smaller than the incentive to do the job.</p>
+        <p><strong>Where this meets Part 2:</strong> the buyer's held-out eval and the leader's held-out metric are the same instrument. In both cases the measure stays a measure only while the party being judged on it cannot push on it, and the moment it becomes visible to them the curve in the Part 2 figure starts again.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Moral hazard against adverse selection, in one ML team<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two words from the same family are worth keeping apart. <strong>Adverse selection</strong> is hidden information before the contract: the dataset vendor knows her labels are poor and you do not, so the wrong vendors are the ones who accept your price. <strong>Moral hazard</strong> is hidden action after the contract: the team knows how much care went into the validation and you do not, so the contract's terms change what care gets taken. Part 1 was adverse selection. Part 3 is moral hazard. The lemons spiral is about who shows up; the metric problem is about what they do once they have.</p>
+        <p>Both have the same root, one side knows something the other cannot check, and the same family of cures, make it checkable or make the informed side bear the cost of being wrong. But they are cured at different moments. Adverse selection is addressed before the deal, with screens and samples. Moral hazard is addressed in the contract, with what is paid on and what is held out. A team that has a strong procurement process and a weak metric has solved the first and not the second, and will hire good vendors to build models that game the number.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The retention model that retained the metric.</strong> A constructed story with a real mechanism. A team is rewarded on the precision of a churn model at a fixed recall. Precision rises for three quarters. Retention does not move. The post-mortem finds the model has learned to rank highest the customers who were going to stay anyway and who also looked like churners on last year's features, because those are the cheapest way to be "right" about churn; the customers the business could actually save sit further down the list, where nobody was paid to look. The metric was a good measure of the model until the quarter it became the target. The fix was not a better team; it was a held-out measure of saved revenue, scored by finance and refreshed monthly, that the team could not see in advance.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>A benchmark drifts, and a model card is read as a signal</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Four steps in numpy and plain Python. Steps 1 and 2 simulate the Part 2 figure: twenty constructed rounds of tuning in which a public score and a held-out score start together and drift apart. Every number is invented, drawn with numpy's default generator, and your numbers will differ. Steps 3 and 4 turn the Part 2 signals into a checklist you can run against any model card in five minutes, and a sentence about what the card could not tell you.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 342" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn checklist sheet titled reading a model card as a signal. Five rows with ticked checkboxes: training data with source, date and exclusions; eval set named and held out; who ran the eval and when; known failure modes listed; version and date of the card. Beside each row is why it is a signal. A side panel headed what the card cannot signal lists four items: how the model behaves on your data, whether the benchmark leaked into training, what the author's incentive was, and anything after the card's date. An amber sum line reads five signals read, four things no card can carry.">
+        <defs>
+          <filter id="d8dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="101" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d8dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d8dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d8dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d8dL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d8dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d8dB { font: 800 12px Inter, sans-serif; fill: #8A4409; }
+          .d8dA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d8dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d8dH" x="30" y="26">READING A MODEL CARD AS A SIGNAL: FIVE THINGS IT CAN CARRY, FOUR IT CANNOT</text>
+
+        <g filter="url(#d8dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the card -->
+          <rect x="30" y="44" width="500" height="250" rx="4" transform="rotate(-0.3 280 169)" fill="#FFFFFF"/>
+          <path d="M30 74 L530 74" stroke="#C9D2E2"/>
+          <!-- checkboxes -->
+          <rect x="40" y="82" width="12" height="12" rx="2" transform="rotate(-3 46 88)"/>
+          <rect x="40" y="116" width="12" height="12" rx="2" transform="rotate(2 46 122)"/>
+          <rect x="40" y="150" width="12" height="12" rx="2" transform="rotate(-2 46 156)"/>
+          <rect x="40" y="184" width="12" height="12" rx="2" transform="rotate(3 46 190)"/>
+          <rect x="40" y="218" width="12" height="12" rx="2" transform="rotate(-1 46 224)"/>
+          <!-- ticks -->
+          <path d="M42 88 L46 92 L52 83" stroke="#A8570B" stroke-width="2.2"/>
+          <path d="M42 122 L46 126 L52 117" stroke="#A8570B" stroke-width="2.2"/>
+          <path d="M42 156 L46 160 L52 151" stroke="#A8570B" stroke-width="2.2"/>
+          <path d="M42 190 L46 194 L52 185" stroke="#A8570B" stroke-width="2.2"/>
+          <path d="M42 224 L46 228 L52 219" stroke="#A8570B" stroke-width="2.2"/>
+          <!-- the sum line: amber -->
+          <path d="M34 258 L526 258" stroke="#A8570B" stroke-width="2.4"/>
+          <!-- the cannot-signal panel, hatched border strip -->
+          <rect x="560" y="44" width="290" height="250" rx="4" transform="rotate(0.4 705 169)" fill="#EEF2F8"/>
+          <rect x="560" y="44" width="290" height="22" rx="4" fill="url(#d8dHc)" stroke="none"/>
+          <!-- a magnifier doodle on the card -->
+          <circle cx="500" cy="60" r="8"/>
+          <path d="M506 66 L516 76"/>
+        </g>
+
+        <text class="d8dA" x="62" y="66">WHAT THE CARD SAYS</text>
+        <text class="d8dA" x="330" y="66">WHY IT IS A SIGNAL</text>
+        <text class="d8dL" x="62" y="92">training data: source, date, exclusions</text>
+        <text class="d8dS" x="330" y="92">costly to fake in detail</text>
+        <text class="d8dL" x="62" y="126">eval set named, and held out</text>
+        <text class="d8dS" x="330" y="126">checkable by a third party</text>
+        <text class="d8dL" x="62" y="160">who ran the eval, and when</text>
+        <text class="d8dS" x="330" y="160">an audit is a stronger signal</text>
+        <text class="d8dL" x="62" y="194">known failure modes listed</text>
+        <text class="d8dS" x="330" y="194">a lemon seller omits these</text>
+        <text class="d8dL" x="62" y="228">version and date of the card</text>
+        <text class="d8dS" x="330" y="228">a stale card is a decayed signal</text>
+        <text class="d8dB" x="62" y="280">five signals read, each with its cost to fake</text>
+
+        <text class="d8dA" x="572" y="84">WHAT IT CANNOT SIGNAL</text>
+        <text class="d8dL" x="572" y="110">how it behaves on your data</text>
+        <text class="d8dL" x="572" y="140">whether the benchmark leaked</text>
+        <text class="d8dS" x="572" y="156">into the training set</text>
+        <text class="d8dL" x="572" y="186">what the author's incentive was</text>
+        <text class="d8dL" x="572" y="216">anything after the card's date</text>
+        <text class="d8dB" x="572" y="280">four things no card can carry</text>
+
+        <text class="d8dN" x="30" y="328">The right column is where the buyer's own screen goes: a held-out set of her cases that the card's author never saw.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the left sheet is what a careful seller can show you; the right panel is what only your own test can, and the amber line is the boundary between them</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Simulate twenty rounds of tuning.</strong> Two scores start equal. Each round the model gets a little better in truth, which moves both, and a little better at the public benchmark specifically, which moves only the public score. The real gain shrinks as ability nears its ceiling; the benchmark-specific gain does not, because tuning to a fixed test never runs out. Every parameter is invented.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · two scores, twenty rounds</span>import numpy as np
+rng = np.random.default_rng(20180901)      # any seed; your numbers will differ
+
+ROUNDS = 20
+held_out = np.zeros(ROUNDS)   # what the model can really do, on a set nobody tuned to
+public   = np.zeros(ROUNDS)   # what the public benchmark reports
+h = p = 0.50                  # both start at the same score (invented)
+
+for r in range(ROUNDS):
+    real_gain   = max(rng.normal(0.010, 0.004), 0) * (1 - h)   # shrinks near the ceiling
+    target_gain = max(rng.normal(0.018, 0.006), 0)             # tuning to the test: never shrinks
+    h += real_gain
+    p += real_gain + target_gain
+    held_out[r], public[r] = h, min(p, 0.99)
+
+print(np.round(public, 3))
+print(np.round(held_out, 3))    # your numbers will differ; the second row flattens, the first does not</div>
+      </div>
+      <div class="step">
+        <p><strong>Read the gap.</strong> The difference between the two rows, round by round, is what optimising the public score bought. Find the round at which it first exceeds a threshold you would notice; that is the round the benchmark stopped being a measure.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the gap, and when it opened</span>gap = public - held_out
+NOTICE = 0.10                                   # invented threshold: a gap you would see
+
+first = int(np.argmax(gap &gt; NOTICE)) + 1 if (gap &gt; NOTICE).any() else None
+print("gap at round 1:", round(gap[0], 3), "  gap at round 20:", round(gap[-1], 3))
+print("first round the gap passed", NOTICE, ":", first)
+# your numbers will differ; the gap is never negative here, because tuning to the
+# public set can only add to the public score</div>
+      </div>
+      <div class="step">
+        <p><strong>The checklist as a small dict.</strong> Five things a model card can carry and why each is a signal, and four things no card can. Run it against a real card by filling in the values; the point is that the second list is the same for every card and is where your own screen has to go.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the model card as signals</span>card_signals = {
+    "training data: source, date, exclusions": "costly to fake in detail",
+    "eval set named, and held out":            "checkable by a third party",
+    "who ran the eval, and when":              "an audit is a stronger signal",
+    "known failure modes listed":              "a lemon seller omits these",
+    "version and date of the card":            "a stale card is a decayed signal",
+}
+cannot_signal = [
+    "how it behaves on your data",
+    "whether the benchmark leaked into the training set",
+    "what the author's incentive was",
+    "anything after the card's date",
+]
+
+present = {k: True for k in card_signals}      # set each to what the real card shows
+n_present = sum(present.values())
+print(n_present, "of", len(card_signals), "signals present;", len(cannot_signal), "things no card can carry")</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the sentence.</strong> One line that is true of the simulation you ran and of any card you read, and that ends where the card's information ends and yours has to begin.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the honest sentence</span>sentence = (
+    f"In {ROUNDS} constructed rounds the public score rose {public[-1] - public[0]:.2f} "
+    f"and the held-out score rose {held_out[-1] - held_out[0]:.2f}; the difference is what the "
+    f"target bought, not what the model learned. A card carries {n_present} signals and "
+    f"cannot carry {len(cannot_signal)} things, so the buyer's held-out set is the screen."
+)
+print(sentence)      # your numbers will differ; the last clause never does
+
+np.save("benchmark_drift_constructed.npy", np.vstack([public, held_out]))  # "constructed" in the filename</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Set the target gain to zero and run Step 1 again.</strong> The two rows now sit on top of each other: with nobody tuning to the public set, the public score is a measure and the gap stays at zero. Then set the real gain to zero and leave the target gain: the public score climbs and the held-out score never moves. That is a model that learned the benchmark and nothing else, and it would top a leaderboard. The two switches are the whole of Goodhart in four lines.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before deep-dive session 9</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Read one real model card</strong> against the Step 3 checklist. Mark each of the five signals present or absent, and write one line on which of the four un-signallable things matters most for your use.</li>
+      <li><strong>Find the step where your team's sellers leave.</strong> For one thing you buy, data, labels, a model, write the procurement criteria as a list and check whether quality is a column. If it is not, write which good seller you have already lost.</li>
+      <li><strong>Draw the principal-agent triangle</strong> for one model in production: who is the principal, what is the real goal, what is the metric, and who can see it. Write whether the metric has become a target yet, and how you would know.</li>
+      <li><strong>Correct one attribution.</strong> Find a post or slide that credits the "measure becomes a target" wording to Goodhart. Write the correct citation, Strathern 1997, European Review 5(3) 305-321, and one sentence on why the distinction is not pedantry.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 8 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · A buyer of labelled datasets compares vendors on price per label. Over a year the average label quality she receives falls, though no vendor changed its process. What happened?</p>
+      <button class="qopt" type="button">A · The vendors colluded to lower quality</button>
+      <button class="qopt" type="button">B · Adverse selection: quality was unobservable before purchase, so the price settled at the average; the above-average vendors could not cover their costs at that price and withdrew, which lowered the average, which is Akerlof 1970</button>
+      <button class="qopt" type="button">C · Label quality is unrelated to price, so nothing about the process could have changed the outcome</button>
+      <button class="qopt" type="button">D · The buyer's model degraded, which made the labels look worse than they were</button>
+      <p class="qwhy">The Market for Lemons, QJE 84(3) 488-500. Nobody cheated; the honest sellers left because the price could not reward what the buyer could not see. The fix is a screen the buyer controls, such as a sample she draws herself.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · A public benchmark ranked models well for a year; now the top entries are indistinguishable on real tasks. Which statement is right about the mechanism and the attribution?</p>
+      <button class="qopt" type="button">A · The benchmark was badly designed from the start; a better one would not decay</button>
+      <button class="qopt" type="button">B · The vendors cheated, which Goodhart 1975 predicted in the words "when a measure becomes a target, it ceases to be a good measure"</button>
+      <button class="qopt" type="button">C · Benchmarks cannot decay; the models simply converged in ability</button>
+      <button class="qopt" type="button">D · The score was a signal while scoring well required a good model; once tuning chased it the cost of sending it fell and the correlation broke. The popular wording is Strathern 1997, European Review 5(3) 305-321, not Goodhart's own 1975 phrasing</button>
+      <p class="qwhy">A measure holds only while nobody pushes on it. The public curve keeps rising because pushing is what everyone is paid to do; the held-out curve flattens because nobody can push on it. The sentence is Strathern's; the law's name is Goodhart's.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A leader pays an ML team on offline AUC because the business outcome, bad approvals next quarter, cannot be observed in time. AUC rises for three quarters and bad approvals do not fall. What is the economics of the situation?</p>
+      <button class="qopt" type="button">A · Principal and agent with a proxy metric between them: the contract pays on the observable proxy, the agent optimises it as the contract asks, and the proxy stops tracking the goal once it is the target; the fix is in the contract, with a measure the agent cannot see, not in the people</button>
+      <button class="qopt" type="button">B · The team is incompetent, since AUC and bad approvals are the same thing</button>
+      <button class="qopt" type="button">C · Adverse selection: the leader hired the wrong team because she could not observe their skill</button>
+      <button class="qopt" type="button">D · The metric is fine and the outcome needs more time; three quarters is too short to judge</button>
+      <p class="qwhy">This is moral hazard, hidden action after the contract, not adverse selection, hidden information before it. Nobody is behaving badly; the structure pays on a proxy and gets the proxy. The held-out eval of Part 2 and the held-out metric here are the same instrument.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Akerlof 1970, "The Market for Lemons", Quarterly Journal of Economics 84(3) 488-500: adverse selection when quality is unobservable before purchase, applied to datasets and models</span><span class="note">Primary; citation confirmed against the journal record</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Signalling and screening; benchmarks, evals, audits and model cards as signals; the cost to fake as what makes a signal informative</span><span class="note">Standard economics, no single source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Goodhart's law, with the popular wording attributed to Strathern 1997, "Improving ratings: audit in the British University system", European Review 5(3) 305-321, not to Goodhart 1975</span><span class="note">Primary; the original PDF located and the wording confirmed</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Principal and agent with a proxy metric between them; moral hazard against adverse selection</span><span class="note">Standard economics, no single source; the offline AUC example is constructed</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The benchmark drift simulation: 20 rounds, two scores starting at 0.50, real gain shrinking toward a ceiling, target gain that does not</span><span class="note">Constructed; every parameter is invented and labelled, the page prints "your numbers will differ"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The model card checklist: five signals a card can carry, four things it cannot</span><span class="note">Constructed as a reading method; no real card is quoted</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Building and scoring a held-out eval</span><span class="note">Named and linked to the AI evals course; not taught here</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 8 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>A model is a lemon until proven otherwise</b><span>Quality hidden before purchase, price settles at the average, the good sellers leave. Akerlof 1970, QJE 84(3).</span></div>
+      <div class="cheat-item"><b>A signal is worth its cost to fake</b><span>Benchmark score, audit, model card: informative in proportion to what a lemon seller would have to spend to send it.</span></div>
+      <div class="cheat-item"><b>Signal: seller moves first. Screen: buyer does</b><span>The cheapest screen that works is a held-out set of your own cases the seller never sees.</span></div>
+      <div class="cheat-item"><b>The wording is Strathern 1997</b><span>"When a measure becomes a target, it ceases to be a good measure." European Review 5(3) 305-321. The law's name is Goodhart's.</span></div>
+      <div class="cheat-item"><b>Principal, agent, proxy</b><span>The agent optimises what the contract pays on. Fix the contract with a measure the agent cannot see; do not blame the agent.</span></div>
+      <div class="cheat-item"><b>Four things no card can carry</b><span>Behaviour on your data, whether the benchmark leaked, the author's incentive, anything after the card's date.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Tonight was about what you cannot see when you buy. Deep-dive session 9 is about the decision that sits behind every data platform: build it, buy it, or rent it. Coase asked in 1937 why firms exist at all if markets are so good at coordinating, and answered that using a market has costs of its own, searching, negotiating, contracting, monitoring, and the boundary of the firm sits where those costs and the costs of doing it in-house balance. A platform decision is that question with a total cost of ownership attached: fixed against variable, a horizon of 12, 24 or 36 months, the option value of being able to walk away, and the switching cost line that the vendor's chart never draws. The build-along is a TCO table with constructed inputs and one extra row, the exit at month 24, that changes which column wins.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 8 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p7-labour-economics-of-ai.html">← Prev: Labour economics of AI</a> &nbsp;·&nbsp; <a href="p9-build-buy-or-rent.html">Next: Build, buy or rent a data platform →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

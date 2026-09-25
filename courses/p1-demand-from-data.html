@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 1 of 10. From 112,650 real order items to a product-month panel, the eligibility rule that leaves 203 products, the log-log line whose slope is an elasticity, and why fitting it one product at a time gives noise: a third of the 203 slopes are past 5 in absolute value. Python build-along on public Olist data.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Demand from data - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 1 of 10. One row is one unit at one price. Build the panel, fit the line, and find out why one product's slope of -10 is not an elasticity.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p1-demand-from-data.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Demand from data - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 1 of 10. The panel, the line, and the slope that is too good.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 1 · Demand from data - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 1 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 1 of 10</div>
+    <h1>Demand from <span class="accent">data</span></h1>
+    <p class="sub">Every textbook draws the demand curve and no dataset contains it. What a dataset contains is rows: this product, this month, sold this many, at this price. Tonight is the road from those rows to a number that deserves the name elasticity, and the road has three decisions on it that most tutorials skip: which rows count, what "price" is, and what unit you fit the line on. The running data is 112,650 real order items from a Brazilian marketplace. By the end you will have a panel of 2,216 product-months for the 203 products that can be read, a log-log line through each one, and the finding that fitting one product at a time gives you noise: a third of the slopes are past 5 in absolute value, and the best-selling product's slope of -10 is not an elasticity at all.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Analysts, pricing and growth teams</span>
+      <span class="chip audience">Python, pandas</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Rows, the panel, and the line</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: items to a fitted slope</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Elasticity is the percentage change in units for a one percent change in price. On a log-log plot it is the slope of a straight line, which is why the whole of this track fits lines through logs. The trouble is never the fitting. It is what you fit on: an order, an item, a product, a month, a product-month, all products at once. Each choice gives a different slope from the same rows, and deep-dive session 2 shows the differences are not small: the same rows give -0.1 one way and -1.8 another. Tonight builds the rows properly so that argument can be had on solid ground.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A product-month panel built from raw order items with every decision written as a comment, the eligibility rule that separates a product you can read from one you cannot, a log-log fit you can explain in one sentence, and the reason you will never again quote one product's slope as its elasticity.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the row, the price, the snapshot</span>
+      <h2>One row is one unit at one price</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Olist ships three tables that matter tonight: order items (112,650 rows, one per unit sold, with the price the seller listed and the freight the buyer paid), orders (99,441, with a status and a purchase timestamp), and products (32,951, with a category). Before any of it becomes a panel, three decisions have to be made and written down, and each one changes which rows survive.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three sketched tables, order items, orders and products, flow through two filters and two joins into a product-month panel. The filter for delivered orders purchased before 1 September 2018 leaves 110,197 of 112,650 items. The price decision is drawn as a tag with freight crossed out beside it. The output box reads 2,216 rows, 203 products, 21 months.">
+        <defs>
+          <filter id="d1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="13" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d1aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d1aL { font: 700 11.5px Inter, sans-serif; fill: #16213A; }
+          .d1aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d1aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d1aW { font: 800 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .d1aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d1aH" x="30" y="26">THREE TABLES, THREE DECISIONS, ONE PANEL</text>
+
+        <g filter="url(#d1aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="130" height="40" rx="3" transform="rotate(-1.5 95 76)" fill="#FFFFFF"/>
+          <rect x="30" y="106" width="130" height="40" rx="3" transform="rotate(1 95 126)" fill="#FFFFFF"/>
+          <rect x="30" y="156" width="130" height="40" rx="3" transform="rotate(-0.8 95 176)" fill="#FFFFFF"/>
+          <!-- funnel: delivered + before snapshot -->
+          <path d="M196 60 L296 60 L262 130 L262 176 L230 176 L230 130 Z" fill="url(#d1aHc)"/>
+          <!-- price tag with freight crossed -->
+          <path d="M330 92 L410 92 L426 112 L410 132 L330 132 Z" transform="rotate(-2 378 112)" fill="#FBEEDC" stroke="#A8570B"/>
+          <path d="M338 150 L418 150" stroke="#A8570B" stroke-width="2.4"/>
+          <!-- joins -->
+          <rect x="460" y="90" width="130" height="64" rx="8" transform="rotate(0.6 525 122)" fill="#EEF2F8"/>
+          <!-- group by -->
+          <rect x="624" y="90" width="110" height="64" rx="8" transform="rotate(-0.5 679 122)" fill="#EEF2F8"/>
+          <!-- output -->
+          <rect x="762" y="86" width="96" height="72" rx="8" transform="rotate(0.4 810 122)" fill="#1F3A5F" stroke="#1F3A5F"/>
+          <!-- arrows -->
+          <path d="M166 76 L192 76" marker-end="url(#d1aAr)"/>
+          <path d="M166 126 L222 126" marker-end="url(#d1aAr)"/>
+          <path d="M166 176 L214 176 L214 150 L222 140" marker-end="url(#d1aAr)"/>
+          <path d="M268 122 L322 112" marker-end="url(#d1aAr)"/>
+          <path d="M428 112 L452 118" marker-end="url(#d1aAr)"/>
+          <path d="M596 122 L616 122" marker-end="url(#d1aAr)"/>
+          <path d="M740 122 L754 122" marker-end="url(#d1aAr)"/>
+        </g>
+
+        <text class="d1aL" x="40" y="80">order items</text>
+        <text class="d1aS" x="118" y="80">112,650</text>
+        <text class="d1aL" x="40" y="130">orders</text>
+        <text class="d1aS" x="90" y="130">99,441</text>
+        <text class="d1aL" x="40" y="180">products</text>
+        <text class="d1aS" x="104" y="180">32,951</text>
+        <text class="d1aB" x="246" y="48" text-anchor="middle">1 · delivered, before 2018-09-01</text>
+        <text class="d1aS" x="246" y="200" text-anchor="middle">110,197 items</text>
+        <text class="d1aB" x="378" y="78" text-anchor="middle">2 · what is the price?</text>
+        <text class="d1aL" x="378" y="116" text-anchor="middle">item price</text>
+        <text class="d1aS" x="378" y="168" text-anchor="middle">freight: excluded</text>
+        <text class="d1aL" x="472" y="112">3 · join category,</text>
+        <text class="d1aL" x="472" y="128">join the month</text>
+        <text class="d1aS" x="472" y="144">from the timestamp</text>
+        <text class="d1aL" x="636" y="112">group by</text>
+        <text class="d1aL" x="636" y="128">product x month</text>
+        <text class="d1aS" x="636" y="144">units, mean price</text>
+        <text class="d1aW" x="810" y="110" text-anchor="middle">2,216 rows</text>
+        <text class="d1aW" x="810" y="126" text-anchor="middle">203 products</text>
+        <text class="d1aW" x="810" y="142" text-anchor="middle">21 months</text>
+
+        <text class="d1aS" x="30" y="236">Decision 1 drops 2,453 items. Decision 2 changes every price by the freight, which is set by distance, not by the seller. Decision 3 picks the grain.</text>
+        <text class="d1aN" x="30" y="284">One line of code and one comment per decision. Two analysts who differ get two panels, and the difference is a diff, not an argument.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the crossed-out line is freight: it moves with the buyer's postcode, so it is not the seller's price and it is not in the panel</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Which rows count, and what "price" is<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Which rows.</strong> Delivered orders only, purchased before 1 September 2018. The second half of that rule comes from the marketplace itself: the export's last timestamp is 17 October 2018 but only 20 orders are dated September or October and none was delivered, so the file effectively stops at the end of August. The retention and RFM courses hit the same ragged edge and chose the same date; reusing it means the customer table there and the panel here describe the same months.</p>
+        <p><strong>What price.</strong> An Olist item row carries two money columns: <code>price</code>, which the seller listed, and <code>freight_value</code>, which depends on how far the buyer lives. The seller's decision is the first one. The buyer's cost is the sum. For an elasticity of the seller's price, use <code>price</code>; the freight-inclusive version is run as a check in session 2 and moves the answer by about 0.1, which is inside the range the honest sentence already carries.</p>
+        <p><strong>What grain.</strong> One row per product per calendar month: units sold, and the mean item price that month. Monthly is the finest grain at which most of the 203 products have more than one sale in a row, and it is the grain at which a seller actually changes a price. Weekly would give more rows and more zeros; quarterly would hide most of the price moves.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the row is an item and not an order, and where the 2,453 went<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>An order can hold several items, each with its own product and price, so "units of product X" is a count of item rows, not order rows. Grouping by order would count a basket with three of the same product as one unit and merge two different products into one price. The item table is the one where a unit and a price sit on the same row, which is the only shape a demand curve can be read from.</p>
+        <p>The 2,453 items dropped by decision 1 are undelivered, cancelled or unavailable orders, plus the twenty stragglers after the snapshot. They are not errors; they are sales that did not complete, and a demand curve is about sales that did. Keep the count in a comment. If it ever changes on a re-run, the export changed and every number downstream is due a re-check.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Two analysts, two elasticities, one shop.</strong> One uses the price the customer paid, freight included; the other uses the list price. On a marketplace where freight is 20 percent of a cheap item's cost and 3 percent of a dear one's, the first analyst's "price" moves whenever the buyer mix shifts toward distant cities, which has nothing to do with the seller. Both get a slope. Only one of them is measuring a decision the seller can make.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the panel and the eligibility rule</span>
+      <h2>The panel, and who gets to be in it</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A product with one price has no elasticity to read; a product that sold six units has a price and not a response. So the panel carries a rule at the door: at least 30 delivered items, at least six months with a sale, at least three distinct prices. Of 32,216 products with a sale, 203 pass. They carry 14.9 percent of every item the marketplace sold.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left: one product's thirteen months drawn as a hand-sketched grid of month, units and mean price, from July 2017 at 5 units and 75 reais to August 2018 at 3 units and 103 reais. Right: the same thirteen months as dots on a log-log plot of units against price, with the amber dots at 69.90 reais high on the units axis and the three grey dots at 89.90 and 103 reais near the bottom.">
+        <defs>
+          <filter id="d1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d1bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d1bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d1bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d1bL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d1bS { font: 400 10.5px Inter, sans-serif; fill: #4E5A75; }
+          .d1bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d1bA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d1bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d1bH" x="30" y="26">ONE PRODUCT, THIRTEEN ROWS</text>
+        <text class="d1bS" x="220" y="26">aca2eb7d, furniture and decor, 520 items</text>
+        <text class="d1bH" x="500" y="26">THE SAME ROWS AS DOTS</text>
+        <text class="d1bS" x="670" y="26">log units against log price</text>
+
+        <g filter="url(#d1bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the grid as a sheet -->
+          <rect x="30" y="44" width="400" height="236" rx="4" transform="rotate(-0.4 230 162)" fill="#FFFFFF"/>
+          <path d="M30 66 L430 66" stroke="#C9D2E2"/>
+          <path d="M150 44 L150 280 M260 44 L260 280" stroke="#C9D2E2"/>
+          <!-- highlight the price cut rows -->
+          <rect x="34" y="150" width="392" height="80" fill="#FBEEDC" stroke="none"/>
+          <!-- right: axes -->
+          <path d="M520 280 L520 60" stroke="#1F3A5F" marker-end="url(#d1bAr)"/>
+          <path d="M520 280 L850 280" stroke="#1F3A5F" marker-end="url(#d1bAr)"/>
+          <!-- dots: x by log price 69.9 -> 600, 75 -> 660, 89.9 -> 760, 103 -> 830; y by log units -->
+          <circle cx="660" cy="232" r="5" fill="#FFFFFF"/>
+          <circle cx="660" cy="196" r="5" fill="#FFFFFF"/>
+          <circle cx="660" cy="232" r="5" fill="#FFFFFF"/>
+          <circle cx="660" cy="150" r="5" fill="#FFFFFF"/>
+          <circle cx="660" cy="148" r="5" fill="#FFFFFF"/>
+          <circle cx="600" cy="110" r="6" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="600" cy="150" r="6" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="600" cy="134" r="6" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="600" cy="124" r="6" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="600" cy="121" r="6" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="760" cy="260" r="5" fill="url(#d1bHc)"/>
+          <circle cx="760" cy="260" r="5" fill="url(#d1bHc)"/>
+          <circle cx="830" cy="248" r="5" fill="url(#d1bHc)"/>
+        </g>
+
+        <text class="d1bL" x="40" y="60">month</text>
+        <text class="d1bL" x="160" y="60">units</text>
+        <text class="d1bL" x="270" y="60">mean price R$</text>
+        <text class="d1bS" x="40" y="82">2017-07</text><text class="d1bS" x="160" y="82">5</text><text class="d1bS" x="270" y="82">75.00</text>
+        <text class="d1bS" x="40" y="98">2017-08</text><text class="d1bS" x="160" y="98">13</text><text class="d1bS" x="270" y="98">75.00</text>
+        <text class="d1bS" x="40" y="114">2017-10</text><text class="d1bS" x="160" y="114">5</text><text class="d1bS" x="270" y="114">75.00</text>
+        <text class="d1bS" x="40" y="130">2017-11</text><text class="d1bS" x="160" y="130">43</text><text class="d1bS" x="270" y="130">75.00</text>
+        <text class="d1bS" x="40" y="146">2017-12</text><text class="d1bS" x="160" y="146">45</text><text class="d1bS" x="270" y="146">75.00</text>
+        <text class="d1bB" x="40" y="164">2018-01</text><text class="d1bB" x="160" y="164">121</text><text class="d1bB" x="270" y="164">69.98</text>
+        <text class="d1bB" x="40" y="180">2018-02</text><text class="d1bB" x="160" y="180">43</text><text class="d1bB" x="270" y="180">69.90</text>
+        <text class="d1bB" x="40" y="196">2018-03</text><text class="d1bB" x="160" y="196">65</text><text class="d1bB" x="270" y="196">69.90</text>
+        <text class="d1bB" x="40" y="212">2018-04</text><text class="d1bB" x="160" y="212">83</text><text class="d1bB" x="270" y="212">69.90</text>
+        <text class="d1bB" x="40" y="228">2018-05</text><text class="d1bB" x="160" y="228">90</text><text class="d1bB" x="270" y="228">69.90</text>
+        <text class="d1bS" x="40" y="246">2018-06</text><text class="d1bS" x="160" y="246">2</text><text class="d1bS" x="270" y="246">89.90</text>
+        <text class="d1bS" x="40" y="262">2018-07</text><text class="d1bS" x="160" y="262">2</text><text class="d1bS" x="270" y="262">89.90</text>
+        <text class="d1bS" x="40" y="278">2018-08</text><text class="d1bS" x="160" y="278">3</text><text class="d1bS" x="270" y="278">103.23</text>
+        <text class="d1bS" x="340" y="164">the cut</text>
+        <text class="d1bS" x="340" y="246">the rise, and a collapse</text>
+
+        <text class="d1bA" x="530" y="56">LOG UNITS</text>
+        <text class="d1bA" x="848" y="272" text-anchor="end">LOG PRICE</text>
+        <text class="d1bS" x="600" y="298" text-anchor="middle">69.90</text>
+        <text class="d1bS" x="660" y="298" text-anchor="middle">75</text>
+        <text class="d1bS" x="760" y="298" text-anchor="middle">89.90</text>
+        <text class="d1bS" x="830" y="298" text-anchor="middle">103</text>
+        <text class="d1bB" x="616" y="104">five amber months at 69.90</text>
+        <text class="d1bS" x="676" y="200">five white months at 75</text>
+        <text class="d1bS" x="690" y="242">three hatched months</text>
+        <text class="d1bS" x="690" y="256">at 89.90 and 103: 2, 2, 3 units</text>
+
+        <text class="d1bN" x="30" y="326">A line through these thirteen dots has slope -10.17. Session 3 explains why that is the slope that is too good, and this session builds the rows it sits on.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the three hatched dots at the bottom right decide the slope, and they are the months the product was barely on sale</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The three sieves, and what each is for<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Thirty items</strong> is a data floor: below it a month with two units and a month with three units differ by 50 percent for no reason a price could explain. 376 products pass. <strong>Three distinct prices</strong> is an economics floor: a slope needs the price to have been in more than one place, and two prices give a line through two points that is fitted to nothing. 226 of the 376 pass. <strong>Six months with a sale</strong> is an identification floor: one price change in a two-month product cannot separate "the price did it" from "the month did it". 203 pass all three.</p>
+        <p>The thresholds are choices and the page says so. Lower them and more products enter with noisier rows; raise them and the panel shrinks toward the handful of bestsellers. The right move is to write the three numbers as constants at the top of the script and re-run the whole ladder under two other settings before quoting anything, which session 10's bench does with two of them as switches.</p>
+        <p>The 203 are not a random sample of the marketplace. They are the products that sold a lot and repriced, which is the population any pricing decision is about anyway; the honest sentence says "for the products that can be read", not "for the marketplace".</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Mean price in a month, and why not the median or the mode<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A product's price can change mid-month, and the month's row then carries a mean of two prices weighted by how many units sold at each. That mean is the price the average unit that month was sold at, which is the quantity a revenue calculation needs. The mode would hide the change; the median would jump. In the headline product, January 2018's mean of 69.98 is 121 units, all but a few at 69.90 and a handful at 75 before the cut took effect. The rest of the year's rows are single prices.</p>
+        <p>For the same reason, "units" is a count of item rows and not of orders. A basket of three is three units at one price, and it belongs in the month's total three times.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the log-log fit and per-product noise</span>
+      <h2>A line through the logs, and the slope that is too good</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Take the log of units and the log of price and fit a straight line. The slope is the elasticity: a slope of -2 says a one percent price rise loses two percent of units. Do it for each of the 203 products on its own months and you get 203 slopes, and they are a lesson in why one product is the wrong unit: the median is -2.03, 70 percent are negative, and a third are past 5 in absolute value, which no demand curve for a bath towel or a phone case has ever produced.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn histogram of the 203 per-product slopes. Most bars sit between minus 5 and plus 1 with the median marked at minus 2.03, and long thin tails run out past minus 10 on the left and past plus 5 on the right. A bracket over the tails reads one third of the slopes: noise. The headline product's minus 10.17 is marked with an arrow in the left tail.">
+        <defs>
+          <filter id="d1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d1cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d1cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d1cL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d1cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d1cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d1cV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .d1cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d1cH" x="30" y="26">203 PRODUCTS, 203 SLOPES, ONE PER PRODUCT</text>
+        <text class="d1cS" x="360" y="26">bar height = how many products' slopes land in that band · shape is real, bars are sketched</text>
+
+        <g filter="url(#d1cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 240 L840 240"/>
+          <!-- left tail -->
+          <rect x="70" y="232" width="26" height="8" fill="url(#d1cHc)"/>
+          <rect x="102" y="228" width="26" height="12" fill="url(#d1cHc)"/>
+          <rect x="134" y="224" width="26" height="16" fill="url(#d1cHc)"/>
+          <rect x="166" y="220" width="26" height="20" fill="url(#d1cHc)"/>
+          <rect x="198" y="214" width="26" height="26" fill="url(#d1cHc)"/>
+          <rect x="230" y="206" width="26" height="34" fill="url(#d1cHc)"/>
+          <!-- the body, -5 to +1 -->
+          <rect x="262" y="180" width="26" height="60" fill="#EEF2F8"/>
+          <rect x="294" y="150" width="26" height="90" fill="#EEF2F8"/>
+          <rect x="326" y="110" width="26" height="130" fill="#EEF2F8"/>
+          <rect x="358" y="90" width="26" height="150" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="390" y="104" width="26" height="136" fill="#EEF2F8"/>
+          <rect x="422" y="130" width="26" height="110" fill="#EEF2F8"/>
+          <rect x="454" y="160" width="26" height="80" fill="#EEF2F8"/>
+          <rect x="486" y="184" width="26" height="56" fill="#EEF2F8"/>
+          <!-- right tail -->
+          <rect x="518" y="208" width="26" height="32" fill="url(#d1cHc)"/>
+          <rect x="550" y="218" width="26" height="22" fill="url(#d1cHc)"/>
+          <rect x="582" y="226" width="26" height="14" fill="url(#d1cHc)"/>
+          <rect x="614" y="230" width="26" height="10" fill="url(#d1cHc)"/>
+          <rect x="646" y="234" width="26" height="6" fill="url(#d1cHc)"/>
+          <!-- brackets over the tails -->
+          <path d="M70 70 L70 60 L256 60 L256 70" stroke="#A8570B"/>
+          <path d="M518 70 L518 60 L672 60 L672 70" stroke="#A8570B"/>
+          <!-- arrow to the headline product -->
+          <path d="M120 150 C120 180 120 200 118 220" stroke="#A8570B" marker-end="url(#d1cAr)"/>
+        </g>
+
+        <text class="d1cB" x="163" y="52" text-anchor="middle">tail past -5: noise</text>
+        <text class="d1cB" x="595" y="52" text-anchor="middle">tail past +1: the sign is wrong</text>
+        <text class="d1cS" x="83" y="258" text-anchor="middle">-15</text>
+        <text class="d1cS" x="243" y="258" text-anchor="middle">-5</text>
+        <text class="d1cS" x="371" y="258" text-anchor="middle">-2</text>
+        <text class="d1cS" x="499" y="258" text-anchor="middle">+1</text>
+        <text class="d1cS" x="659" y="258" text-anchor="middle">+10</text>
+        <text class="d1cV" x="371" y="82" text-anchor="middle">median -2.03</text>
+        <text class="d1cB" x="120" y="140" text-anchor="middle">aca2eb7d: -10.17</text>
+        <text class="d1cS" x="120" y="126" text-anchor="middle">the headline product</text>
+
+        <text class="d1cL" x="700" y="110">70.0 percent negative</text>
+        <text class="d1cL" x="700" y="130">59.6 percent below -1</text>
+        <text class="d1cB" x="700" y="150">33.5 percent past 5</text>
+        <text class="d1cS" x="700" y="166">in absolute value</text>
+        <text class="d1cS" x="700" y="190">interquartile range</text>
+        <text class="d1cS" x="700" y="206">-5.09 to +0.70</text>
+
+        <text class="d1cN" x="30" y="306">Thirteen rows cannot hold an elasticity still. The panel of 2,216 can, and session 2 fits it as one line with 203 intercepts instead of 203 lines.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber bar is where the median sits; the two hatched tails are one product in three, and neither tail is economics</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why -10.17 is not an elasticity, and what it is instead<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read the thirteen rows again. Five months at R$ 75 selling 5 to 45. A cut to R$ 69.90 and five months selling 43 to 121. Then R$ 89.90 and R$ 103, selling 2, 2 and 3. A line through that has to pass near the bottom-right dots, and it comes out at -10, which would mean a 10 percent rise loses 62 percent of units. Nobody's bath mat behaves like that.</p>
+        <p>What the last three months look like is a product going out of stock or being delisted, with a price raised on the way out, or a seller clearing the last units at a higher price with no promotion behind it. In either case the units did not fall <em>because</em> the price rose; both moved because the product was ending. <strong>The rows cannot distinguish demand from supply here</strong>, and a slope fitted to them is a description of the product's life, not of its buyers.</p>
+        <p>This is the general lesson and it is why the track fits the panel and not the product: one product's thirteen months carry every accident of its life, and a slope has no way of knowing which dots are accidents. Two hundred products' months average the accidents out, and what is left is the part they share.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Logs, and why the slope is a percentage change<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Elasticity is a ratio of percentage changes, and the derivative of log x is one over x, so a small change in log x is a percentage change in x. A straight line in logs, log units = a + b log price, therefore says: a one percent change in price goes with a b percent change in units, at every price. That is the constant-elasticity demand curve, and b is the elasticity.</p>
+        <p>Two consequences worth holding. First, the fit is only as good as the assumption that the elasticity is the same at R$ 70 and R$ 100, which the bench's session tests by fitting on subsets. Second, zeros cannot be logged: a month with no sales is not in the panel at all, which is one reason the eligibility rule asks for six months with a sale rather than six months.</p>
+      </div>
+    </details>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Write the three sieves for a table you own" data-hint="For your own sales table: what counts as enough sales, how many distinct prices you need, how many periods. Then say what share of your products would pass. Three lines." data-seed="" data-cta="Count it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Items to a fitted slope, on 110,197 real rows</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Seven steps in pandas and numpy on the public Olist CSVs. Every number printed below is what the code produces; if yours differs, the difference is one of the three decisions and you should be able to name which. Get the CSVs from Kaggle (a free account, or <code>kagglehub.dataset_download("olistbr/brazilian-ecommerce")</code> fetches them with no login).</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as a hand-drawn track of seven stations: load, filter delivered before the snapshot, join category and month, group to product-month, apply the three sieves, fit a log-log line per product, and read the headline product. Each station shows the count it leaves: 110,197 items, 2,216 rows, 203 products, 203 slopes.">
+        <defs>
+          <filter id="d1dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d1dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d1dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d1dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d1dL { font: 700 11px Inter, sans-serif; fill: #16213A; }
+          .d1dS { font: 400 10.5px Inter, sans-serif; fill: #4E5A75; }
+          .d1dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d1dW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .d1dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d1dH" x="30" y="26">SEVEN STATIONS</text>
+
+        <g filter="url(#d1dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 120 L840 120" stroke="#C9D2E2"/>
+          <rect x="40" y="90" width="96" height="60" rx="8" transform="rotate(-0.6 88 120)" fill="#FFFFFF"/>
+          <rect x="156" y="90" width="96" height="60" rx="8" transform="rotate(0.5 204 120)" fill="url(#d1dHc)"/>
+          <rect x="272" y="90" width="96" height="60" rx="8" transform="rotate(-0.4 320 120)" fill="#EEF2F8"/>
+          <rect x="388" y="90" width="96" height="60" rx="8" transform="rotate(0.6 436 120)" fill="#EEF2F8"/>
+          <rect x="504" y="90" width="96" height="60" rx="8" transform="rotate(-0.5 552 120)" fill="#FBEEDC" stroke="#A8570B"/>
+          <rect x="620" y="90" width="96" height="60" rx="8" transform="rotate(0.4 668 120)" fill="#1F3A5F" stroke="#1F3A5F"/>
+          <rect x="736" y="90" width="104" height="60" rx="8" transform="rotate(-0.5 788 120)" fill="#FFFFFF"/>
+          <path d="M138 120 L152 120" marker-end="url(#d1dAr)"/>
+          <path d="M254 120 L268 120" marker-end="url(#d1dAr)"/>
+          <path d="M370 120 L384 120" marker-end="url(#d1dAr)"/>
+          <path d="M486 120 L500 120" marker-end="url(#d1dAr)"/>
+          <path d="M602 120 L616 120" marker-end="url(#d1dAr)"/>
+          <path d="M718 120 L732 120" marker-end="url(#d1dAr)"/>
+        </g>
+
+        <text class="d1dL" x="52" y="112">1 · load</text>
+        <text class="d1dS" x="52" y="128">three CSVs</text>
+        <text class="d1dS" x="52" y="142">112,650 items</text>
+        <text class="d1dL" x="168" y="112">2 · filter</text>
+        <text class="d1dS" x="168" y="128">delivered, before</text>
+        <text class="d1dS" x="168" y="142">snapshot: 110,197</text>
+        <text class="d1dL" x="284" y="112">3 · join</text>
+        <text class="d1dS" x="284" y="128">category, month</text>
+        <text class="d1dS" x="284" y="142">from timestamp</text>
+        <text class="d1dL" x="400" y="112">4 · group</text>
+        <text class="d1dS" x="400" y="128">product x month</text>
+        <text class="d1dS" x="400" y="142">units, mean price</text>
+        <text class="d1dB" x="516" y="112">5 · three sieves</text>
+        <text class="d1dS" x="516" y="128">30 items, 3 prices,</text>
+        <text class="d1dS" x="516" y="142">6 months: 203</text>
+        <text class="d1dW" x="632" y="112">6 · fit</text>
+        <text class="d1dW" x="632" y="128">log-log, per</text>
+        <text class="d1dW" x="632" y="142">product: 203 slopes</text>
+        <text class="d1dL" x="748" y="112">7 · read one</text>
+        <text class="d1dS" x="748" y="128">aca2eb7d, 13 rows</text>
+        <text class="d1dS" x="748" y="142">slope -10.17</text>
+
+        <text class="d1dS" x="40" y="74">Stations 1 to 4 are the same in every panel build. Station 5 is the door. Station 6 is where session 2 changes the unit from the product to the panel.</text>
+        <text class="d1dN" x="30" y="212">Save the panel with the snapshot date in the filename. Sessions 2 and 10 fit it again and the fits only compare if the rows are the same rows.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber station is the only one that changes what the answer is about; the rest change how many rows it rests on</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Load three tables.</strong> Items carry the price, orders carry the status and the timestamp, products carry the category. The translation file turns Portuguese category names into English.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · load</span>import numpy as np
+import pandas as pd
+
+D = "data/"   # the Kaggle CSVs
+items    = pd.read_csv(D + "olist_order_items_dataset.csv")
+orders   = pd.read_csv(D + "olist_orders_dataset.csv",
+                       parse_dates=["order_purchase_timestamp"])
+products = pd.read_csv(D + "olist_products_dataset.csv")
+names    = pd.read_csv(D + "product_category_name_translation.csv")
+print(len(items), len(orders), len(products))     # 112650 99441 32951</div>
+      </div>
+      <div class="step">
+        <p><strong>Decision 1: which rows.</strong> Delivered, purchased before the snapshot. The snapshot is a literal with its reason beside it, never a computed maximum.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · filter</span># last complete month is August 2018; Sep-Oct hold 20 undelivered stragglers
+SNAPSHOT = pd.Timestamp("2018-09-01")
+
+x = items.merge(orders[["order_id", "order_status", "order_purchase_timestamp"]],
+                on="order_id")
+x = x[(x["order_status"] == "delivered") &amp;
+      (x["order_purchase_timestamp"] &lt; SNAPSHOT)]
+print(len(x), x["product_id"].nunique())          # 110197 32216</div>
+      </div>
+      <div class="step">
+        <p><strong>Decision 2 and the joins.</strong> The price is the seller's <code>price</code>; freight stays in a column of its own for the session 2 check. The month comes from the purchase timestamp.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · join category and month</span>x = x.merge(products[["product_id", "product_category_name"]], on="product_id", how="left")
+x = x.merge(names, on="product_category_name", how="left")
+x["cat"]   = x["product_category_name_english"].fillna("unknown")
+x["month"] = x["order_purchase_timestamp"].dt.to_period("M")
+# price = the seller's listed item price; freight_value is the buyer's, kept separately</div>
+      </div>
+      <div class="step">
+        <p><strong>Decision 3: the grain.</strong> One row per product per month. Units is a count of item rows; price is the mean item price that month.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the panel</span>panel = (x.groupby(["product_id", "month"])
+           .agg(units=("order_id", "size"),
+                price=("price", "mean"),
+                freight=("freight_value", "mean"),
+                cat=("cat", "first"))
+           .reset_index())
+print(len(panel))                                  # 60881 product-months before the sieves</div>
+      </div>
+      <div class="step">
+        <p><strong>The three sieves.</strong> Written as constants so that changing one is an edit, not an archaeology. Print the count each sieve leaves; the three numbers are the first thing to say about the panel.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · eligibility</span>MIN_ITEMS, MIN_MONTHS, MIN_PRICES = 30, 6, 3
+
+g = x.groupby("product_id").agg(n=("order_id", "size"),
+                                months=("month", "nunique"),
+                                prices=("price", "nunique"))
+print((g["n"] &gt;= MIN_ITEMS).sum())                                     # 376
+print(((g["n"] &gt;= MIN_ITEMS) &amp; (g["prices"] &gt;= MIN_PRICES)).sum())     # 226
+keep = g[(g["n"] &gt;= MIN_ITEMS) &amp; (g["months"] &gt;= MIN_MONTHS) &amp; (g["prices"] &gt;= MIN_PRICES)].index
+print(len(keep))                                                        # 203
+
+panel = panel[panel["product_id"].isin(keep)].copy()
+panel["lp"] = np.log(panel["price"])
+panel["lq"] = np.log(panel["units"])
+print(len(panel), panel["month"].nunique())                             # 2216 21
+print(round(g.loc[keep, "n"].sum() / g["n"].sum(), 4))                  # 0.1493</div>
+      </div>
+      <div class="step">
+        <p><strong>Fit one line per product.</strong> The slope of log units on log price is the elasticity. Skip a product whose price never varied within the panel (there are none among the 203, but the guard costs nothing).</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · 203 slopes</span>def slope(lp, lq):
+    return np.polyfit(lp, lq, 1)[0]
+
+per = (panel.groupby("product_id")
+         .apply(lambda s: slope(s["lp"].values, s["lq"].values) if s["lp"].std() &gt; 0 else np.nan)
+         .dropna())
+print(len(per))                                    # 203
+print(round(per.median(), 2))                      # -2.03
+print(round((per &lt; 0).mean(), 3))                  # 0.700
+print(round((per &lt; -1).mean(), 3))                 # 0.596
+print(round((per.abs() &gt; 5).mean(), 3))            # 0.335
+print(per.quantile([.25, .75]).round(2).tolist())  # [-5.09, 0.7]</div>
+      </div>
+      <div class="step">
+        <p><strong>Read the one that sold most.</strong> Thirteen rows, a cut, a rise, a collapse, and a slope of -10.17. Look at the rows before believing the slope; that is the whole habit.</p>
+        <div class="prompt-box good"><span class="label">★ Step 7 · the headline product</span>top = g.loc[keep, "n"].idxmax()
+rows = panel[panel["product_id"] == top][["month", "units", "price"]]
+print(top[:8], int(g.loc[top, "n"]))              # aca2eb7d 520
+print(rows.to_string(index=False))
+#  month  units   price
+# 2017-07     5   75.00
+# 2017-08    13   75.00
+# ...
+# 2018-01   121   69.98
+# ...
+# 2018-06     2   89.90
+# 2018-08     3  103.23
+print(round(per[top], 2))                          # -10.17
+
+panel.to_csv("panel_2018-09-01.csv", index=False)  # the date in the filename, always</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the three sieves as constants and the counts as comments.</strong> When a colleague gets 190 products instead of 203, the diff between your script and theirs is the answer, and it takes a minute. Without the constants and the comments it takes an afternoon and ends in an argument about whose panel is "right".</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before deep-dive session 2</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Run the seven steps</strong> on Olist, or on your own item-level sales table. Write the three decisions as comments at the top before any code below them.</li>
+      <li><strong>Change one sieve</strong> (30 items to 20, or 6 months to 4) and re-run. Write down the new product count and the new median slope. That pair of numbers is the cost of the threshold.</li>
+      <li><strong>Find your own headline product,</strong> the one with the most rows, and read its rows before its slope. Write one sentence on whether its slope is about buyers or about its life.</li>
+      <li><strong>Bring the panel.</strong> Session 2 fits it five ways and the five answers span a factor of sixteen.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 1 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Why is the panel built on item rows with the seller's listed price, and not on the price the buyer paid including freight?</p>
+      <button class="qopt" type="button">A · Because freight is always small enough to ignore</button>
+      <button class="qopt" type="button">B · Because freight is set by the buyer's distance, not by the seller, so a freight-inclusive price moves whenever the buyer mix shifts toward distant cities; an elasticity of the seller's price has to use the number the seller decides</button>
+      <button class="qopt" type="button">C · Because the Olist items table does not contain freight</button>
+      <button class="qopt" type="button">D · Because pandas cannot sum two money columns with different rounding</button>
+      <p class="qwhy">Freight stays in its own column, and the freight-inclusive fit is run as a check in session 2, where it moves the within-product answer by about 0.1. The decision is about what question is being asked, not about the size of the number.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · The eligibility rule leaves 203 of 32,216 products. What is each of the three sieves for?</p>
+      <button class="qopt" type="button">A · All three are there to make the code run faster</button>
+      <button class="qopt" type="button">B · Thirty items removes fraud, three prices removes discounts, six months removes seasonality</button>
+      <button class="qopt" type="button">C · They select the products with the highest elasticity</button>
+      <button class="qopt" type="button">D · Thirty items is a data floor against two-unit months, three distinct prices is an economics floor because a slope needs the price to have been in more than one place, and six months is an identification floor so one price change is not confused with one month's shift</button>
+      <p class="qwhy">The thresholds are choices, written as constants, and the honest sentence says "for the products that can be read", not "for the marketplace". The 203 carry 14.9 percent of all items sold.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · The best-selling eligible product's own slope is -10.17. What is the honest reading?</p>
+      <button class="qopt" type="button">A · The last three months, at higher prices with 2, 2 and 3 units, look like a stock-out or delisting, so the rows cannot separate demand from supply; the slope describes the product's life, not its buyers, and one product's months are the wrong unit for an elasticity</button>
+      <button class="qopt" type="button">B · Demand for this product is extremely elastic, and a 10 percent rise would lose 62 percent of units</button>
+      <button class="qopt" type="button">C · The slope is wrong because the January price was 69.98 rather than 69.90</button>
+      <button class="qopt" type="button">D · The product should be dropped from the panel because its slope is an outlier</button>
+      <p class="qwhy">A third of the 203 per-product slopes are past 5 in absolute value, which no demand curve for these goods produces. The panel of 2,216 rows, fitted as one line with 203 intercepts, is the unit that averages the accidents out; that is session 2.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Price elasticity of demand as the slope of a log-log line</span><span class="note">Standard economics, no single source; the constant-elasticity form is the one fitted here</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The panel: 112,650 items, 110,197 delivered before the snapshot, 32,216 products, 2,216 rows for 203 products over 21 months</span><span class="note">Computed from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0) for these pages; the snapshot rule is the one the RFM course derived from the same export</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The three sieves: 376, 226, 203; 14.9 percent of items; median price range 1.294</span><span class="note">Computed; thresholds are stated choices</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Per-product slopes: median -2.03, 70.0 percent negative, 59.6 percent below -1, 33.5 percent past 5 in absolute value, IQR -5.09 to +0.70; the headline product's 13 rows and slope -10.17</span><span class="note">Computed; the reading of the last three months as a stock-out or delisting is an interpretation and the page says so</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Fixed effects, month effects, the placebo</span><span class="note">Named as session 2; not taught here</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>One row = one unit at one price</b><span>Items, not orders. Delivered, before the snapshot. 110,197 of 112,650.</span></div>
+      <div class="cheat-item"><b>Price = the seller's number</b><span>Freight is the buyer's distance. Keep it in its own column for the check.</span></div>
+      <div class="cheat-item"><b>Product x month</b><span>Units = item count, price = mean that month. The grain a seller reprices at.</span></div>
+      <div class="cheat-item"><b>Three sieves, three floors</b><span>30 items (data), 3 prices (economics), 6 months (identification). 32,216 to 203.</span></div>
+      <div class="cheat-item"><b>Slope of log on log = elasticity</b><span>-2 means one percent up in price, two percent down in units.</span></div>
+      <div class="cheat-item"><b>One product is the wrong unit</b><span>203 slopes, a third past 5. The -10.17 is a product's life, not its buyers.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You have 2,216 rows and a reason not to trust any one product's slope. Deep-dive session 2 fits those rows five ways: across products, where the slope is +0.008 and cheap products are simply not popular products; pooled, where it is -0.108; within product, where it is -1.788; with month effects, -1.854; and against a placebo where prices are shuffled inside each product and the slope falls to zero. Same rows, a factor of sixteen, and the whole difference is whether a product was compared with itself.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 1 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← Course home</a> &nbsp;·&nbsp; <a href="p2-why-the-naive-number-lies.html">Next: Why the naive number lies →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

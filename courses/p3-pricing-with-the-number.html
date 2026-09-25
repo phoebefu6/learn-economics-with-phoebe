@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 3 of 10. The revenue rule with the real Olist number: a 10 percent price rise gains 8.9 percent of revenue under the pooled -0.108 and loses 7.2 percent under the within-product -1.788. Then first, second and third degree price discrimination, versioning as a menu that sorts customers, freemium as a price, and why willingness to pay is never in the data. Python build-along.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Pricing with the number - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 3 of 10. The first thing an elasticity buys you is the sign of a pricing decision. Then three ways to charge different buyers different prices.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p3-pricing-with-the-number.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pricing with the number - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 3 of 10. +8.9 or -7.2 percent of revenue from the same 10 percent rise, and the menu that sorts customers.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 3 · Pricing with the number - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 3 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 3 of 10</div>
+    <h1>Pricing with the <span class="accent">number</span></h1>
+    <p class="sub">Deep-dive session 2 ended with a within-product elasticity between -1.5 and -2.2, about -1.8 at the default, with a label on it. Tonight is what a number like that is for. The first use is the smallest and the most valuable: it tells you the sign of a price change's effect on revenue, and on these rows the pooled number and the within-product number give opposite signs for the same 10 percent rise. The second use is the one every marketplace, airline and software company runs on: if buyers differ in how much they would pay, one price leaves money on both sides of it, and there are exactly three ways to charge different buyers different prices. The third is the honest boundary: the thing a pricing team most wants, each buyer's willingness to pay, is never in the data.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Analysts, pricing and growth teams</span>
+      <span class="chip audience">Python, plain arithmetic</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The revenue rule, three degrees, the menu</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the revenue table and the sentence</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Revenue is price times units. Raise the price by some percent and units fall by the elasticity times that percent, so whether revenue goes up or down depends on whether the elasticity is bigger or smaller than one in absolute value. That is the whole of the revenue rule and it is the reason the number matters: at -0.108 a rise is free money, at -1.788 it costs you. Everything else tonight is the same idea taken further. If some buyers would pay more than the price and some would pay less, then a single price is a compromise, and a seller who can tell the two groups apart, or get them to sort themselves, can do better than any single price. The Olist rows say nothing about that second part directly; they were sold at one price each. But the elasticity is the average of those buyers, and the menu is a way of not averaging them.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The revenue arithmetic for any price change under any elasticity, in one line of Python; the two-scope sentence for a leader, with the range and not the point; the three degrees of price discrimination as three mechanisms and the test of which one a given price is; versioning and freemium as second-degree discrimination, with the menu drawn; and the reason a price test, not a panel, is what settles a pricing decision.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the revenue rule with the real number</span>
+      <h2>The first thing an elasticity buys you is a sign</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Take the 10 percent rise the catalogue slide from deep-dive session 2 recommended. Under a constant-elasticity demand curve, units change by (1.10 to the power of the elasticity) minus one, and revenue by (1.10 to the power of one plus the elasticity) minus one. Under the pooled -0.108 that is units -1.0 percent and revenue +8.9 percent. Under the within-product -1.788 it is units -15.7 percent and revenue -7.2 percent. Under -1.854 with month effects, units -16.2 and revenue -7.8. All three are modelled numbers: arithmetic on a computed slope under a constant-elasticity assumption, and the page says so wherever they appear.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 356" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two hand-drawn bars either side of a zero line, both for the same 10 percent price rise. The left bar rises to +8.9 percent of revenue under the pooled elasticity of -0.108, with a small units bar of -1.0 percent beside it. The right bar, in amber, falls to -7.2 percent of revenue under the within-product elasticity of -1.788, with a hatched units bar of -15.7 percent beside it. A sketched price tag at the top reads plus 10 percent.">
+        <defs>
+          <filter id="d3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d3aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d3aL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d3aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d3aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d3aV { font: 800 18px Inter, sans-serif; fill: #142944; }
+          .d3aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .d3aA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d3aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d3aH" x="30" y="26">ONE RISE, TWO ELASTICITIES, OPPOSITE SIGNS</text>
+        <text class="d3aS" x="360" y="26">modelled: constant elasticity, arithmetic on the deep-dive session 2 slopes</text>
+
+        <g filter="url(#d3aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the price tag -->
+          <path d="M60 52 L150 52 L168 70 L150 88 L60 88 Z" transform="rotate(-2 114 70)" fill="#FBEEDC" stroke="#A8570B"/>
+          <circle cx="74" cy="70" r="3" fill="#FFFFFF" stroke="#A8570B"/>
+          <!-- zero line and scale ticks -->
+          <path d="M200 200 L620 200"/>
+          <path d="M200 120 L200 300" stroke="#1F3A5F" marker-end="url(#d3aAr)"/>
+          <path d="M194 128 L206 128 M194 200 L206 200 M194 272 L206 272"/>
+          <!-- revenue bar under -0.108: up 8.9 * 8 = 71 -->
+          <rect x="250" y="129" width="80" height="71" rx="3" transform="rotate(-0.8 290 164)" fill="#EEF2F8"/>
+          <!-- units bar under -0.108: down 1.0 * 8 = 8 -->
+          <rect x="340" y="200" width="30" height="8" rx="2" fill="url(#d3aHc)"/>
+          <!-- revenue bar under -1.788: down 7.2 * 8 = 58 -->
+          <rect x="450" y="200" width="80" height="58" rx="3" transform="rotate(0.7 490 229)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- units bar under -1.788: down 15.7 * 8 = 126 -->
+          <rect x="540" y="200" width="30" height="126" rx="2" fill="url(#d3aHc)"/>
+          <!-- side note box -->
+          <rect x="660" y="120" width="190" height="150" rx="8" transform="rotate(-0.5 755 195)" fill="#FFFFFF"/>
+        </g>
+
+        <text class="d3aB" x="114" y="74" text-anchor="middle">+10 percent</text>
+        <text class="d3aS" x="60" y="106">on every price</text>
+        <text class="d3aA" x="176" y="132" text-anchor="end">+9</text>
+        <text class="d3aA" x="176" y="204" text-anchor="end">0</text>
+        <text class="d3aA" x="176" y="276" text-anchor="end">-9</text>
+        <text class="d3aS" x="150" y="316" text-anchor="end">percent</text>
+        <text class="d3aV" x="290" y="118" text-anchor="middle">+8.9</text>
+        <text class="d3aL" x="290" y="222" text-anchor="middle">revenue</text>
+        <text class="d3aS" x="290" y="238" text-anchor="middle">under -0.108, pooled</text>
+        <text class="d3aS" x="355" y="224" text-anchor="middle">units</text>
+        <text class="d3aS" x="355" y="240" text-anchor="middle">-1.0</text>
+        <text class="d3aW" x="490" y="234" text-anchor="middle">-7.2</text>
+        <text class="d3aB" x="490" y="278" text-anchor="middle">revenue</text>
+        <text class="d3aS" x="490" y="294" text-anchor="middle">under -1.788, within</text>
+        <text class="d3aS" x="600" y="316" text-anchor="middle">units -15.7</text>
+        <text class="d3aL" x="672" y="146">same rows, same rise</text>
+        <text class="d3aS" x="672" y="166">pooled says: take it</text>
+        <text class="d3aS" x="672" y="182">within says: it costs 7.2</text>
+        <text class="d3aS" x="672" y="204">with month effects, -1.854:</text>
+        <text class="d3aS" x="672" y="220">units -16.2, revenue -7.8</text>
+        <text class="d3aB" x="672" y="248">the sign is the decision</text>
+
+        <text class="d3aN" x="30" y="334">Revenue rises with a price rise only when the elasticity is smaller than one in absolute value.</text>
+        <text class="d3aN" x="30" y="350">-0.108 is; -1.788 is not; and the range -1.5 to -2.2 is nowhere near the line.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the pale bar is what the catalogue slide promised; the amber bar is what the within-product number says the same rise costs</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The revenue rule, and the two-scope sentence<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The rule.</strong> A price rise raises revenue when demand is inelastic (absolute elasticity below one) and lowers it when demand is elastic (above one). Under a constant-elasticity curve the arithmetic is exact: revenue after a rise of p percent is (1 + p/100) to the power (1 + elasticity), minus one. At -0.108 the exponent is 0.892, so a 10 percent rise gives 1.10 to the 0.892, which is +8.9 percent. At -1.788 the exponent is -0.788, and 1.10 to the -0.788 is -7.2 percent. The sign flipped because the elasticity crossed one.</p>
+        <p><strong>Why the range and not the point.</strong> Deep-dive session 2 printed -1.788 at the default, -2.216 weighted by units, -1.881 with freight in the price, -1.480 without single-unit months, and -1.854 with month effects. The sentence for a leader is: <em>on these rows, the within-product elasticity is between -1.5 and -2.2 depending on the weighting and the row filter, about -1.8 at the default; it is not -0.1 and it is not zero.</em> Under every number in that range a 10 percent rise loses revenue, between 4.7 and 10.8 percent. The decision does not depend on which decimal you believe, which is exactly what a range is for.</p>
+        <p><strong>The assumption, said out loud.</strong> Constant elasticity means the same percentage response at every price, which is what the log-log line assumes. It is fine for a 5 or 10 percent move near the prices the panel saw; it is a guess for a 50 percent move, and no panel can tell you what happens at a price nobody was charged.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the Olist number sits among published ones, as reported<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Published elasticities are almost all below one in absolute value, because most of what economists have measured is a necessity bought by everyone. Gasoline: about -0.09 in the short run and about -0.31 in the long run, the publication-bias-corrected figures reported by Havranek, Irsova and Janda 2012, Energy Economics 34(1) 201-207. Food away from home 0.81 and eggs 0.27, in absolute value as the paper reports them, from Andreyeva, Long and Brownell 2010, American Journal of Public Health 100(2). Nobody stops driving to work because petrol rose 10 percent; people do skip a restaurant meal.</p>
+        <p>A marketplace product with a slope of about -1.8 is a different animal: a bath towel, a phone case or a garden tool with a dozen substitutes one search away. That is why the within-product Olist number is elastic where petrol is not, and it is the reason the sign of a price rise on a marketplace is the opposite of the sign at a petrol station. It is not a general e-commerce elasticity; the panel is 203 products on one marketplace in 2017 and 2018, and no number on this page is a claim about any other market.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The across-the-board rise.</strong> A category manager is asked for 9 percent more revenue next quarter and proposes 10 percent on every price, on the strength of a flat catalogue scatter. On the within-product number the proposal delivers about -7. The alternative the elasticity actually supports is the opposite move on the most elastic lines: under -1.788 a 10 percent cut gains 20.7 percent of units and 8.7 percent of revenue, modelled, constant elasticity. Whether the margin survives the cut is a cost question the elasticity does not answer, and it should be the next slide.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers first, second and third degree price discrimination</span>
+      <h2>Three ways to charge different buyers different prices</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">An elasticity of -1.8 is an average over buyers who differ. Some would have paid R$ 90 for the towel and got it at R$ 70; some would only have paid R$ 60 and did not buy. One price leaves money with the first group and sales with the second. Price discrimination is any arrangement that charges the two groups differently, and the economics textbooks sort every such arrangement into three degrees by one question: how does the seller find out which group a buyer is in?</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 362" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three hand-drawn panels. First degree: two sketched people each holding a different price tag, the seller knows each one's willingness to pay. Second degree: one person in front of a menu board with three lines, small, medium and large, and an arrow from the person to the line they pick; the buyer sorts themselves. Third degree: a wall with a door and a card check, two groups either side with two posted prices; the seller uses a verifiable marker such as a student card.">
+        <defs>
+          <filter id="d3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="23" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d3bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d3bL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d3bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d3bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d3bW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .d3bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d3bH" x="30" y="26">FIRST DEGREE</text>
+        <text class="d3bH" x="320" y="26">SECOND DEGREE</text>
+        <text class="d3bH" x="600" y="26">THIRD DEGREE</text>
+        <text class="d3bS" x="140" y="26">a price per person</text>
+        <text class="d3bS" x="440" y="26">a menu, buyers sort themselves</text>
+        <text class="d3bS" x="704" y="26">a price per group</text>
+
+        <g filter="url(#d3bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- panel frames -->
+          <rect x="30" y="40" width="260" height="210" rx="8" transform="rotate(-0.4 160 145)" fill="#FFFFFF"/>
+          <rect x="310" y="40" width="260" height="210" rx="8" transform="rotate(0.4 440 145)" fill="#FFFFFF"/>
+          <rect x="590" y="40" width="260" height="210" rx="8" transform="rotate(-0.3 720 145)" fill="#FFFFFF"/>
+          <!-- first degree: two people, two tags -->
+          <circle cx="90" cy="110" r="10"/>
+          <path d="M90 120 L90 160 M90 132 L74 148 M90 132 L106 148 M90 160 L78 190 M90 160 L102 190"/>
+          <circle cx="220" cy="110" r="10"/>
+          <path d="M220 120 L220 160 M220 132 L204 148 M220 132 L236 148 M220 160 L208 190 M220 160 L232 190"/>
+          <path d="M60 206 L118 206 L130 218 L118 230 L60 230 Z" transform="rotate(-2 95 218)" fill="#FBEEDC" stroke="#A8570B"/>
+          <path d="M190 206 L248 206 L260 218 L248 230 L190 230 Z" transform="rotate(2 225 218)" fill="#FBEEDC" stroke="#A8570B"/>
+          <!-- second degree: a person and a menu board -->
+          <circle cx="360" cy="140" r="10"/>
+          <path d="M360 150 L360 190 M360 162 L344 178 M360 162 L376 178 M360 190 L348 220 M360 190 L372 220"/>
+          <rect x="420" y="60" width="130" height="130" rx="4" transform="rotate(0.8 485 125)" fill="#EEF2F8"/>
+          <path d="M432 92 L538 92 M432 128 L538 128" stroke="#C9D2E2"/>
+          <rect x="424" y="98" width="122" height="26" rx="3" fill="#FBEEDC" stroke="#A8570B"/>
+          <path d="M378 150 L416 118" stroke="#A8570B" stroke-width="2.4" marker-end="url(#d3bAr)"/>
+          <!-- third degree: a wall with a door, two groups -->
+          <path d="M700 60 L700 230" stroke-width="3"/>
+          <rect x="690" y="150" width="20" height="60" rx="2" fill="url(#d3bHc)"/>
+          <circle cx="640" cy="120" r="9"/>
+          <path d="M640 129 L640 165 M640 140 L627 154 M640 140 L653 154 M640 165 L630 190 M640 165 L650 190"/>
+          <circle cx="780" cy="120" r="9"/>
+          <path d="M780 129 L780 165 M780 140 L767 154 M780 140 L793 154 M780 165 L770 190 M780 165 L790 190"/>
+          <rect x="612" y="200" width="60" height="26" rx="3" transform="rotate(-1.5 642 213)" fill="#FBEEDC" stroke="#A8570B"/>
+          <rect x="748" y="200" width="60" height="26" rx="3" transform="rotate(1.5 778 213)" fill="#FBEEDC" stroke="#A8570B"/>
+          <rect x="716" y="178" width="34" height="22" rx="2" transform="rotate(-6 733 189)" fill="#FFFFFF"/>
+        </g>
+
+        <text class="d3bS" x="90" y="88" text-anchor="middle">would pay 90</text>
+        <text class="d3bS" x="220" y="88" text-anchor="middle">would pay 60</text>
+        <text class="d3bB" x="92" y="222" text-anchor="middle">90</text>
+        <text class="d3bB" x="222" y="222" text-anchor="middle">60</text>
+        <text class="d3bL" x="160" y="170" text-anchor="middle">seller knows each</text>
+        <text class="d3bS" x="160" y="186" text-anchor="middle">buyer's ceiling</text>
+        <text class="d3bL" x="485" y="82" text-anchor="middle">small · 40</text>
+        <text class="d3bB" x="485" y="116" text-anchor="middle">medium · 70</text>
+        <text class="d3bL" x="485" y="152" text-anchor="middle">large · 120</text>
+        <text class="d3bS" x="485" y="176" text-anchor="middle">one menu for all</text>
+        <text class="d3bS" x="360" y="240" text-anchor="middle">picks the line</text>
+        <text class="d3bS" x="640" y="100" text-anchor="middle">has the card</text>
+        <text class="d3bS" x="780" y="100" text-anchor="middle">does not</text>
+        <text class="d3bB" x="642" y="217" text-anchor="middle">50</text>
+        <text class="d3bB" x="778" y="217" text-anchor="middle">70</text>
+        <text class="d3bS" x="733" y="246" text-anchor="middle">card check</text>
+
+        <text class="d3bN" x="30" y="284">The degree is decided by how the seller learns who is who:</text>
+        <text class="d3bN" x="30" y="300">told outright (first), the buyer reveals it by choosing (second), or a marker the buyer cannot fake (third).</text>
+        <text class="d3bN" x="30" y="316">Prices sketched are invented for the drawing.</text>
+        <text class="d3bN" x="30" y="332">Airline fares, student tickets and software tiers are the three degrees in the wild, roughly in reverse order.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber shapes are the price each mechanism sets; only the middle panel sets one thing for everyone and lets the buyer do the sorting</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>First, second, third: what each one needs to work<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>First degree</strong> charges each buyer their own ceiling. It needs the seller to know every buyer's willingness to pay, and to stop the R$ 60 buyer reselling to the R$ 90 one. Pure first degree is rare; haggling in a bazaar and a car dealer's negotiated price are the closest real cases, and personalised online prices are the modern attempt. It is the one people mean when they say "they charge what you will pay", and it needs information no seller fully has.</p>
+        <p><strong>Second degree</strong> posts one menu and lets buyers pick. Small, medium, large; economy and business; a free tier and a paid one. The seller does not know who is who, and does not need to: the menu is designed so that the high-ceiling buyer chooses the dear line on their own and the low-ceiling buyer chooses the cheap one. What it needs is that the lines differ in something the high-ceiling buyer cares about and the low-ceiling one can live without. Part 3 is entirely about this one.</p>
+        <p><strong>Third degree</strong> charges by group, using a marker the buyer cannot easily fake: a student card, an age, a postcode, a country, a business email domain. Cinema tickets, regional pricing and educational licences. It needs the marker to correlate with willingness to pay, and it needs the wall to hold: a student cannot buy for a non-student without it becoming first-degree resale.</p>
+        <p>The test of which degree a price is: who did the sorting? If the seller did it with a marker, third. If the buyer did it by choosing, second. If the seller did it one buyer at a time, first.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why one price leaves money on both sides, in surplus terms<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Foundations session 1 introduced surplus: the gap between what a buyer would have paid and what they did pay, summed over buyers. At one price of R$ 70, the buyer whose ceiling was R$ 90 keeps R$ 20 of surplus; the buyer whose ceiling was R$ 60 keeps nothing and buys nothing, and the seller made no sale that would have been worth R$ 60 minus cost. Discrimination moves both: it takes some of the first buyer's R$ 20, and it makes the second sale at R$ 60 happen. Whether that is good or bad for buyers as a group depends on which effect is larger, which is why the same mechanism is called "personalised pricing" by one side and "price gouging" by the other.</p>
+        <p>The condition all three degrees share is that resale must be hard. If the R$ 60 buyer can sell to the R$ 90 buyer, every degree collapses back to one price. Digital goods, tickets with a name on them and services consumed in person are the cases where resale is hard, which is why they are where discrimination is most visible.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The seat that costs three prices.</strong> An airline sells the same seat at one fare three weeks out, another the day before, and a third to anyone who books a Saturday night stay. None of the three requires the airline to know a single passenger's ceiling. Business travellers book late and refuse Saturday nights; leisure travellers book early and stay the weekend. The fare rules are a menu, the passengers sort themselves, and the rule "Saturday night stay" is the line on the menu that the high-ceiling buyer will not cross. Second degree, at scale, since the 1980s.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers versioning and freemium</span>
+      <h2>Versioning: the menu that sorts customers</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Shapiro and Varian's Information Rules (1998, Harvard Business School Press, as reported) put a name on the software version of second-degree discrimination: versioning. An information good costs almost nothing to copy, so the seller can offer several versions of the same thing at different prices, and the versions are designed so that customers sort themselves by how much they value the differences. A free tier is the bottom line of that menu. Freemium is not a marketing tactic bolted onto pricing; it is second-degree price discrimination with a price of zero on the lowest version.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn vertical axis of willingness to pay on the left with seven customers sketched as dots at different heights. On the right, three shelves labelled free at 0, pro at 12 and team at 40 sit at three heights. Amber arrows run from each customer to the highest shelf below their own height, so the customers sort themselves onto the three versions without the seller knowing any one customer's ceiling. Prices are invented for the drawing.">
+        <defs>
+          <filter id="d3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d3cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d3cL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d3cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d3cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d3cW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .d3cA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d3cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d3cH" x="30" y="26">SEVEN CUSTOMERS, ONE MENU, THREE SHELVES</text>
+        <text class="d3cS" x="380" y="26">each customer picks the dearest version below their own ceiling; prices invented for the drawing</text>
+
+        <g filter="url(#d3cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the WTP axis -->
+          <path d="M120 300 L120 60" stroke="#1F3A5F" marker-end="url(#d3cAr)"/>
+          <path d="M114 300 L126 300 M114 240 L126 240 M114 180 L126 180 M114 120 L126 120"/>
+          <!-- customers as dots at their ceilings -->
+          <circle cx="180" cy="284" r="6" fill="#FFFFFF"/>
+          <circle cx="220" cy="262" r="6" fill="#FFFFFF"/>
+          <circle cx="180" cy="224" r="6" fill="#FFFFFF"/>
+          <circle cx="230" cy="204" r="6" fill="#FFFFFF"/>
+          <circle cx="190" cy="168" r="6" fill="#FFFFFF"/>
+          <circle cx="220" cy="128" r="6" fill="#FFFFFF"/>
+          <circle cx="180" cy="94" r="6" fill="#FFFFFF"/>
+          <!-- the three shelves -->
+          <rect x="520" y="262" width="230" height="40" rx="6" transform="rotate(-0.5 635 282)" fill="url(#d3cHc)"/>
+          <rect x="520" y="186" width="230" height="40" rx="6" transform="rotate(0.5 635 206)" fill="#EEF2F8"/>
+          <rect x="520" y="96" width="230" height="40" rx="6" transform="rotate(-0.4 635 116)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- arrows: customer to shelf (highest shelf whose price is below their ceiling) -->
+          <path d="M188 284 L512 286" stroke="#A8570B" stroke-width="1.8" marker-end="url(#d3cAr)"/>
+          <path d="M228 262 L512 280" stroke="#A8570B" stroke-width="1.8" marker-end="url(#d3cAr)"/>
+          <path d="M188 224 L512 210" stroke="#A8570B" stroke-width="1.8" marker-end="url(#d3cAr)"/>
+          <path d="M238 204 L512 204" stroke="#A8570B" stroke-width="1.8" marker-end="url(#d3cAr)"/>
+          <path d="M198 168 L512 198" stroke="#A8570B" stroke-width="1.8" marker-end="url(#d3cAr)"/>
+          <path d="M228 128 L512 118" stroke="#A8570B" stroke-width="1.8" marker-end="url(#d3cAr)"/>
+          <path d="M188 94 L512 112" stroke="#A8570B" stroke-width="1.8" marker-end="url(#d3cAr)"/>
+          <!-- a wall between shelves: the feature the dearer line has -->
+          <path d="M770 150 L850 150 M770 240 L850 240" stroke="#C9D2E2" stroke-dasharray="4 4"/>
+        </g>
+
+        <text class="d3cA" x="34" y="56">WILLINGNESS</text>
+        <text class="d3cA" x="34" y="70">TO PAY</text>
+        <text class="d3cS" x="106" y="304" text-anchor="end">0</text>
+        <text class="d3cS" x="106" y="244" text-anchor="end">12</text>
+        <text class="d3cS" x="106" y="184" text-anchor="end">40</text>
+        <text class="d3cS" x="106" y="124" text-anchor="end">80</text>
+        <text class="d3cS" x="250" y="300">seven ceilings the seller never sees</text>
+        <text class="d3cL" x="532" y="288">free · 0</text>
+        <text class="d3cS" x="620" y="288">two customers</text>
+        <text class="d3cL" x="532" y="212">pro · 12</text>
+        <text class="d3cS" x="620" y="212">three customers</text>
+        <text class="d3cW" x="532" y="122">team · 40</text>
+        <text class="d3cW" x="620" y="122">two customers</text>
+        <text class="d3cS" x="772" y="144">what team has</text>
+        <text class="d3cS" x="772" y="234">what pro has</text>
+        <text class="d3cB" x="772" y="270">and free lacks</text>
+
+        <text class="d3cN" x="30" y="352">The seller posts three prices and learns seven ceilings, roughly, from which shelf each customer lands on.</text>
+        <text class="d3cN" x="30" y="368">That is why a free tier is worth having even at zero revenue: it is the line that catches the</text>
+        <text class="d3cN" x="30" y="384">customers a single price would have lost.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the shelves do not move; the customers do, and the gaps between shelves are the features that stop a high-ceiling customer dropping down</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Designing the menu, and why the cheap version is often made worse on purpose<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The menu works when nobody wants to move down.</strong> The high-ceiling customer must prefer the dear version at its price to the cheap version at its price. That is the whole design constraint: the gap in features between two lines has to be worth at least the gap in price to the customer you want on the upper line. If it is not, they drop down and the upper line earns nothing. This is why the difference between a free tier and a paid one is so often a limit that a heavy user hits and a light user never does: seats, storage, history, an export button.</p>
+        <p><strong>The cheap version is sometimes the dear one with something removed.</strong> Shapiro and Varian's examples, as reported, include software shipped with features switched off and a printer sold in a slower version at a lower price. It looks perverse to spend money making a product worse. It is not: the worse version exists to make the low-ceiling sale without giving the high-ceiling customer a reason to take it. The cost of the damage is the price of the sorting.</p>
+        <p><strong>Freemium, said plainly.</strong> A free tier is a version with a price of zero. It is second-degree discrimination whose bottom line is set where the marginal cost of one more user is close to nothing, which is true of information goods and not of towels. Its job is to catch every customer whose ceiling is above zero and below the first paid price, and its design question is the same as any other line's: what does the paid line have that a customer with a real ceiling will not do without?</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Willingness to pay is unobservable, so what settles a price is a test<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every mechanism on this page is a way of working around one fact: a customer's ceiling is inside their head and nothing in a transaction table records it. A sale at R$ 70 says the ceiling was at least 70; a non-sale says nothing, because the non-buyer is not in the table at all. Surveys ask, and people answer strategically or wrongly. The elasticity from deep-dive session 2 is the best a panel can do: the average response of the customers who were there to the prices that were charged. It cannot say what the customers who were not there would have paid, and it cannot say what happens at a price nobody was charged.</p>
+        <p>What settles a pricing decision is a price test: the same product shown at two prices to two comparable groups, with the assignment decided by a random draw rather than by a seller looking at demand. That removes the thing the panel could not, the seller's choice, and the difference in units between the groups is a causal elasticity at those two prices. How to size, run and read that test is the subject of <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/">learn-experimentation-with-phoebe</a>. And where a customer's value over time rather than in one purchase comes into a pricing decision, the lifetime value that a free tier is betting on, that arithmetic lives in <a href="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/">learn-customer-retention-with-phoebe</a>, which owns customer acquisition cost and lifetime value; a menu is designed on the elasticity, and paid for on the lifetime.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The export button.</strong> A note-taking product offers a free tier with everything except export and version history. Neither feature costs the company anything to switch on. A student never exports and is happy for free; a consultant who bills by the document hits the missing export in the first week and pays. The company never asked either of them what the product was worth. It posted two lines and watched where they landed. The feature it withheld was chosen because it is the one the consultant will not do without and the student will not notice, which is the only design rule a menu has.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Name the sorting feature on a menu you pay for" data-hint="Pick a product you use with a free or cheap tier and a dear one. What is the one thing the dear tier has that made you, or would make you, move up? Say who it is designed to catch and who it is designed to let pass. Three lines." data-seed="" data-cta="Name it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>The revenue table, and the sentence with the range in it</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">No data tonight, only the number and the arithmetic on it. Four steps: the constant-elasticity revenue function, the check that it reproduces the three modelled numbers from the map, the table for price changes of -10, -5, +5 and +10 percent under four elasticities, and the sentence for a leader that carries the range rather than the point. Every printed figure is modelled: arithmetic on the deep-dive session 2 slopes under a constant-elasticity assumption.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 332" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn grid of revenue changes. Rows are four elasticities: -0.108, -1.5, -1.8 and -2.2. Columns are four price changes: -10, -5, +5 and +10 percent. Under -0.108 a 10 percent rise gives +8.9 percent revenue; under -1.5 it gives -4.7, under -1.8 it gives -7.3, under -2.2 it gives -10.8. The +10 column is shaded amber. All values are modelled under constant elasticity.">
+        <defs>
+          <filter id="d3dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d3dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d3dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d3dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d3dL { font: 700 12px Inter, sans-serif; fill: #16213A; }
+          .d3dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d3dB { font: 800 12px Inter, sans-serif; fill: #8A4409; }
+          .d3dV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .d3dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d3dH" x="30" y="26">REVENUE CHANGE, PERCENT, UNDER FOUR ELASTICITIES</text>
+        <text class="d3dS" x="440" y="26">modelled, constant elasticity; -1.8 stands for the default -1.788</text>
+
+        <g filter="url(#d3dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the sheet -->
+          <rect x="40" y="44" width="800" height="196" rx="4" transform="rotate(-0.3 440 142)" fill="#FFFFFF"/>
+          <!-- the +10 column shaded -->
+          <rect x="670" y="46" width="166" height="192" fill="#FBEEDC" stroke="none"/>
+          <!-- header rule and row rules -->
+          <path d="M40 80 L840 80"/>
+          <path d="M40 120 L840 120 M40 160 L840 160 M40 200 L840 200" stroke="#C9D2E2"/>
+          <!-- column rules -->
+          <path d="M210 44 L210 240 M370 44 L370 240 M520 44 L520 240 M670 44 L670 240" stroke="#C9D2E2"/>
+          <!-- the pooled row hatched: the one not to use -->
+          <rect x="42" y="82" width="166" height="36" fill="url(#d3dHc)" stroke="none"/>
+        </g>
+
+        <text class="d3dL" x="56" y="68">elasticity</text>
+        <text class="d3dL" x="290" y="68" text-anchor="middle">price -10</text>
+        <text class="d3dL" x="445" y="68" text-anchor="middle">price -5</text>
+        <text class="d3dL" x="595" y="68" text-anchor="middle">price +5</text>
+        <text class="d3dB" x="755" y="68" text-anchor="middle">price +10</text>
+
+        <text class="d3dL" x="56" y="106">-0.108 pooled</text>
+        <text class="d3dV" x="290" y="108" text-anchor="middle">-9.0</text>
+        <text class="d3dV" x="445" y="108" text-anchor="middle">-4.5</text>
+        <text class="d3dV" x="595" y="108" text-anchor="middle">+4.4</text>
+        <text class="d3dV" x="755" y="108" text-anchor="middle">+8.9</text>
+
+        <text class="d3dL" x="56" y="146">-1.5 low end</text>
+        <text class="d3dV" x="290" y="148" text-anchor="middle">+5.4</text>
+        <text class="d3dV" x="445" y="148" text-anchor="middle">+2.6</text>
+        <text class="d3dV" x="595" y="148" text-anchor="middle">-2.4</text>
+        <text class="d3dV" x="755" y="148" text-anchor="middle">-4.7</text>
+
+        <text class="d3dB" x="56" y="186">-1.8 default</text>
+        <text class="d3dV" x="290" y="188" text-anchor="middle">+8.8</text>
+        <text class="d3dV" x="445" y="188" text-anchor="middle">+4.2</text>
+        <text class="d3dV" x="595" y="188" text-anchor="middle">-3.8</text>
+        <text class="d3dV" x="755" y="188" text-anchor="middle">-7.3</text>
+
+        <text class="d3dL" x="56" y="226">-2.2 high end</text>
+        <text class="d3dV" x="290" y="228" text-anchor="middle">+13.5</text>
+        <text class="d3dV" x="445" y="228" text-anchor="middle">+6.3</text>
+        <text class="d3dV" x="595" y="228" text-anchor="middle">-5.7</text>
+        <text class="d3dV" x="755" y="228" text-anchor="middle">-10.8</text>
+
+        <text class="d3dN" x="30" y="266">The hatched row is the pooled number and it is the only row where a rise pays.</text>
+        <text class="d3dN" x="30" y="282">Every row in the within-product range points the same way, which is what lets a leader act on a range.</text>
+        <text class="d3dN" x="30" y="298">At exactly -1.788 the +10 cell is -7.2 and the -10 cell is +8.7; the -1.8 row rounds them to -7.3 and +8.8.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - read down the amber column: the sign flips once, between the pooled row and the rest, and never again</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>The revenue function.</strong> Under constant elasticity b, a price change of pct percent multiplies units by (1 + pct/100) to the power b, and revenue by one more power of the same base. Two lines, no data.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · constant-elasticity arithmetic</span>def rev(b, pct):
+    """Revenue change (fraction) for a pct percent price change under elasticity b."""
+    return (1 + pct / 100) ** (1 + b) - 1
+
+def units(b, pct):
+    """Units change (fraction) for the same move."""
+    return (1 + pct / 100) ** b - 1
+
+# modelled, constant elasticity: the same percentage response at every price</div>
+      </div>
+      <div class="step">
+        <p><strong>Check it against the map's three numbers.</strong> The three modelled figures for a 10 percent rise must come out exactly before the function is trusted with anything else.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the three modelled numbers</span>for b in [-0.108, -1.788, -1.854]:
+    print(f"b {b:+.3f}: units {units(b, 10)*100:+.1f}%  revenue {rev(b, 10)*100:+.1f}%")
+# b -0.108: units -1.0%  revenue +8.9%
+# b -1.788: units -15.7%  revenue -7.2%
+# b -1.854: units -16.2%  revenue -7.8%</div>
+      </div>
+      <div class="step">
+        <p><strong>The table.</strong> Four price moves across, four elasticities down: the pooled number, the two ends of the within-product range, and the default. Print it as one block; the block is the argument.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the revenue table</span>PCTS = [-10, -5, 5, 10]
+BS   = [-0.108, -1.5, -1.788, -2.2]      # pooled, low end, default, high end
+print("elasticity " + "".join(f"{p:+6d}%" for p in PCTS))
+for b in BS:
+    print(f"{b:+10.3f} " + "".join(f"{rev(b, p)*100:+6.1f} " for p in PCTS))
+# elasticity    -10%    -5%    +5%   +10%
+#     -0.108   -9.0   -4.5   +4.4   +8.9
+#     -1.500   +5.4   +2.6   -2.4   -4.7
+#     -1.788   +8.7   +4.1   -3.8   -7.2
+#     -2.200  +13.5   +6.3   -5.7  -10.8</div>
+      </div>
+      <div class="step">
+        <p><strong>The sentence.</strong> A leader does not need the decimal; they need the sign and how sure it is. Compute the two ends of the range and write the sentence from them, never from the point.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the sentence with the range</span>low, high = rev(-2.2, 10) * 100, rev(-1.5, 10) * 100
+print(f"a 10 percent rise: revenue between {low:+.1f} and {high:+.1f} percent")
+# a 10 percent rise: revenue between -10.8 and -4.7 percent
+
+# The sentence for a leader, with the label from deep-dive session 2 kept on:
+# "On these rows the within-product elasticity is between -1.5 and -2.2, about -1.8
+#  at the default. A 10 percent rise loses between 5 and 11 percent of revenue under
+#  a constant-elasticity assumption. It is an association with a placebo behind it,
+#  not an experiment; a price test would settle it."</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Print the range's two ends before the point, every time.</strong> If both ends of the range give the same sign, the decision is safe and the decimal is a detail. If they straddle zero, no decimal will rescue it and the honest answer is a price test. The table makes that visible in one glance; a single number hides it.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before deep-dive session 4</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Extend the table</strong> to price changes of -20 and +20 percent and add the weighted -2.216 and the freight-inclusive -1.881 as rows. Write one line on whether the sign changes anywhere in the within-product rows.</li>
+      <li><strong>Classify five prices you paid this month</strong> by degree: who did the sorting, the seller with a marker, you by choosing, or the seller one buyer at a time? At least one will be hard to place; say why.</li>
+      <li><strong>Draw the menu</strong> for a product you know with a free tier: the lines, the prices, and the one feature on each step that stops a customer dropping down. Mark which step you think catches the most revenue.</li>
+      <li><strong>Write the price test</strong> in three sentences: what two prices, what two groups, and what you would measure. Do not run it; the point is to notice what the panel could not give you.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 3 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Under the pooled -0.108 a 10 percent rise gives revenue +8.9 percent; under the within-product -1.788 it gives -7.2 percent. Why do the signs differ?</p>
+      <button class="qopt" type="button">A · Because the within-product fit uses fewer rows and is therefore less reliable</button>
+      <button class="qopt" type="button">B · Because revenue rises with price only when the elasticity is below one in absolute value; -0.108 is, -1.788 is not, and the whole within-product range -1.5 to -2.2 sits on the elastic side, so every number in it says the rise loses revenue</button>
+      <button class="qopt" type="button">C · Because the pooled number includes freight and the within-product number does not</button>
+      <button class="qopt" type="button">D · Because the constant-elasticity assumption only holds for the pooled fit</button>
+      <p class="qwhy">Both fits use the same 2,216 rows; the pooled one compares products with products and the within one compares each product with itself. Under -1.5 the rise costs 4.7 percent and under -2.2 it costs 10.8, modelled, so the sign is settled by the range and not by any one decimal.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · A cinema charges students less on showing a card; a software company posts free, pro and team tiers; a market trader haggles each sale. Which degree is each?</p>
+      <button class="qopt" type="button">A · All three are first degree, since each ends with different buyers paying different prices</button>
+      <button class="qopt" type="button">B · Cinema second, software third, trader first</button>
+      <button class="qopt" type="button">C · Cinema third (the seller sorts buyers with a marker they cannot easily fake), software second (one menu and the buyer sorts themselves by choosing), trader first (a price per buyer, set one at a time)</button>
+      <button class="qopt" type="button">D · Cinema first, software second, trader third</button>
+      <p class="qwhy">The test is who did the sorting. A marker the seller checks is third degree; a menu the buyer picks from is second; a price negotiated per buyer is first. Freemium is the software case with a zero on the bottom line.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A pricing team wants each customer's willingness to pay. What can the Olist panel give them, and what settles the decision?</p>
+      <button class="qopt" type="button">A · The panel gives the average response of the customers who were there to the prices that were charged, within product and with a label on; it cannot see the ceilings of buyers who did not buy or prices nobody was charged. A price test with assignment decided by a random draw is what settles it</button>
+      <button class="qopt" type="button">B · The panel gives each customer's ceiling, since every sale records what the buyer was willing to pay</button>
+      <button class="qopt" type="button">C · A survey settles it, since customers can simply be asked what they would pay</button>
+      <button class="qopt" type="button">D · Nothing settles it; willingness to pay is unobservable, so pricing is guesswork</button>
+      <p class="qwhy">A sale at R$ 70 says the ceiling was at least 70 and a non-sale is not in the table at all. The panel's elasticity is the best a panel can do; a test replaces the seller's choice of price with a random draw, which is the thing deep-dive session 2 said no fixed effect could remove.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The revenue rule and the constant-elasticity arithmetic; a 10 percent rise gives units -1.0 and revenue +8.9 percent under -0.108, units -15.7 and revenue -7.2 under -1.788, units -16.2 and revenue -7.8 under -1.854</span><span class="note">Modelled: arithmetic on slopes computed from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0), under a constant-elasticity assumption</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The revenue table under -0.108, -1.5, -1.788 and -2.2 for -10, -5, +5 and +10 percent; the two-scope statement, -1.5 to -2.2, about -1.8</span><span class="note">Modelled on computed numbers; the range comes from the deep-dive session 2 robustness rows</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Price discrimination, first, second and third degree; surplus; resale as the shared condition</span><span class="note">Standard economics, no single source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Versioning and damaged goods; freemium as second-degree discrimination with a zero price on the lowest version</span><span class="note">Shapiro and Varian 1998, Information Rules, Harvard Business School Press, as reported; the freemium framing is the page's application of it</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Published elasticities: gasoline about -0.09 short run and -0.31 long run; food away from home 0.81 and eggs 0.27 in absolute value</span><span class="note">Havranek, Irsova and Janda 2012, Energy Economics 34(1) 201-207, as reported; Andreyeva, Long and Brownell 2010, American Journal of Public Health 100(2), primary</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The price test, and customer acquisition cost and lifetime value</span><span class="note">Named and linked to the experimentation and customer retention courses; not taught here</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The revenue rule</b><span>A rise pays only when the elasticity is below 1 in absolute value. -0.108: +8.9. -1.788: -7.2. Modelled.</span></div>
+      <div class="cheat-item"><b>The sentence</b><span>Between -1.5 and -2.2, about -1.8. A 10 percent rise loses 5 to 11 percent of revenue. Not an experiment.</span></div>
+      <div class="cheat-item"><b>Who did the sorting?</b><span>Seller, one buyer at a time: first. Buyer, by choosing: second. Seller, with a marker: third.</span></div>
+      <div class="cheat-item"><b>The menu's one rule</b><span>The feature gap must be worth the price gap to the customer you want on the upper line.</span></div>
+      <div class="cheat-item"><b>Freemium is a price</b><span>Second degree with zero on the bottom line. It catches ceilings above zero and below the first paid tier.</span></div>
+      <div class="cheat-item"><b>Willingness to pay is not in the data</b><span>A sale is a floor, a non-sale is absent. A price test with a random draw settles it.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Tonight priced a towel. Deep-dive session 4 prices a prediction. An information good was supposed to cost nothing at the margin, and per-token pricing puts a marginal cost on every request; so the question becomes where the break-even sits between renting inference by the token and paying a fixed cost to run it yourself. A constructed workload of 2 million requests a month, dated list prices, caching as a marginal-cost cut, and a slider for the fixed cost because nobody's GPU price is a fact.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 3 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p2-why-the-naive-number-lies.html">← Prev: Why the naive number lies</a> &nbsp;·&nbsp; <a href="p4-the-economics-of-a-prediction.html">Next: The economics of a prediction →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

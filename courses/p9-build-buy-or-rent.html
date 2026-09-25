@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 9 of 10. Make-or-buy as Coase 1937: transaction costs decide where the boundary of the firm sits. Fixed against variable cost, total cost of ownership over 12, 24 and 36 months, the option value of renting, and the switching cost line the vendor's chart never draws. Python build-along: a TCO table with constructed inputs for build, buy and rent, plus an exit at month 24 that changes which column wins.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Build, buy or rent a data platform - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 9 of 10. Where the firm ends is a cost decision. Three cost lines over 36 months, and the fourth line nobody drew.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p9-build-buy-or-rent.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Build, buy or rent a data platform - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 9 of 10. Coase, the horizon, and the switching cost the vendor did not draw.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 9 · Build, buy or rent a data platform - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 9 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 9 of 10</div>
+    <h1>Build, buy or rent a data <span class="accent">platform</span></h1>
+    <p class="sub">Every data team has the argument at least once a year: build the platform, buy the licence, or rent it by the month. It is usually held as a technology argument and it is not one. It is the oldest question in the economics of the firm, asked by Coase in 1937 about why firms exist at all, and his answer applies unchanged: you do a thing in-house when the cost of using the market to get it, finding a vendor, negotiating, contracting, monitoring, exceeds the cost of coordinating it yourself. Everything else on a platform decision is arithmetic on top of that, and the arithmetic has traps. A fixed cost looks expensive at month 3 and cheap at month 36. A monthly fee looks cheap at month 3 and is the most expensive line on the chart by month 30. And the chart the vendor shows you has one line missing, which is what it costs to leave. Tonight draws all four lines, with constructed inputs labelled as such, and ends with a table you can rebuild for your own decision in ten minutes.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Data leads, platform owners, anyone signing a vendor contract</span>
+      <span class="chip audience">Python, pandas</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Coase, the horizon, the hidden line</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: a TCO table with an exit row</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Deep-dive session 8 was about what a buyer cannot see in the thing she buys. Tonight is about what she cannot see in the contract: the costs that are not on the invoice. Deep-dive session 4 already met fixed and marginal cost in the shape of an inference bill, with a break-even volume where renting an API and owning a fixed cost cross. A platform decision is the same crossing drawn over time instead of volume, with three lines instead of two, and with a fourth that appears only when you try to move. The economics is short. The discipline is writing every input down as a number you chose, so that when the vendor's chart and yours disagree, the disagreement is a diff and not a meeting.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Coase's transaction-cost answer to make-or-buy stated in a form you can put in a business case, the boundary of the firm drawn as a wall with a door and four kinds of friction on it, three cumulative cost lines over 36 months and the three months at which they cross, the option value of a monthly contract stated as what it buys and what it costs, the switching cost line that turns a rent decision into a lock-in decision, and a pandas TCO table with constructed inputs whose last row, the exit at month 24, changes which column wins.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Coase and the boundary of the firm</span>
+      <h2>Where the firm ends is a cost decision</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Coase 1937, "The Nature of the Firm", Economica 4(16) 386-405, starts from a puzzle. If markets coordinate so well, why does any firm employ anyone rather than contracting for every task on the open market? His answer is that using the market is not free. Every transaction has to be found, priced, written into a contract, and policed, and those costs, which he called the costs of using the price mechanism and later economics calls transaction costs, are what a firm saves by doing the thing inside. The firm grows until the cost of coordinating one more activity in-house equals the cost of buying it outside, and that is where its boundary sits. A data platform is one such activity, and the decision is where to put the wall.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn panel labelled inside the firm on the left and the market on the right, separated by a hatched wall with an amber door. Inside: coordinate by instruction, with the costs of managing, hiring and keeping a platform team. Outside: coordinate by contract, with the costs of finding, negotiating and checking a vendor. Four friction marks on the wall are labelled search, negotiate, contract, monitor. A note cites Coase 1937 and says transaction costs decide where the boundary sits.">
+        <defs>
+          <filter id="d9aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="91" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d9aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d9aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d9aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d9aL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d9aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d9aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d9aA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d9aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d9aH" x="30" y="26">THE BOUNDARY OF THE FIRM IS A WALL WITH A DOOR, AND THE DOOR HAS FRICTION</text>
+
+        <g filter="url(#d9aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- inside the firm -->
+          <rect x="30" y="60" width="350" height="200" rx="8" transform="rotate(-0.4 205 160)" fill="#EEF2F8"/>
+          <!-- the market -->
+          <rect x="560" y="60" width="290" height="200" rx="8" transform="rotate(0.5 705 160)" fill="#FFFFFF"/>
+          <!-- the wall, hatched -->
+          <rect x="400" y="60" width="40" height="200" transform="rotate(0.3 420 160)" fill="url(#d9aHc)"/>
+          <!-- the door: the one amber thing -->
+          <rect x="408" y="196" width="24" height="60" rx="2" transform="rotate(-1 420 226)" fill="#FBEEDC" stroke="#A8570B"/>
+          <circle cx="426" cy="228" r="2" fill="#A8570B" stroke="#A8570B"/>
+          <!-- four friction marks on the market side of the wall -->
+          <path d="M446 88 L452 94 L446 100 L452 106"/>
+          <path d="M446 114 L452 120 L446 126 L452 132"/>
+          <path d="M446 140 L452 146 L446 152 L452 158"/>
+          <path d="M446 166 L452 172 L446 178 L452 184"/>
+          <!-- arrows through the door, both ways -->
+          <path d="M380 244 L556 244" marker-end="url(#d9aAr)"/>
+          <path d="M556 214 L380 214" marker-end="url(#d9aAr)"/>
+          <!-- a small person just inside the door -->
+          <circle cx="350" cy="176" r="7"/>
+          <path d="M350 183 L350 204 M350 190 L340 198 M350 190 L360 198 M350 204 L344 218 M350 204 L356 218"/>
+        </g>
+
+        <text class="d9aA" x="42" y="84">INSIDE THE FIRM</text>
+        <text class="d9aL" x="42" y="110">coordinate by instruction</text>
+        <text class="d9aS" x="42" y="128">cost: managing, hiring, keeping</text>
+        <text class="d9aS" x="42" y="144">the platform team on the payroll</text>
+        <text class="d9aA" x="572" y="84">THE MARKET</text>
+        <text class="d9aL" x="572" y="110">coordinate by contract</text>
+        <text class="d9aS" x="572" y="128">cost: finding, negotiating, checking</text>
+        <text class="d9aS" x="572" y="144">the vendor invoice, plus the friction</text>
+        <text class="d9aB" x="462" y="98">search</text>
+        <text class="d9aB" x="462" y="124">negotiate</text>
+        <text class="d9aB" x="462" y="150">contract</text>
+        <text class="d9aB" x="462" y="176">monitor</text>
+        <text class="d9aS" x="452" y="204">work moves in</text>
+        <text class="d9aS" x="452" y="234">work moves out</text>
+
+        <text class="d9aS" x="30" y="286">Coase 1937, The Nature of the Firm, Economica 4(16) 386-405: transaction costs decide where the boundary sits.</text>
+        <text class="d9aN" x="30" y="308">High friction pulls work inside; low friction pushes it out. A platform decision is a bet on the friction.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber door is the make-or-buy decision; the four marks beside it are the costs of using the market that never appear on a vendor's invoice and always appear on your calendar</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Transaction costs: what the market charges that the invoice does not<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Coase's list, in a data team's words.</strong> Search: the weeks spent finding out which vendors exist, which of them do the thing you need and which only say so. Negotiate: the procurement cycle, the security review, the legal redlines on the data-processing terms. Contract: writing down what "the platform works" means precisely enough to hold someone to it, which is the eval-as-contract problem from deep-dive session 8 in a different costume. Monitor: checking, every month, that what was promised is what is being delivered, and having a lever to pull when it is not. None of these lines is on the vendor's quote. All of them are paid in your team's hours, which are the scarcest thing you have.</p>
+        <p><strong>The in-house side has costs too,</strong> and Coase was equally clear about them: as a firm takes on more activities, the cost of coordinating them rises, managers make more mistakes, and the firm loses the discipline that a price would have imposed. The platform team you hire to avoid the vendor has to be hired, managed, retained and replaced, and its output has no market price to tell you whether it is worth what it costs. The boundary sits where the two curves meet: the rising cost of coordinating one more thing inside against the transaction cost of buying it outside.</p>
+        <p><strong>Where a data platform usually lands.</strong> The friction is high when the thing is hard to specify, changes often, and is hard to check from outside, which describes the parts of a platform that touch your own data model, your own semantics and your own quality rules. The friction is low when the thing is standard, stable and easy to test, which describes storage, compute and most of the plumbing. That is why the same team can sensibly rent the warehouse and build the semantic layer: the boundary runs through the platform, not around it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the shadow price of a constraint lives, and why it is not here<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every make-or-buy decision runs into a constraint that is not money: the number of engineers you can hire this year, the security clearance a vendor cannot get, the one person who understands the legacy schema. Economics calls the value of relaxing such a constraint by one unit its shadow price, and it is the number that tells you whether the constraint is the real reason you are building rather than buying. If the shadow price of one more engineer is high, the platform team is expensive in a way the salary line does not show; if it is near zero, the "we cannot hire" argument is not the binding one.</p>
+        <p>Computing a shadow price properly means setting the decision up as an optimisation and reading the dual, and that is the subject of the prescriptive analytics course at <a href="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/">learn-prescriptive-analytics-with-phoebe</a>, which owns the feasible region, the solver and the dual variables. Tonight does not solve one. It only insists that when someone says "we have to build because we cannot get X", the next question is what X is worth at the margin, and that there is a course where that question has a method.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The team that priced the vendor at the invoice.</strong> A constructed story with a real mechanism. A data lead compared a licence quote against the salary of two engineers, found the licence cheaper, and signed. The first quarter went on the security review and a data-processing addendum. The second went on discovering that the connector for the one source that mattered was "on the roadmap". The third went on a monitoring dashboard to catch the silent failures the contract did not define as failures. By the fourth quarter the two engineers' worth of hours had been spent, on the vendor's side of the wall, by people who were not counted as the vendor's cost. Nothing about the licence was wrong. The transaction costs had simply been priced at zero, which is the one price they never are.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers fixed against variable, the horizon and the option</span>
+      <h2>Three lines over 36 months, and where they cross</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Strip the three options to their cost shapes. Build is a large fixed cost up front and a small monthly cost after. Buy is a medium fixed cost, the licence, plus a medium monthly cost for support and the people who run it. Rent is no fixed cost and the largest monthly cost. Draw the cumulative cost of each over 36 months and the lines cross, and the month at which they cross is the whole decision. The inputs below are invented; the crossing structure is what every real version of this chart has.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 332" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand-drawn axes of cumulative cost against months from 0 to 36. Three lines: build starts high at 360 and rises slowly to 504; buy starts at 120 and rises to 552; rent starts at zero and rises steeply to 792. Amber circles mark the crossings: rent passes buy at month 12, rent passes build at month 20, buy passes build at month 30. All inputs are labelled invented. A clock doodle marks the horizon at top right.">
+        <defs>
+          <filter id="d9bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="103" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d9bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d9bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d9bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d9bL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d9bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d9bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d9bA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d9bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d9bH" x="30" y="26">BUILD, BUY, RENT: CUMULATIVE COST OVER 36 MONTHS, CONSTRUCTED INPUTS</text>
+
+        <g filter="url(#d9bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M80 260 L80 60" stroke="#1F3A5F" marker-end="url(#d9bAr)"/>
+          <path d="M80 260 L830 260" stroke="#1F3A5F" marker-end="url(#d9bAr)"/>
+          <!-- build: 360 up front, 4 a month -->
+          <path d="M80 174 L800 139" stroke="#1F3A5F" stroke-width="2.6"/>
+          <!-- buy: 120 licence, 12 a month -->
+          <path d="M80 231 L800 128" stroke="#4E5A75" stroke-width="2.2" stroke-dasharray="7 4"/>
+          <!-- rent: 0 up front, 22 a month -->
+          <path d="M80 260 L800 70" stroke="#16213A" stroke-width="2.2"/>
+          <!-- the crossings: amber -->
+          <circle cx="320" cy="197" r="5" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="480" cy="154" r="5" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="680" cy="145" r="5" fill="#A8570B" stroke="#A8570B"/>
+          <!-- month ticks -->
+          <path d="M320 256 L320 264 M560 256 L560 264 M800 256 L800 264" stroke="#1F3A5F"/>
+          <!-- a clock: the horizon -->
+          <circle cx="838" cy="50" r="10"/>
+          <path d="M838 43 L838 50 L843 54"/>
+        </g>
+
+        <text class="d9bA" x="86" y="56">CUMULATIVE COST, INVENTED UNITS</text>
+        <text class="d9bA" x="822" y="246" text-anchor="end">MONTHS</text>
+        <text class="d9bS" x="80" y="280" text-anchor="middle">0</text>
+        <text class="d9bS" x="320" y="280" text-anchor="middle">12</text>
+        <text class="d9bS" x="560" y="280" text-anchor="middle">24</text>
+        <text class="d9bS" x="800" y="280" text-anchor="middle">36</text>
+        <text class="d9bL" x="806" y="74">rent 792</text>
+        <text class="d9bL" x="806" y="124">buy 552</text>
+        <text class="d9bL" x="806" y="150">build 504</text>
+
+        <text class="d9bB" x="100" y="80">crossings, on these invented inputs:</text>
+        <text class="d9bS" x="100" y="98">month 12: rent passes buy</text>
+        <text class="d9bS" x="100" y="114">month 20: rent passes build</text>
+        <text class="d9bS" x="100" y="130">month 30: buy passes build</text>
+
+        <text class="d9bS" x="30" y="304">Inputs, all invented: build 360 up front and 4 a month; buy 120 licence and 12 a month; rent 22 a month and nothing up front.</text>
+        <text class="d9bN" x="30" y="324">Rent is cheapest at month 6, buy at month 24, build at month 36. The horizon is the decision, not a finding.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the three amber dots are the only facts on the chart; move the horizon past each one and the cheapest option changes, which is why every business case should state its horizon before its answer</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Total cost of ownership over a horizon, and why the horizon is the decision<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Total cost of ownership</strong> is the sum of every cost an option incurs over a stated period: the fixed cost, the monthly cost, and the transaction costs from Part 1 priced in hours. Its one indispensable input is the period. On the invented inputs above, rent is cheapest for the first eleven months, buy is cheapest from month 12 to month 29, and build is cheapest from month 30. Ask "which is cheapest?" without a horizon and the honest answer is "when?". Anyone who presents a TCO comparison without stating the horizon has presented a number that could be made to favour any option by moving one date.</p>
+        <p><strong>Fixed against variable</strong> is the reason the lines cross at all, and deep-dive session 4 met it as the break-even volume between an API bill and a fixed cost. A fixed cost is paid once and spread over every month after; the more months, the thinner it is spread. A variable cost is paid every month and never gets thinner. So a long horizon favours the option with the highest fixed and lowest variable cost, and a short horizon favours the reverse. The build line starts highest and ends lowest for exactly that reason, and it is neither the good option nor the bad one; it is the long-horizon one.</p>
+        <p><strong>The number to write down first</strong> is therefore not a cost. It is how many months you are confident the platform will be needed in something like its current shape. Teams that are honest about that number, which is usually shorter than the roadmap says, find the decision mostly makes itself.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The option value of renting: what the monthly fee actually buys<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The rent line is the most expensive by month 36 and it is still often the right choice, because its monthly fee buys something the chart does not show: the right to stop. A fixed cost is a commitment; a monthly fee is a series of small decisions, each of which can be "no". That right is worth most when the future is least certain, when the team does not yet know which platform features it needs, whether the use case will survive its first year, or whether the data volume will be ten times larger or a tenth. Economics calls this option value, and it is real value, not a consolation.</p>
+        <p>The honest way to weigh it is to ask what the uncertainty is and when it resolves. If in six months you will know whether the use case is real, then six months of rent is the price of finding out, and it should be compared with the cost of having built for a use case that died. If the uncertainty never resolves, rent is a permanent premium for flexibility you keep needing, and that is also a fair price if the flexibility is used. Where the argument goes wrong is renting for the option value and then never exercising the option: paying the premium for years on a decision that was settled in month 4.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The buy landscape lives elsewhere<span class="mini">1 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Tonight is the economics of the choice and not a survey of the market. What the warehouse buy landscape looks like, which categories of product sit where, and how to read a vendor's positioning, is the subject of the data warehouse course at <a href="https://phoebefu6.github.io/learn-data-warehouse-with-phoebe/">learn-data-warehouse-with-phoebe</a>, which owns that map and keeps it current. No vendor is named on this page, on purpose: the three lines and the three crossings are the same whichever names are on the invoices, and a page that named them would be wrong within a year.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The business case with two horizons.</strong> A constructed story with a real mechanism. A platform proposal came to a steering group with a three-year TCO showing build cheapest. A finance partner asked for the same table at eighteen months, and rent was cheapest. Nobody had made an arithmetic error; the two tables were both right, and the room had been about to decide on the strength of a horizon that nobody had chosen. The decision that followed was not build or rent. It was to rent for twelve months, with the twelve months used to find out whether the use case would still exist at month 36, and to revisit with one horizon everyone had agreed on.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="State the horizon before the answer" data-hint="For one platform decision you know: how many months are you confident it will be needed in its current shape? Write the number, then one line on what would make it shorter, and one on what the monthly fee is buying you. Three lines." data-seed="" data-cta="State it"></div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers switching costs and lock-in</span>
+      <h2>The line the vendor did not draw</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The vendor's chart shows the rent line to month 36 and it is accurate. What it omits is the price of leaving. Migration, re-testing, retraining the team, rewriting everything that was built against the vendor's particular way of doing things: that is a switching cost, it is paid in a lump at the moment you try to exit, and it turns a series of small "no" decisions into one large one. Deep-dive session 5 drew switching costs as a moat from the incumbent's side. Tonight draws the same wall from inside, where it is called lock-in, and adds it to the chart as the fourth line.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 332" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same hand-drawn axes of cumulative cost against months. The rent line the vendor drew rises smoothly to month 36. A second line follows it to month 24 and then jumps vertically by a hatched block labelled switching cost, 150, invented, before continuing at the same slope to a higher endpoint. The build line is drawn faintly for comparison. A small figure stands at month 24, wanting to leave. Notes say both lines are invented and the mechanism is not.">
+        <defs>
+          <filter id="d9cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="107" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d9cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d9cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d9cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d9cL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d9cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d9cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d9cA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d9cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d9cH" x="30" y="26">THE RENT LINE, AND THE RENT LINE WITH THE EXIT DRAWN IN</text>
+
+        <g filter="url(#d9cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M80 260 L80 60" stroke="#1F3A5F" marker-end="url(#d9cAr)"/>
+          <path d="M80 260 L830 260" stroke="#1F3A5F" marker-end="url(#d9cAr)"/>
+          <!-- build, faint, for comparison: 360 up front, 4 a month -->
+          <path d="M80 188 L800 159" stroke="#C9D2E2" stroke-width="2"/>
+          <!-- the rent line the vendor drew: 22 a month -->
+          <path d="M80 260 L800 102" stroke="#4E5A75" stroke-width="2.2" stroke-dasharray="7 4"/>
+          <!-- the line with the exit: same to month 24, then the jump, then the same slope -->
+          <path d="M80 260 L560 154" stroke="#16213A" stroke-width="2.4"/>
+          <path d="M560 124 L800 72" stroke="#16213A" stroke-width="2.4"/>
+          <!-- the switching cost block: hatched, amber edge -->
+          <rect x="549" y="124" width="22" height="30" fill="url(#d9cHc)" stroke="#A8570B"/>
+          <!-- leader from the label to the block -->
+          <path d="M470 120 L544 130" stroke="#A8570B" marker-end="url(#d9cAr)"/>
+          <!-- month ticks -->
+          <path d="M320 256 L320 264 M560 256 L560 264 M800 256 L800 264" stroke="#1F3A5F"/>
+          <!-- the person at month 24, wanting to leave -->
+          <circle cx="560" cy="206" r="7"/>
+          <path d="M560 213 L560 232 M560 220 L550 228 M560 220 L570 228 M560 232 L554 246 M560 232 L566 246"/>
+        </g>
+
+        <text class="d9cA" x="86" y="56">CUMULATIVE COST, INVENTED UNITS</text>
+        <text class="d9cA" x="822" y="246" text-anchor="end">MONTHS</text>
+        <text class="d9cS" x="80" y="280" text-anchor="middle">0</text>
+        <text class="d9cS" x="320" y="280" text-anchor="middle">12</text>
+        <text class="d9cS" x="560" y="280" text-anchor="middle">24</text>
+        <text class="d9cS" x="800" y="280" text-anchor="middle">36</text>
+        <text class="d9cL" x="806" y="76">exit 942</text>
+        <text class="d9cS" x="806" y="106">vendor 792</text>
+        <text class="d9cS" x="806" y="163">build 504</text>
+        <text class="d9cL" x="380" y="88">the line you pay if you leave at month 24</text>
+        <text class="d9cB" x="464" y="116" text-anchor="end">switching cost: 150, invented</text>
+        <text class="d9cS" x="640" y="190">what the vendor drew</text>
+        <text class="d9cS" x="586" y="222">you, at month 24</text>
+
+        <text class="d9cS" x="30" y="304">Both lines are invented. The mechanism is not: the exit has a price, and it is on nobody's invoice.</text>
+        <text class="d9cN" x="30" y="324">A switching cost is a moat seen from inside the castle. Draw the line yourself before month 1, not at month 24.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the hatched block is the whole of lock-in: every month before it the option to leave was real, and at the block the option has a price that was set the day you signed</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Switching costs, and why they are paid at the worst moment<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What is in the block.</strong> Moving the data, which is the smallest part. Rewriting every pipeline, query, dashboard and model that was built against the vendor's dialect, API or semantics, which is the largest. Re-testing all of it against the numbers it used to produce, because a migration that changes a number silently is worse than no migration. Retraining the people who had learned the old tool. And the months during which two platforms run at once, which cost twice. Every one of those is a fixed cost paid at the exit, and the longer you have been on the platform, the larger it is, because more has been built against it.</p>
+        <p><strong>Why it is invisible on the vendor's chart.</strong> Not deceit, usually; the vendor's chart is a chart of the vendor's fees, and the switching cost is paid to nobody. It is your team's hours, your delay, your risk. It appears on no invoice and so on no invoice-based comparison. It also grows in a way the invoice does not: the fee per month is roughly flat, while the exit cost climbs with every integration built. A rent decision that was genuinely reversible at month 6 can be effectively irreversible at month 30 without a single term of the contract having changed.</p>
+        <p><strong>The option value from Part 2, revisited.</strong> The monthly fee bought the right to stop. A switching cost is the price of exercising that right, and if it is large enough the right is worth nothing: you are paying a premium for flexibility you cannot afford to use. That is the case where rent is the worst of the three, more expensive than build over the horizon and no more reversible. The way to know which case you are in is to draw the fourth line before signing, with an honest estimate of what exit would cost at month 12, 24 and 36, and to write it down where the steering group can see it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Lock-in as a moat from the other side<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Deep-dive session 5 taught switching costs as one of the few durable moats a platform can hold: a customer who would have to pay a large fixed cost to leave will tolerate a higher price than one who can walk. Tonight's chart is that sentence from the customer's chair. The vendor's incentive is to raise the exit cost, not by force but by helpfulness: a proprietary feature that saves you a week today and costs you a quarter to replace, a dialect that is slightly nicer than the standard, an integration that only works with the vendor's other products. Each one is genuinely useful and each one raises the block in the figure.</p>
+        <p>The customer's defence is the mirror of the vendor's strategy: prefer the standard over the proprietary where the difference is small, keep the semantic layer and the tests in a form that does not depend on the vendor, and price the exit every year as if you were going to take it. None of that is free either; it is a monthly cost paid to keep the option alive, and whether it is worth paying depends on how likely you are to need the exit. A team that is certain it will stay for five years can rationally build deep into the vendor. A team that is not should keep the block small, on purpose, and know what it costs to do so.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The renewal that was not a negotiation.</strong> A constructed story with a real mechanism. At the third annual renewal the vendor raised the price by a third. The data lead opened a spreadsheet to model the alternatives and found that the cost of moving, which nobody had estimated at signing, was larger than three years of the increase. The renewal was signed. Nothing about the vendor's behaviour was surprising; the customer's exit cost was known to both sides, and only one side had drawn it on a chart. The lesson the team took was procedural, not moral: from then on every vendor contract came with a fourth line, estimated at signing and refreshed at each renewal, and the renewals became negotiations again.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>A TCO table with constructed inputs, and the row the vendor left out</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Five short steps in pandas and numpy. Every input is invented and the code says so in the comment beside it; the shape of the result, three lines that cross and a fourth that jumps, is what every real version of this table has. Replace the inputs with your own estimates, keep the word "constructed" in the filename until they are real, and the sentence at the end will still be true of whatever you typed. Your numbers will differ.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn table with three horizon rows, 12, 24 and 36 months, and four columns: build, buy, rent, and rent with an exit at month 24. Values on the invented inputs: at 12 months 408, 264, 264 and 264; at 24 months 456, 408, 528 and 678; at 36 months 504, 552, 792 and 942. The last column is shaded amber. An inputs line lists the invented figures and a clock doodle marks the horizon.">
+        <defs>
+          <filter id="d9dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="113" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d9dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d9dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d9dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d9dL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d9dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d9dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d9dV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .d9dA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d9dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d9dH" x="30" y="26">THE TCO TABLE, WITH THE FOURTH COLUMN THE VENDOR LEFT OUT</text>
+
+        <g filter="url(#d9dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the sheet -->
+          <rect x="30" y="44" width="820" height="206" rx="4" transform="rotate(-0.3 440 147)" fill="#FFFFFF"/>
+          <!-- the exit column: the one amber thing -->
+          <rect x="716" y="48" width="130" height="198" rx="3" fill="#FBEEDC" stroke="#A8570B"/>
+          <path d="M30 76 L850 76" stroke="#C9D2E2"/>
+          <path d="M30 114 L850 114 M30 150 L850 150 M30 186 L850 186" stroke="#C9D2E2"/>
+          <!-- cheapest-at-horizon markers: small circles -->
+          <circle cx="426" cy="98" r="5"/>
+          <circle cx="426" cy="134" r="5"/>
+          <circle cx="246" cy="170" r="5"/>
+          <!-- a clock -->
+          <circle cx="60" cy="60" r="9"/>
+          <path d="M60 54 L60 60 L64 63"/>
+        </g>
+
+        <text class="d9dA" x="80" y="66">HORIZON</text>
+        <text class="d9dA" x="260" y="66">BUILD</text>
+        <text class="d9dA" x="440" y="66">BUY</text>
+        <text class="d9dA" x="600" y="66">RENT</text>
+        <text class="d9dA" x="728" y="66">RENT, EXIT AT 24</text>
+
+        <text class="d9dL" x="80" y="102">12 months</text>
+        <text class="d9dV" x="260" y="104">408</text>
+        <text class="d9dV" x="440" y="104">264</text>
+        <text class="d9dV" x="600" y="104">264</text>
+        <text class="d9dV" x="728" y="104">264</text>
+        <text class="d9dL" x="80" y="138">24 months</text>
+        <text class="d9dV" x="260" y="140">456</text>
+        <text class="d9dV" x="440" y="140">408</text>
+        <text class="d9dV" x="600" y="140">528</text>
+        <text class="d9dV" x="728" y="140">678</text>
+        <text class="d9dL" x="80" y="174">36 months</text>
+        <text class="d9dV" x="260" y="176">504</text>
+        <text class="d9dV" x="440" y="176">552</text>
+        <text class="d9dV" x="600" y="176">792</text>
+        <text class="d9dV" x="728" y="176">942</text>
+
+        <text class="d9dS" x="80" y="210">the circle marks the cheapest column at each horizon; at 12 months buy and rent tie and buy is listed first</text>
+        <text class="d9dB" x="80" y="234">inputs, invented: build 360 + 4 a month · buy 120 + 12 a month · rent 22 a month · exit 150</text>
+
+        <text class="d9dS" x="30" y="274">The exit column is the same rent line with one lump added at month 24. It is never cheapest after the lump lands.</text>
+        <text class="d9dN" x="30" y="292">Every number here is invented. Rebuild the table with yours, and keep the fourth column even when its estimate is rough.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber column is the one that never appears in a vendor deck; on these inputs it turns rent from the cheapest option at month 12 into the most expensive at month 24</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Write the inputs as data.</strong> Three options, each with a one-off cost and a monthly cost, in cost units that are invented. The point of writing them as a dict is that the whole argument later is a diff on this block.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · the inputs, all invented</span>import numpy as np
+import pandas as pd
+
+# Every figure below is INVENTED, in "cost units". The shape is the lesson, not the values.
+inputs = {
+    "build": {"upfront": 360, "monthly": 4},    # large fixed cost, small monthly
+    "buy":   {"upfront": 120, "monthly": 12},   # licence, plus support and the people who run it
+    "rent":  {"upfront": 0,   "monthly": 22},   # nothing up front, the largest monthly
+}
+HORIZONS = [12, 24, 36]</div>
+      </div>
+      <div class="step">
+        <p><strong>The table at three horizons.</strong> Total cost of ownership is the one-off cost plus the monthly cost times the months. Three rows, three columns, and the cheapest column changes as you read down.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · TCO at 12, 24 and 36 months</span>def tco(option, months):
+    c = inputs[option]
+    return c["upfront"] + c["monthly"] * months
+
+tab = pd.DataFrame({opt: [tco(opt, m) for m in HORIZONS] for opt in inputs}, index=HORIZONS)
+tab.index.name = "months"
+print(tab)
+#         build  buy  rent      on the invented inputs; your numbers will differ
+# 12        408  264   264
+# 24        456  408   528
+# 36        504  552   792
+print(tab.idxmin(axis=1))     # 12: buy (tied with rent, listed first), 24: buy, 36: build</div>
+      </div>
+      <div class="step">
+        <p><strong>Find the crossings.</strong> Compute all three lines month by month and record every month at which the cheapest option changes. Those months are the whole decision, and they move when any input does.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · where the cheapest option changes</span>months = np.arange(0, 37)
+lines = {opt: inputs[opt]["upfront"] + inputs[opt]["monthly"] * months for opt in inputs}
+
+cheapest = pd.Series([min(lines, key=lambda o: lines[o][m]) for m in months], index=months)
+changes  = cheapest[cheapest != cheapest.shift()]
+print(changes)
+# 0     rent
+# 12     buy       on the invented inputs; your numbers will differ
+# 30   build</div>
+      </div>
+      <div class="step">
+        <p><strong>Add the line the vendor did not draw.</strong> A switching cost is a lump added to the rent line at the exit month. It is invented here, like everything else, and the only rule about it is that it is never zero.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the exit at month 24</span>EXIT_MONTH, SWITCH = 24, 150     # invented: migration, re-testing, retraining, two platforms at once
+
+rent_exit = lines["rent"] + np.where(months &gt;= EXIT_MONTH, SWITCH, 0)
+tab["rent, exit at 24"] = [rent_exit[m] for m in HORIZONS]
+print(tab)
+#         build  buy  rent  rent, exit at 24
+# 12        408  264   264               264
+# 24        456  408   528               678      on the invented inputs; your numbers will differ
+# 36        504  552   792               942</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the sentence.</strong> One line that names the horizon, the cheapest option at it, and the switching cost that was assumed, so that whoever reads it knows which three numbers to argue with.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the honest sentence</span>H = 36                                        # the horizon is a choice; state it first
+best = tab.loc[H].idxmin()
+sentence = (
+    f"At a {H}-month horizon the cheapest option is {best} at {tab.loc[H, best]} units, "
+    f"assuming a switching cost of {SWITCH} at month {EXIT_MONTH}; change the horizon or "
+    f"the switching cost and the answer changes, so those two numbers are the decision."
+)
+print(sentence)      # your numbers will differ; the last clause never does
+
+tab.to_csv("tco_table_constructed.csv")    # "constructed" in the filename until the inputs are real</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Run Step 5 at 12, 24 and 36 before anyone sees the table.</strong> If the cheapest option is the same at all three horizons, the decision is robust and the horizon argument is not worth having. If it changes, the horizon is the decision, and the steering group should be asked to choose the horizon first and see the table second. Presenting the table first invites everyone to pick the horizon that favours the option they already wanted.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before deep-dive session 10</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Rebuild the table</strong> for one real platform decision you know, with your own estimates in place of the invented inputs. Mark each estimate as rough or firm, and keep "constructed" in the filename until every one is firm.</li>
+      <li><strong>Price the friction.</strong> For the buy or rent option, estimate the hours your team would spend on search, negotiation, contracting and monitoring in year one, and add them to the table as a line. Write whether it moved a crossing.</li>
+      <li><strong>Draw the fourth line at three exits.</strong> Estimate the switching cost at month 12, 24 and 36 for the rent option, and write one sentence on why it grows.</li>
+      <li><strong>Bring the panel and the sentence.</strong> Deep-dive session 10 is the bench: rungs 1 to 5 on the real Olist rows, computed live, and the sentence you will say to a leader about a number you have defended. Re-read your deep-dive session 2 notes on the placebo before you come.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 9 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Coase 1937 asked why firms exist if markets coordinate so well. Applied to a data platform, what does his answer say decides whether to build in-house or buy from a vendor?</p>
+      <button class="qopt" type="button">A · Whichever has the lower price on the invoice</button>
+      <button class="qopt" type="button">B · Whether the firm has engineers available; if it does, it should build</button>
+      <button class="qopt" type="button">C · The transaction costs of using the market, searching, negotiating, contracting and monitoring, against the cost of coordinating the work inside; the boundary of the firm sits where the two balance, and it can run through a platform rather than around it</button>
+      <button class="qopt" type="button">D · Whether the vendor is larger than the firm, since larger organisations coordinate more cheaply</button>
+      <p class="qwhy">"The Nature of the Firm", Economica 4(16) 386-405. The costs of using the price mechanism are paid in your team's hours and appear on no quote; the costs of coordinating inside rise as the firm takes on more. Neither is zero, and the invoice shows only one side of one of them.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · On the constructed inputs, rent is cheapest to month 11, buy from month 12 and build from month 30. A colleague says the table "shows build is cheapest". What is the right response?</p>
+      <button class="qopt" type="button">A · It shows build is cheapest only at a horizon of 30 months or more; the horizon is a choice that has to be stated before the answer, and the monthly fee of the rent option buys the right to stop, which has value when the horizon is uncertain</button>
+      <button class="qopt" type="button">B · Agree; a lower cost at month 36 means build is the cheapest option</button>
+      <button class="qopt" type="button">C · Disagree; rent is always cheapest because it has no fixed cost</button>
+      <button class="qopt" type="button">D · The table is wrong because cumulative cost lines cannot cross</button>
+      <p class="qwhy">A fixed cost is spread thinner over more months and a variable cost never is, so a long horizon favours high-fixed, low-variable options. Without a stated horizon a TCO comparison can be made to favour any option by moving one date.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · A vendor's chart shows the rent line to month 36 and it is arithmetically correct. What is missing, and why does it matter more the longer you stay?</p>
+      <button class="qopt" type="button">A · Nothing; the vendor's fees are the only cost of renting</button>
+      <button class="qopt" type="button">B · Inflation, which makes later months cost more in real terms</button>
+      <button class="qopt" type="button">C · The vendor's profit margin, which should be subtracted</button>
+      <button class="qopt" type="button">D · The switching cost: migration, rewriting, re-testing and retraining, paid in a lump at the exit and on nobody's invoice; it grows with everything built against the vendor, so an option that was reversible at month 6 can be effectively locked in by month 30 with no change in the contract</button>
+      <p class="qwhy">Lock-in is the switching cost moat of deep-dive session 5 seen from inside. The fee per month is flat; the exit cost climbs. Draw the fourth line at signing and refresh it at every renewal, or the renewal is not a negotiation.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Coase 1937, "The Nature of the Firm", Economica 4(16) 386-405: transaction costs decide the boundary of the firm; make-or-buy as where that boundary sits</span><span class="note">Primary; citation confirmed against the journal record</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Fixed against variable cost, total cost of ownership over a stated horizon, the option value of a monthly contract</span><span class="note">Standard economics, no single source; deep-dive session 4 taught the same crossing over volume</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Switching costs and lock-in as the moat of deep-dive session 5 seen from the customer's side</span><span class="note">Standard economics, no single source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The TCO table: build 360 plus 4 a month, buy 120 plus 12 a month, rent 22 a month, exit 150 at month 24; crossings at months 12, 20 and 30; totals 408/456/504, 264/408/552, 264/528/792, 264/678/942</span><span class="note">Constructed; every input is invented and labelled, the arithmetic follows from them</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The shadow price of a constraint, read from the dual of an optimisation</span><span class="note">Named and linked to the prescriptive analytics course; no optimisation is solved here</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The warehouse buy landscape and vendor categories</span><span class="note">Named and linked to the data warehouse course; no vendor is named here</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 9 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Make-or-buy is Coase 1937</b><span>Search, negotiate, contract, monitor: the market's costs. The firm ends where they balance coordination inside. Economica 4(16).</span></div>
+      <div class="cheat-item"><b>The invoice is one side of one cost</b><span>Transaction costs are paid in hours and appear on no quote. Price them, or they are priced at zero.</span></div>
+      <div class="cheat-item"><b>State the horizon before the answer</b><span>Fixed cost spreads thinner; variable never does. On the invented inputs the cheapest option changes at months 12 and 30.</span></div>
+      <div class="cheat-item"><b>Rent buys the right to stop</b><span>Option value is real when the future is uncertain. It is wasted when the option is never exercised.</span></div>
+      <div class="cheat-item"><b>The fourth line</b><span>Switching cost: a lump at the exit, on nobody's invoice, growing with everything built against the vendor.</span></div>
+      <div class="cheat-item"><b>Lock-in is a moat from inside</b><span>Estimate the exit at signing, refresh at every renewal, or the renewal is not a negotiation.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Nine sessions of mechanism, and the last one is a number you have to defend out loud. Deep-dive session 10 is the elasticity bench: rungs 1 to 5 on the real Olist panel, every slope computed live in the browser, from the cross-section that says +0.008 to the within-product answer near -1.8 and the placebo that collapses to zero when prices are shuffled within product. It has an anti-lever, "use the market-wide number", which predicts that a 10 percent price rise raises revenue about 9 percent when the within-product number says it loses about 7. It has a break button, so you can see the bench fail as well as pass. It has the filters, category, weighting, freight and single-unit months, that move the answer inside its honest range. And it ends with the scorecard and the sentence you say to a leader: the range, not the decimal, and what the number cannot say.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 9 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p8-information-economics-of-models.html">← Prev: Information economics of models</a> &nbsp;·&nbsp; <a href="p10-the-elasticity-bench.html">Next: The elasticity bench, and defending a number →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

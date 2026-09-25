@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 2 of 10. The same 2,216 Olist product-month rows fitted five ways: across products the slope is +0.008, pooled it is -0.108, within product it is -1.788, with month effects -1.854, and a placebo that shuffles prices inside each product collapses to -0.002. What a fixed effect removes, drawn as demeaning, and what none of it removes. Python build-along.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Why the naive number lies - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 2 of 10. Same rows, five fits, a factor of sixteen. The whole difference is whether a product was compared with itself.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p2-why-the-naive-number-lies.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why the naive number lies - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 2 of 10. +0.008, -0.108, -1.788: same rows, and only one of them compares a product with itself.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 2 · Why the naive number lies - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 2 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 2 of 10</div>
+    <h1>Why the naive <span class="accent">number</span> lies</h1>
+    <p class="sub">Deep-dive session 1 left you with 2,216 product-month rows for 203 products and a reason not to trust any one product's slope. Tonight fits those rows as one line, and the first three ways of doing it give +0.008, -0.108 and -1.788. Nothing about the rows changed between those numbers. What changed is the question each fit asks: does a cheaper product sell more than a dearer one, or does a product sell more in the months it is cheaper? The first is a fact about the catalogue and the second is an elasticity, and the pooled line quietly answers the first while looking like the second. Then a month effect, three robustness checks, and a placebo that shuffles the prices inside each product and watches the slope fall to zero.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Analysts, pricing and growth teams</span>
+      <span class="chip audience">Python, pandas, numpy</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Three rungs, one fixed effect, one placebo</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: rungs 1 to 5 on the panel</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">A line through logs has a slope, and last time the slope was fitted one product at a time and came out as noise. The fix is not more data per product; it is a different unit. Fit all 2,216 rows at once and the slope steadies. But "all at once" hides a choice: whether each product is allowed its own level. Without that allowance, the line is comparing a bath towel that sells 40 a month at R$ 30 with a watch that sells 4 a month at R$ 300, and calling the difference an elasticity. With it, the line only sees how each product's own months differ from each other. Every standard error tonight is a naive standard error: conventional OLS, unclustered, and the page says so each time one appears.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Five fits of the same panel with the number on each; the one sentence that explains why +0.008 and -1.788 are both correct answers to different questions; a demeaning step you can write in one line of pandas and defend in one line of English; a placebo loop that tells you how far from zero "far" is; and the honest label for the result: a within-product association with a placebo behind it, not a causal elasticity.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the cross-section across products</span>
+      <h2>Rung 1: cheap products are not popular products</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The first thing most people fit is the obvious one: one dot per product, its mean price against its total units, a line through all of them. Across 4,731 Olist products with at least five units sold, that line has slope +0.008 with a naive standard error of 0.011. Zero, in other words. Inside each of the eight biggest categories the slope sits between -0.035 and +0.089; none is below -0.04. Price tells you nothing about how much a product sells when the products are different products.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 376" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn log-log cloud made of five product clusters. Across the clusters the trend is flat: a dashed line for the cross-section with slope +0.008 and a solid line for the pooled fit with slope -0.108 both run almost level. Inside every cluster the dots fall steeply from left to right, and a thick amber line through the middle cluster, with thinner parallel amber lines through the others, carries the within-product slope of -1.788.">
+        <defs>
+          <filter id="d2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d2aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d2aL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d2aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d2aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d2aA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d2aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d2aH" x="30" y="26">SAME 2,216 ROWS, THREE LINES</text>
+        <text class="d2aS" x="240" y="26">each cluster is one product's months; five sketched of 203</text>
+
+        <g filter="url(#d2aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M80 290 L80 70" stroke="#1F3A5F" marker-end="url(#d2aAr)"/>
+          <path d="M80 290 L850 290" stroke="#1F3A5F" marker-end="url(#d2aAr)"/>
+          <!-- rung 1 dashed, rung 2 solid: both near flat -->
+          <path d="M110 197 L790 189" stroke="#1F3A5F" stroke-dasharray="7 6"/>
+          <path d="M110 181 L790 207" stroke="#1F3A5F"/>
+          <!-- within-product lines, parallel, amber -->
+          <path d="M146 160 L214 240" stroke="#A8570B" stroke-width="1.4"/>
+          <path d="M266 140 L334 220" stroke="#A8570B" stroke-width="1.4"/>
+          <path d="M396 170 L464 250" stroke="#A8570B" stroke-width="3.5"/>
+          <path d="M526 130 L594 210" stroke="#A8570B" stroke-width="1.4"/>
+          <path d="M666 165 L734 245" stroke="#A8570B" stroke-width="1.4"/>
+          <!-- cluster 1, centre 180,200 -->
+          <circle cx="156" cy="172" r="4" fill="#FFFFFF"/><circle cx="168" cy="190" r="4" fill="#FFFFFF"/><circle cx="182" cy="198" r="4" fill="#FFFFFF"/><circle cx="192" cy="216" r="4" fill="#FFFFFF"/><circle cx="204" cy="226" r="4" fill="#FFFFFF"/>
+          <!-- cluster 2, centre 300,180 -->
+          <circle cx="276" cy="150" r="4" fill="#FFFFFF"/><circle cx="288" cy="170" r="4" fill="#FFFFFF"/><circle cx="302" cy="178" r="4" fill="#FFFFFF"/><circle cx="312" cy="194" r="4" fill="#FFFFFF"/><circle cx="324" cy="208" r="4" fill="#FFFFFF"/>
+          <!-- cluster 3, centre 430,210 (the drawn one) -->
+          <circle cx="406" cy="182" r="4" fill="#FBEEDC" stroke="#A8570B"/><circle cx="418" cy="198" r="4" fill="#FBEEDC" stroke="#A8570B"/><circle cx="432" cy="212" r="4" fill="#FBEEDC" stroke="#A8570B"/><circle cx="442" cy="222" r="4" fill="#FBEEDC" stroke="#A8570B"/><circle cx="454" cy="238" r="4" fill="#FBEEDC" stroke="#A8570B"/>
+          <!-- cluster 4, centre 560,170 -->
+          <circle cx="536" cy="142" r="4" fill="#FFFFFF"/><circle cx="548" cy="158" r="4" fill="#FFFFFF"/><circle cx="562" cy="172" r="4" fill="#FFFFFF"/><circle cx="572" cy="184" r="4" fill="#FFFFFF"/><circle cx="584" cy="198" r="4" fill="#FFFFFF"/>
+          <!-- cluster 5, centre 700,205 -->
+          <circle cx="676" cy="176" r="4" fill="#FFFFFF"/><circle cx="688" cy="194" r="4" fill="#FFFFFF"/><circle cx="702" cy="206" r="4" fill="#FFFFFF"/><circle cx="712" cy="218" r="4" fill="#FFFFFF"/><circle cx="724" cy="234" r="4" fill="#FFFFFF"/>
+          <!-- legend swatches -->
+          <path d="M470 60 L510 60" stroke="#1F3A5F" stroke-dasharray="7 6"/>
+          <path d="M470 82 L510 82" stroke="#1F3A5F"/>
+          <path d="M470 104 L510 104" stroke="#A8570B" stroke-width="3.5"/>
+        </g>
+
+        <text class="d2aA" x="90" y="64">LOG UNITS</text>
+        <text class="d2aA" x="770" y="310">LOG PRICE</text>
+        <text class="d2aL" x="520" y="64">rung 1 · across products · +0.008 (naive se 0.011)</text>
+        <text class="d2aL" x="520" y="86">rung 2 · pooled, no controls · -0.108 (naive se 0.028)</text>
+        <text class="d2aB" x="520" y="108">rung 3 · within product · -1.788 (naive se 0.149)</text>
+        <text class="d2aS" x="100" y="260">a dear product that sells a lot sits up here</text>
+        <text class="d2aS" x="100" y="276">a cheap one that sells little sits down there</text>
+        <text class="d2aB" x="470" y="266">one slope, 203 intercepts</text>
+
+        <text class="d2aN" x="30" y="344">The flat lines ask whether cheap products outsell dear ones across the catalogue.</text>
+        <text class="d2aN" x="30" y="360">The amber lines ask whether a product sells more in its cheaper months. Only the second is an elasticity.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two navy lines are almost level because they compare products with other products; every amber line is steep because it compares a product with itself</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What a cross-section across products is actually measuring<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>One dot per product.</strong> Mean price on the x axis, total units on the y axis, 4,731 dots, a line. The slope of +0.008 with a naive standard error of 0.011 says the line is flat. The reading people reach for is "demand on this marketplace is perfectly inelastic", and that reading is wrong, because the line never saw a price change. It saw 4,731 different products at 4,731 different prices, and the reason a R$ 300 watch sells fewer units than a R$ 30 towel is that it is a watch, not that it is dear.</p>
+        <p><strong>Inside a category it does not improve.</strong> Bed, bath and table +0.022; sports and leisure -0.013; health and beauty -0.026; furniture and decor -0.028; housewares +0.089; computers and accessories +0.066; telephony -0.009; watches and gifts -0.035. Eight categories, none below -0.04. Two towels at different prices are still two different towels: one has better reviews, a bigger seller, a photo that loads. Their price difference is tangled with everything else that differs between them, and the slope cannot pull the price part out.</p>
+        <p><strong>The bench's own version.</strong> On the 203 eligible products alone, the same cross-section gives -0.001 with a naive standard error of 0.058. Same answer on the rows the browser can recompute in deep-dive session 10, which is why the build-along tonight prints that one and quotes the 4,731-product figure from the offline run.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why a flat cross-section is not evidence of inelastic demand<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>An elasticity is the answer to "if this product's price moved, how would its units move". A cross-section holds 4,731 answers to a different question, "which products are cheap and which are popular", and those two properties are set by different things. Popularity comes from category, brand, reviews, the seller's reach; cheapness comes from cost, positioning, the seller's margin. There is no reason for them to line up, and on Olist they do not.</p>
+        <p>The mistake has a name in econometrics, omitted variable bias, and its cure is not a bigger cross-section. Ten times the products would give ten times the dots and the same flat line with a smaller standard error, which would make the wrong answer look more certain. The cure is a within comparison, which is Part 2.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The catalogue slide.</strong> A pricing review opens with a scatter of every SKU's price against its volume and a fitted line that is nearly flat. The slide concludes that customers are not price sensitive and recommends a 10 percent rise across the board. Every dot on that slide is a different product; the slide has measured the shape of the catalogue and presented it as the shape of demand. On these rows the within-product number says the rise loses about 7 percent of revenue, not gains 9, and Part 3 shows the two predictions side by side.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers pooled versus within, and what a fixed effect removes</span>
+      <h2>Rungs 2 and 3: the same rows, compared within product</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Now use the panel. Rung 2 fits one line through all 2,216 product-months with no allowance for which product a row belongs to, and gets -0.108 with a naive standard error of 0.028. Rung 3 fits the same 2,216 rows after subtracting each product's own mean of log price and mean of log units, and gets -1.788 with a naive standard error of 0.149. The second fit is the first fit with 203 intercepts, one per product, and those intercepts are a product fixed effect. What they remove is everything about a product that does not change from month to month.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 364" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two hand-drawn panels. Before: three products' monthly rows sit as three separate clusters at different heights and prices on a log-log plot, each with an amber cross at its own mean. After: the same rows with each product's mean subtracted, so all three clusters now overlap at the origin and one thick amber line through them has slope -1.788. An arrow between the panels reads subtract each product's mean.">
+        <defs>
+          <filter id="d2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="19" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d2bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d2bL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d2bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d2bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d2bA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d2bV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .d2bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d2bH" x="30" y="26">BEFORE: EACH PRODUCT AT ITS OWN LEVEL</text>
+        <text class="d2bH" x="470" y="26">AFTER: EACH PRODUCT'S MEAN SUBTRACTED</text>
+
+        <g filter="url(#d2bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- left panel axes -->
+          <path d="M60 280 L60 60" stroke="#1F3A5F" marker-end="url(#d2bAr)"/>
+          <path d="M60 280 L400 280" stroke="#1F3A5F" marker-end="url(#d2bAr)"/>
+          <!-- product A, mean 140,110 -->
+          <circle cx="118" cy="86" r="4" fill="#FFFFFF"/><circle cx="130" cy="100" r="4" fill="#FFFFFF"/><circle cx="148" cy="118" r="4" fill="#FFFFFF"/><circle cx="162" cy="136" r="4" fill="#FFFFFF"/>
+          <path d="M134 110 L146 110 M140 104 L140 116" stroke="#A8570B" stroke-width="2.4"/>
+          <!-- product B, mean 250,230 -->
+          <circle cx="228" cy="206" r="4" fill="url(#d2bHc)"/><circle cx="240" cy="220" r="4" fill="url(#d2bHc)"/><circle cx="258" cy="238" r="4" fill="url(#d2bHc)"/><circle cx="272" cy="256" r="4" fill="url(#d2bHc)"/>
+          <path d="M244 230 L256 230 M250 224 L250 236" stroke="#A8570B" stroke-width="2.4"/>
+          <!-- product C, mean 340,150 -->
+          <circle cx="318" cy="126" r="4" fill="#EEF2F8"/><circle cx="330" cy="140" r="4" fill="#EEF2F8"/><circle cx="348" cy="158" r="4" fill="#EEF2F8"/><circle cx="362" cy="176" r="4" fill="#EEF2F8"/>
+          <path d="M334 150 L346 150 M340 144 L340 156" stroke="#A8570B" stroke-width="2.4"/>
+          <!-- arrow between panels -->
+          <path d="M408 170 L452 170" stroke="#A8570B" stroke-width="2.4" marker-end="url(#d2bAr)"/>
+          <!-- right panel: axes through the origin -->
+          <path d="M655 280 L655 60" stroke="#1F3A5F" marker-end="url(#d2bAr)"/>
+          <path d="M480 170 L850 170" stroke="#1F3A5F" marker-end="url(#d2bAr)"/>
+          <!-- the one line -->
+          <path d="M590 92 L720 248" stroke="#A8570B" stroke-width="3.5"/>
+          <!-- all three products now on the origin -->
+          <circle cx="633" cy="146" r="4" fill="#FFFFFF"/><circle cx="645" cy="160" r="4" fill="#FFFFFF"/><circle cx="663" cy="178" r="4" fill="#FFFFFF"/><circle cx="677" cy="196" r="4" fill="#FFFFFF"/>
+          <circle cx="631" cy="150" r="4" fill="url(#d2bHc)"/><circle cx="643" cy="164" r="4" fill="url(#d2bHc)"/><circle cx="661" cy="182" r="4" fill="url(#d2bHc)"/><circle cx="675" cy="200" r="4" fill="url(#d2bHc)"/>
+          <circle cx="635" cy="142" r="4" fill="#EEF2F8"/><circle cx="647" cy="156" r="4" fill="#EEF2F8"/><circle cx="665" cy="174" r="4" fill="#EEF2F8"/><circle cx="679" cy="192" r="4" fill="#EEF2F8"/>
+        </g>
+
+        <text class="d2bA" x="70" y="54">LOG UNITS</text>
+        <text class="d2bA" x="320" y="300">LOG PRICE</text>
+        <text class="d2bS" x="100" y="72">product A</text>
+        <text class="d2bS" x="212" y="192">product B</text>
+        <text class="d2bS" x="300" y="112">product C</text>
+        <text class="d2bB" x="176" y="112">+ its mean</text>
+        <text class="d2bS" x="60" y="316">three of 203, sketched; the levels differ, the tilt does not</text>
+        <text class="d2bB" x="404" y="156" text-anchor="start">subtract</text>
+        <text class="d2bS" x="404" y="192" text-anchor="start">the mean</text>
+        <text class="d2bA" x="665" y="54">LOG UNITS, DEMEANED</text>
+        <text class="d2bA" x="740" y="190">LOG PRICE, DEMEANED</text>
+        <text class="d2bS" x="640" y="192">0</text>
+        <text class="d2bV" x="730" y="256">-1.788</text>
+        <text class="d2bS" x="730" y="272">naive se 0.149</text>
+        <text class="d2bS" x="480" y="300">2,216 rows, each measured from its own product's mean; one line, one slope</text>
+
+        <text class="d2bN" x="30" y="336">The subtraction keeps only how each month differs from that product's usual month. A product that is always cheap</text>
+        <text class="d2bN" x="30" y="352">and always slow contributes nothing to the slope; one that was cheaper in March and sold more in March contributes everything.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber crosses are what the fixed effect removes; after they are subtracted every product sits on the same origin and the only thing left to fit is the tilt</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Pooled is not within, and demeaning is the whole trick<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Rung 2, pooled.</strong> One line through 2,216 rows, no intercepts. Its slope of -0.108 looks like a small elasticity and is not one, because the line is still mostly comparing products with other products: 203 products at 203 levels contribute most of the spread in both price and units, and the month-to-month movement inside a product is a small part of the picture. The pooled number is a blend of the flat across-product story and the steep within-product story, weighted toward the flat one.</p>
+        <p><strong>Rung 3, within.</strong> For each product, subtract its mean log price from every month's log price and its mean log units from every month's log units. Then fit one line through the 2,216 demeaned rows. This is exactly the regression with 203 product dummies, and the demeaned version is the one you can draw: every product now sits at the origin and the only variation left is within it. The slope is -1.788 with a naive standard error of 0.149.</p>
+        <p><strong>What the fixed effect removes.</strong> Everything about a product that is constant across its months: its category, its seller, its photo, its reviews as of the panel, its usual price level and its usual volume. What it cannot remove is anything that changes month to month inside the product, which is where Part 3 starts.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why 203 dummies and one demeaning step give the same slope<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Regressing log units on log price plus 203 product indicator columns, and regressing demeaned log units on demeaned log price with no indicators, give the identical slope. This is the Frisch-Waugh-Lovell result: partialling a set of regressors out of both sides first and then fitting the rest is the same as fitting everything at once. Demeaning within product is the partialling-out step for product dummies, and it is why the build-along never constructs a 2,216 by 204 design matrix.</p>
+        <p>One thing the shortcut does change is the naive standard error's degrees of freedom: the demeaned regression thinks it estimated one parameter when it estimated 204. The correction is small at 2,216 rows, and the honest move anyway is to cluster by product, which conventional OLS does not do. That is the reason every standard error on this page is called naive.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The subscription tier that "proved" price does not matter.</strong> A SaaS analyst pools three years of accounts across a starter, a team and an enterprise tier and finds that higher prices go with more seats. Of course they do; enterprise customers buy the enterprise tier. Compare each account with itself across its own renewals, where the price actually moved, and the sign flips. The pooled fit was a cross-section across customers wearing a panel's clothes.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers month effects, robustness, and the placebo</span>
+      <h2>Rungs 4 and 5: the month, the checks, and the shuffle</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A product fixed effect does nothing about November. If the marketplace grew, or every seller discounted in the same month, then price and units moved together across all products at once, and the within-product slope carries a share of that. Rung 4 removes each month's mean as well as each product's and gets -1.854 with a naive standard error of 0.150: month effects move it a little, not a lot. Three robustness rows move it inside a band. And a placebo tells you what the fit gives when there is nothing to find: shuffle log price within product, refit 200 times, and the slope averages -0.002.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn histogram of 200 placebo slopes, a narrow bell centred on -0.002 with standard deviation 0.159 and the widest draw at 0.444 in absolute value, sits on the right of an axis that runs from -0.5 to +0.5. Far to the left, past a break in the axis, an amber marker shows the real within-product slope of -1.788, with an arrow reading more than 11 placebo standard deviations away.">
+        <defs>
+          <filter id="d2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d2cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d2cL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d2cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d2cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d2cV { font: 800 18px Inter, sans-serif; fill: #142944; }
+          .d2cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d2cH" x="30" y="26">200 SHUFFLES, 200 SLOPES, AND THE REAL ONE</text>
+        <text class="d2cS" x="360" y="26">log price shuffled within each product, then the rung 3 fit repeated; bars sketched, shape as computed</text>
+
+        <g filter="url(#d2cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axis with a break -->
+          <path d="M60 250 L180 250"/>
+          <path d="M186 258 L196 242 M200 258 L210 242"/>
+          <path d="M216 250 L840 250"/>
+          <!-- the real slope marker -->
+          <path d="M110 100 L110 250" stroke="#A8570B" stroke-width="3.5"/>
+          <path d="M110 100 L102 114 M110 100 L118 114" stroke="#A8570B" stroke-width="2.4"/>
+          <!-- histogram, centre x=560, 23px bins, sd 73px -->
+          <rect x="353" y="246" width="23" height="4" fill="url(#d2cHc)"/>
+          <rect x="376" y="241" width="23" height="9" fill="url(#d2cHc)"/>
+          <rect x="399" y="233" width="23" height="17" fill="url(#d2cHc)"/>
+          <rect x="422" y="219" width="23" height="31" fill="url(#d2cHc)"/>
+          <rect x="445" y="199" width="23" height="51" fill="url(#d2cHc)"/>
+          <rect x="468" y="174" width="23" height="76" fill="url(#d2cHc)"/>
+          <rect x="491" y="147" width="23" height="103" fill="url(#d2cHc)"/>
+          <rect x="514" y="125" width="23" height="125" fill="url(#d2cHc)"/>
+          <rect x="537" y="112" width="23" height="138" fill="#EEF2F8"/>
+          <rect x="560" y="112" width="23" height="138" fill="#EEF2F8"/>
+          <rect x="583" y="125" width="23" height="125" fill="url(#d2cHc)"/>
+          <rect x="606" y="147" width="23" height="103" fill="url(#d2cHc)"/>
+          <rect x="629" y="174" width="23" height="76" fill="url(#d2cHc)"/>
+          <rect x="652" y="199" width="23" height="51" fill="url(#d2cHc)"/>
+          <rect x="675" y="219" width="23" height="31" fill="url(#d2cHc)"/>
+          <rect x="698" y="233" width="23" height="17" fill="url(#d2cHc)"/>
+          <rect x="721" y="241" width="23" height="9" fill="url(#d2cHc)"/>
+          <rect x="744" y="246" width="23" height="4" fill="url(#d2cHc)"/>
+          <!-- bracket for max abs -->
+          <path d="M356 96 L356 86 L764 86 L764 96" stroke="#1F3A5F"/>
+          <!-- the distance arrow -->
+          <path d="M340 160 L130 160" stroke="#A8570B" stroke-width="2" marker-end="url(#d2cAr)"/>
+        </g>
+
+        <text class="d2cS" x="110" y="270" text-anchor="middle">-1.788</text>
+        <text class="d2cS" x="330" y="270" text-anchor="middle">-0.5</text>
+        <text class="d2cS" x="560" y="270" text-anchor="middle">0</text>
+        <text class="d2cS" x="790" y="270" text-anchor="middle">+0.5</text>
+        <text class="d2cV" x="110" y="90" text-anchor="middle">-1.788</text>
+        <text class="d2cB" x="110" y="60" text-anchor="middle">the real slope</text>
+        <text class="d2cB" x="235" y="150" text-anchor="middle">more than 11 placebo sd</text>
+        <text class="d2cS" x="235" y="180" text-anchor="middle">from zero</text>
+        <text class="d2cL" x="560" y="78" text-anchor="middle">widest of 200 draws: 0.444 in absolute value</text>
+        <text class="d2cL" x="790" y="130" text-anchor="end">mean -0.002</text>
+        <text class="d2cL" x="790" y="148" text-anchor="end">sd 0.159</text>
+        <text class="d2cS" x="790" y="166" text-anchor="end">seed 20180901</text>
+
+        <text class="d2cN" x="30" y="306">If the within-product slope were an artefact of the fitting, shuffling prices inside each product would leave it standing.</text>
+        <text class="d2cN" x="30" y="322">It does not; the slope collapses to zero every time. -1.788 is not the method.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bell is what the fit produces when price carries no information; the amber marker sits eleven bell-widths to its left</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Month effects, three checks, and the placebo<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Rung 4, product and month effects.</strong> Subtract each product's mean, then each month's mean, and repeat until nothing moves (alternating projections, fifty passes is plenty). The slope is -1.854 with a naive standard error of 0.150, against -1.788 without the month effects. The marketplace grew across 2017 and 2018 and prices drifted, and removing that shared movement changes the answer by 0.07. A small move is itself a finding: the within-product slope is not being driven by the calendar.</p>
+        <p><strong>Three ways of being wrong that do not change the sign.</strong> Weight each row by its units, so big-selling months count more: -2.216 (naive standard error 0.143). Use the freight-inclusive price the buyer paid instead of the seller's: -1.881 (naive standard error 0.154). Drop the months where a product sold a single unit, which leaves 1,850 rows: -1.480 (naive standard error 0.142); the single-unit months pull the slope more negative. All three are rung 3 on the same panel with one decision flipped, and the answer stays between -1.5 and -2.2.</p>
+        <p><strong>Rung 5, the placebo.</strong> Inside each product, shuffle the log prices across its months so that every product keeps its own prices but in a random order, then run the rung 3 fit. Do it 200 times. The slopes have mean -0.002, standard deviation 0.159, and the widest is 0.444 in absolute value. The real -1.788 is more than eleven of those standard deviations from zero. That is what "the slope is not the method" looks like in a number.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What none of it removes: the seller chose the price after seeing demand<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Product fixed effects remove "this product is cheap and popular". Month effects remove "the marketplace grew". The placebo shows the slope is not a fitting artefact. None of the three touches the thing that makes an observational price panel hard: a seller cuts price when stock is high, or when a competitor moves, or when units have been slow; and a seller raises price in the last months of a product's life, which is also when it is going out of stock. The price was chosen after looking at demand, so price and units are tied together by the seller's decision as well as by the buyers' response, and the panel cannot tell the two apart.</p>
+        <p>The honest label for -1.788 is therefore a <strong>within-product association with a placebo behind it, not a causal elasticity</strong>. It is the number to publish, with its range, and it is a much better number than +0.008 or -0.108. It is not the number an experiment would give. The steps from association to cause, confounding, what a control can and cannot do, and how to read a diagram of the mechanism, are the subject of <a href="https://phoebefu6.github.io/learn-causal-inference-with-phoebe/">learn-causal-inference-with-phoebe</a>. The experiment that would settle the Olist question, a price test where the seller's choice is replaced by a random draw, is designed in <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/">learn-experimentation-with-phoebe</a>. Deep-dive session 3 uses the number as it is, with the label on.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The clearance that looked like elasticity.</strong> In the headline product from deep-dive session 1, the last three months carry prices of R$ 89.90 and R$ 103 and units of 2, 2 and 3. A within-product fit sees a rise and a collapse and reads it as a response. The seller most likely raised the price because the product was ending, and units collapsed for the same reason. Fixed effects cannot see that, month effects cannot see that, and the placebo cannot see that; only knowing why the price moved can. The number survives all three checks and still carries the label.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Name what your fixed effect removes, and what it leaves" data-hint="For a panel you own (customer x month, store x week, SKU x day): what is constant inside a unit that the fixed effect removes, and what changes inside a unit that it leaves? Two lines each." data-seed="" data-cta="Name it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Rungs 1 to 5 on the saved panel</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Start from <code>panel_2018-09-01.csv</code>, the file deep-dive session 1 wrote, with columns <code>product_id, month, units, price, freight, cat, lp, lq</code>. Seven steps in pandas and numpy, each printing the map's number to three decimals. Every standard error is the conventional OLS one, unclustered, so the code calls it <code>naive_se</code> and the comments do too.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn ladder with five rungs, numbered from the bottom. Rung 1 cross-section +0.008, rung 2 pooled -0.108, rung 3 product fixed effects -1.788 drawn in amber, rung 4 product and month effects -1.854, rung 5 placebo mean -0.002. A side panel lists three robustness rows for rung 3: weighted by units -2.216, freight-inclusive price -1.881, months with two or more units -1.480. A small sketched person stands at the foot of the ladder.">
+        <defs>
+          <filter id="d2dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d2dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d2dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d2dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d2dL { font: 700 11px Inter, sans-serif; fill: #16213A; }
+          .d2dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d2dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d2dV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .d2dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .d2dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d2dH" x="30" y="26">FIVE RUNGS, ONE PANEL, THE NUMBER ON EACH</text>
+
+        <g filter="url(#d2dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- rails -->
+          <path d="M150 50 L146 372" stroke-width="3"/>
+          <path d="M330 50 L334 372" stroke-width="3"/>
+          <!-- rungs, bottom to top -->
+          <path d="M148 330 L332 330" stroke-width="3"/>
+          <path d="M148 265 L332 265" stroke-width="3"/>
+          <path d="M148 200 L332 200" stroke="#A8570B" stroke-width="5"/>
+          <path d="M148 135 L332 135" stroke-width="3"/>
+          <path d="M148 70 L332 70" stroke-width="3" stroke-dasharray="8 6"/>
+          <!-- number tags to the right of each rung -->
+          <rect x="356" y="314" width="92" height="30" rx="4" transform="rotate(-0.8 402 329)" fill="#FFFFFF"/>
+          <rect x="356" y="249" width="92" height="30" rx="4" transform="rotate(0.7 402 264)" fill="#EEF2F8"/>
+          <rect x="356" y="184" width="92" height="30" rx="4" transform="rotate(-0.6 402 199)" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="356" y="119" width="92" height="30" rx="4" transform="rotate(0.5 402 134)" fill="#EEF2F8"/>
+          <rect x="356" y="54" width="92" height="30" rx="4" transform="rotate(-0.7 402 69)" fill="url(#d2dHc)"/>
+          <!-- side panel: the robustness rows -->
+          <rect x="620" y="150" width="230" height="120" rx="8" transform="rotate(0.5 735 210)" fill="#FBEEDC" stroke="#A8570B"/>
+          <path d="M456 199 L612 199" stroke="#A8570B" marker-end="url(#d2dAr)"/>
+          <!-- a person at the foot of the ladder -->
+          <circle cx="90" cy="312" r="9" fill="#FFFFFF"/>
+          <path d="M90 321 L90 350 M90 330 L76 342 M90 330 L104 342 M90 350 L80 370 M90 350 L100 370"/>
+        </g>
+
+        <text class="d2dL" x="240" y="322" text-anchor="middle">rung 1 · across products</text>
+        <text class="d2dL" x="240" y="257" text-anchor="middle">rung 2 · pooled, no controls</text>
+        <text class="d2dB" x="240" y="190" text-anchor="middle">rung 3 · product effects</text>
+        <text class="d2dL" x="240" y="127" text-anchor="middle">rung 4 · product + month</text>
+        <text class="d2dL" x="240" y="62" text-anchor="middle">rung 5 · placebo, 200 draws</text>
+        <text class="d2dV" x="402" y="335" text-anchor="middle">+0.008</text>
+        <text class="d2dV" x="402" y="270" text-anchor="middle">-0.108</text>
+        <text class="d2dW" x="402" y="205" text-anchor="middle">-1.788</text>
+        <text class="d2dV" x="402" y="140" text-anchor="middle">-1.854</text>
+        <text class="d2dV" x="402" y="75" text-anchor="middle">-0.002</text>
+        <text class="d2dS" x="460" y="335">naive se 0.011 · on the 203: -0.001</text>
+        <text class="d2dS" x="460" y="270">naive se 0.028 · 2,216 rows</text>
+        <text class="d2dS" x="460" y="140">naive se 0.150</text>
+        <text class="d2dS" x="460" y="75">sd 0.159 · max abs 0.444</text>
+        <text class="d2dB" x="632" y="176">rung 3, one decision flipped</text>
+        <text class="d2dL" x="632" y="200">weighted by units</text><text class="d2dL" x="838" y="200" text-anchor="end">-2.216</text>
+        <text class="d2dL" x="632" y="222">price incl. freight</text><text class="d2dL" x="838" y="222" text-anchor="end">-1.881</text>
+        <text class="d2dL" x="632" y="244">months with 2+ units</text><text class="d2dL" x="838" y="244" text-anchor="end">-1.480</text>
+        <text class="d2dS" x="632" y="262">naive se 0.143 · 0.154 · 0.142</text>
+
+        <text class="d2dN" x="30" y="392">Climb it in order. Each rung is one line of pandas more than the last, and the number changes by a factor of sixteen between rung 2 and rung 3.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber rung is the one to publish, with the three flipped-decision numbers beside it as its range</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Load the panel and write the slope function once.</strong> The slope of y on x, optionally weighted, with the conventional standard error. It is the same function for every rung, which is the point: the rungs differ in what goes in, never in the fit.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · load and slope</span>import numpy as np
+import pandas as pd
+
+panel = pd.read_csv("panel_2018-09-01.csv")   # from deep-dive session 1
+print(len(panel), panel["product_id"].nunique())   # 2216 203
+
+def slope(x, y, w=None):
+    """OLS slope of y on x and its naive (conventional, unclustered) standard error."""
+    x = np.asarray(x, float); y = np.asarray(y, float)
+    w = np.ones_like(x) if w is None else np.asarray(w, float)
+    xm = np.average(x, weights=w); ym = np.average(y, weights=w)
+    sxx = np.sum(w * (x - xm) ** 2); sxy = np.sum(w * (x - xm) * (y - ym))
+    b = sxy / sxx
+    resid = y - ym - b * (x - xm)
+    naive_se = np.sqrt(np.sum(w * resid ** 2) / (len(x) - 2) / sxx)
+    return b, naive_se</div>
+      </div>
+      <div class="step">
+        <p><strong>Rung 1: the cross-section on the 203.</strong> One dot per product, total units against mean price. The 4,731-product version (+0.008, naive standard error 0.011) needs the full item table and is quoted from the offline run; on the 203 the answer is the same: nothing.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · rung 1, across products</span>cs = panel.groupby("product_id").agg(units=("units", "sum"), price=("price", "mean"))
+b, se = slope(np.log(cs["price"]), np.log(cs["units"]))
+print(f"rung 1  across the 203 products:  {b:+.3f}  (naive se {se:.3f})")
+# rung 1  across the 203 products:  -0.001  (naive se 0.058)
+# across all 4,731 products with 5+ units (offline, needs the item table): +0.008 (naive se 0.011)</div>
+      </div>
+      <div class="step">
+        <p><strong>Rung 2: pooled.</strong> All 2,216 rows, one line, no intercepts per product. The number looks like a small elasticity. It is a blend.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · rung 2, pooled</span>b, se = slope(panel["lp"], panel["lq"])
+print(f"rung 2  pooled, no controls:       {b:+.3f}  (naive se {se:.3f})")
+# rung 2  pooled, no controls:       -0.108  (naive se 0.028)</div>
+      </div>
+      <div class="step">
+        <p><strong>Rung 3: demean by product.</strong> One helper, one line per column, then the same fit. This is the regression with 203 product dummies, without building them.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · rung 3, product fixed effects</span>def demean(df, col, by):
+    return df[col] - df.groupby(by)[col].transform("mean")
+
+lp_w = demean(panel, "lp", "product_id")
+lq_w = demean(panel, "lq", "product_id")
+b, se = slope(lp_w, lq_w)
+print(f"rung 3  product fixed effects:     {b:+.3f}  (naive se {se:.3f})")
+# rung 3  product fixed effects:     -1.788  (naive se 0.149)</div>
+      </div>
+      <div class="step">
+        <p><strong>Rung 4: product and month effects by alternating projections.</strong> Subtract product means, subtract month means, repeat. Fifty passes is far more than the panel needs and costs nothing.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · rung 4, two-way effects</span>def twoway_demean(df, col, a, b, iters=50):
+    v = df[col].astype(float).copy()
+    for _ in range(iters):
+        v = v - v.groupby(df[a]).transform("mean")
+        v = v - v.groupby(df[b]).transform("mean")
+    return v
+
+panel["m"] = panel["month"].astype(str)
+b, se = slope(twoway_demean(panel, "lp", "product_id", "m"),
+              twoway_demean(panel, "lq", "product_id", "m"))
+print(f"rung 4  product + month effects:   {b:+.3f}  (naive se {se:.3f})")
+# rung 4  product + month effects:   -1.854  (naive se 0.150)</div>
+      </div>
+      <div class="step">
+        <p><strong>Three decisions flipped, one at a time.</strong> Each is rung 3 with a single change. Print all three before quoting any one of them; together they are the range.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · the robustness rows</span>b, se = slope(lp_w, lq_w, w=panel["units"])
+print(f"  weighted by units:               {b:+.3f}  (naive se {se:.3f})")
+# weighted by units:                 -2.216  (naive se 0.143)
+
+p2 = panel.assign(lpf=np.log(panel["price"] + panel["freight"]))
+b, se = slope(demean(p2, "lpf", "product_id"), demean(p2, "lq", "product_id"))
+print(f"  price incl. freight:             {b:+.3f}  (naive se {se:.3f})")
+# price incl. freight:               -1.881  (naive se 0.154)
+
+p3 = panel[panel["units"] &gt;= 2]
+b, se = slope(demean(p3, "lp", "product_id"), demean(p3, "lq", "product_id"))
+print(f"  months with 2+ units:            {b:+.3f}  (naive se {se:.3f}), {len(p3)} rows")
+# months with 2+ units:              -1.480  (naive se 0.142), 1850 rows</div>
+      </div>
+      <div class="step">
+        <p><strong>Rung 5: the placebo.</strong> Shuffle log price inside each product, demean, refit, 200 times. The mean and sd are "about" because a different generator order gives slightly different draws; the offline run with this seed gave -0.002 and 0.159, and the browser's own generator in deep-dive session 10 gave -0.003 and 0.170.</p>
+        <div class="prompt-box good"><span class="label">★ Step 7 · rung 5, shuffle within product</span>rng = np.random.default_rng(20180901)
+bs = []
+for _ in range(200):
+    sh = panel.groupby("product_id")["lp"].transform(
+        lambda s: pd.Series(rng.permutation(s.values), index=s.index))
+    lp_sh = sh - sh.groupby(panel["product_id"]).transform("mean")
+    bs.append(slope(lp_sh, lq_w)[0])
+bs = np.array(bs)
+print(f"rung 5  placebo: mean {bs.mean():+.3f}, sd {bs.std():.3f}, max abs {np.abs(bs).max():.3f}")
+# rung 5  placebo: mean about -0.002, sd about 0.159, max abs about 0.444
+print(f"real slope is {abs(-1.788 / bs.std()):.1f} placebo sd from zero")   # about 11</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Print the ladder as one block, every time.</strong> Five rungs and three flipped decisions, eight lines, before a single number leaves the notebook. A reader who sees only -1.788 has to trust you; a reader who sees +0.008 above it and -0.002 below it can see for themselves what the number is and what it is not.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before deep-dive session 3</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Run the seven steps</strong> on the saved panel and check every printed number against the comment beside it. Any three-decimal difference means the panel is not the panel; find which of deep-dive session 1's three decisions moved.</li>
+      <li><strong>Flip a fourth decision.</strong> Restrict rung 3 to one category (bed, bath and table has 22 products and 241 rows) and print the slope with its naive standard error. Write one sentence on whether it is distinguishable from the all-category number.</li>
+      <li><strong>Run the placebo with a different seed</strong> and a different draw count (500). Write down the mean and sd, and how many placebo standard deviations -1.788 is from zero this time.</li>
+      <li><strong>Write the label.</strong> One sentence that says what -1.788 is and what it is not, including the words "within product", "placebo" and "not causal". That sentence goes above every chart that uses the number.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 2 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Across 4,731 products, a line through mean price and total units has slope +0.008 with a naive standard error of 0.011. What does that say about demand?</p>
+      <button class="qopt" type="button">A · Demand on this marketplace is perfectly inelastic, so prices can rise without losing units</button>
+      <button class="qopt" type="button">B · The data is too noisy to say anything, and the panel should be rebuilt with more products</button>
+      <button class="qopt" type="button">C · Nothing about demand. The line compares different products at different prices, and a R$ 300 watch sells fewer units than a R$ 30 towel because it is a watch; the slope measures the shape of the catalogue, not the response to a price change</button>
+      <button class="qopt" type="button">D · That cheap products are slightly more popular, since the slope is positive</button>
+      <p class="qwhy">An elasticity answers "if this product's price moved, how would its units move". A cross-section holds thousands of answers to "which products are cheap and which are popular", and those are set by different things. Inside each of the eight biggest categories the slope stays between -0.035 and +0.089.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Rung 2 (pooled) gives -0.108 and rung 3 (product fixed effects) gives -1.788 on the same 2,216 rows. What does the fixed effect do?</p>
+      <button class="qopt" type="button">A · It subtracts each product's own mean of log price and log units from that product's rows, so the fit only sees how a product's months differ from its own usual month; everything constant about a product, its category, seller, level and volume, is removed</button>
+      <button class="qopt" type="button">B · It drops the products with the most extreme slopes so the line is not pulled by outliers</button>
+      <button class="qopt" type="button">C · It weights each product by its units so that bestsellers dominate the fit</button>
+      <button class="qopt" type="button">D · It removes the months where the marketplace grew, so the calendar cannot drive the slope</button>
+      <p class="qwhy">Demeaning within product is the same regression as one with 203 product dummies. Option D describes the month effect of rung 4, which moves the answer from -1.788 to -1.854; the product effect is what moves it from -0.108 to -1.788.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · The placebo shuffles log price within each product 200 times and the refitted slope averages -0.002 with sd 0.159. The real slope is -1.788. What is the honest label for -1.788?</p>
+      <button class="qopt" type="button">A · A causal price elasticity, since the placebo proves the price caused the units to move</button>
+      <button class="qopt" type="button">B · A number that is probably noise, since the placebo sd of 0.159 is large</button>
+      <button class="qopt" type="button">C · The marketplace-wide elasticity for Brazilian e-commerce</button>
+      <button class="qopt" type="button">D · A within-product association with a placebo behind it. The placebo shows the slope is not a fitting artefact, and the fixed effects remove what is constant about a product and a month; none of it removes that the seller chose the price after seeing demand, so it is not a causal elasticity</button>
+      <p class="qwhy">-1.788 is more than eleven placebo standard deviations from zero, so it is not noise and not the method. It is also not an experiment: a seller cuts price when stock is high and raises it when a product is ending. The number to publish is the range -1.5 to -2.2 with the label on.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Rung 1: cross-section across 4,731 products +0.008 (naive se 0.011); by category, none of eight below -0.04; on the 203 eligible products -0.001 (naive se 0.058)</span><span class="note">Computed from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0) for these pages</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Rung 2 pooled -0.108 (naive se 0.028); rung 3 product fixed effects -1.788 (naive se 0.149); rung 4 product and month effects -1.854 (naive se 0.150), all on 2,216 rows</span><span class="note">Computed; standard errors are conventional OLS, unclustered, and called naive throughout</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Robustness: weighted by units -2.216 (naive se 0.143); freight-inclusive price -1.881 (naive se 0.154); months with 2+ units -1.480 (naive se 0.142) on 1,850 rows; the two-scope statement -1.5 to -2.2, about -1.8</span><span class="note">Computed</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Placebo: log price shuffled within product, 200 draws, seed 20180901: mean -0.002, sd 0.159, max abs 0.444; the real slope more than 11 placebo sd from zero</span><span class="note">Computed; a different generator order gives slightly different draws, so the build-along says "about"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Fixed effects as demeaning; Frisch-Waugh-Lovell; omitted variable bias in a cross-section</span><span class="note">Standard econometrics, no single source</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Confounding, the steps from association to cause, and the price experiment</span><span class="note">Named and linked to the causal inference and experimentation courses; not taught here</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Across products = the catalogue</b><span>+0.008 on 4,731 products. Cheap products are not popular products. Not an elasticity.</span></div>
+      <div class="cheat-item"><b>Pooled = a blend</b><span>-0.108 on 2,216 rows. Mostly still comparing products with products.</span></div>
+      <div class="cheat-item"><b>Within product = the elasticity</b><span>-1.788, naive se 0.149. Subtract each product's mean, fit one line. 203 intercepts.</span></div>
+      <div class="cheat-item"><b>Month effects move it a little</b><span>-1.854. Weighted -2.216, freight -1.881, 2+ units -1.480. Publish -1.5 to -2.2.</span></div>
+      <div class="cheat-item"><b>Placebo = what nothing looks like</b><span>Shuffle price within product, 200 times: mean -0.002, sd 0.159. Real slope 11 sd away.</span></div>
+      <div class="cheat-item"><b>The label</b><span>Within-product association with a placebo behind it. The seller chose the price. Not causal.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You have a number with a range and a label. Deep-dive session 3 puts it to work: under -0.108 a 10 percent price rise gains 8.9 percent of revenue, and under -1.788 it loses 7.2, so the first thing an elasticity buys you is the sign of a pricing decision. Then the ways a seller charges different prices to different buyers, first, second and third degree, versioning as a menu that sorts customers, and why a free tier is a price too.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 2 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p1-demand-from-data.html">← Prev: Demand from data</a> &nbsp;·&nbsp; <a href="p3-pricing-with-the-number.html">Next: Pricing with the number →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

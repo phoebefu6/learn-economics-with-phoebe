@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 6 of 10. Why a price is sometimes a question: sealed bids, first price against second price, Vickrey's result that bidding your true value is a dominant strategy, the generalised second-price ladder that sells ad positions and is not truthful (Edelman, Ostrovsky and Schwarz 2007), spot compute as an auction in disguise, and the winner's curse. Python build-along: a second-price auction in about twenty lines with constructed bidders, and the check that shading never helps.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Auctions: how ads and compute are priced - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 6 of 10. Three sealed bids, one winner, and a price that is not the winner's bid. Why honesty is safe in one design and a mistake in the next.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p6-auctions.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Auctions: how ads and compute are priced - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 6 of 10. Sealed bids, the position ladder, and the curse of winning.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 6 · Auctions: how ads and compute are priced - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 6 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 6 of 10</div>
+    <h1>Auctions: how ads and <span class="accent">compute</span> are priced</h1>
+    <p class="sub">Most prices on a marketplace are typed in by a seller who has a rough idea of what buyers will pay. An auction is what you run when nobody has that idea: the value of the thing is locked inside the heads of the people who want it, and the mechanism's whole job is to get it out of them at a price they will not regret. Two of the largest markets in the data economy are auctions, and neither looks like one from outside. Every ad position on a search page is sold by sealed bid in the time it takes the page to load, and spare compute is sold on a spot market where the price is whatever the marginal buyer was willing to pay. Tonight is the mechanism: why bidding your true value is safe in one design and a mistake in the next, why the position ladder that sells ads is not the honest auction it is often assumed to be, and why the winner of a common-value auction is, on average, the person who was most wrong. You leave with a working second-price auction in about twenty lines and a check that shading your bid never helps and sometimes costs you the item.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Analysts, growth and platform teams</span>
+      <span class="chip audience">Python, numpy</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Sealed bids, the ladder, the spot market</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: a second-price auction and the shading check</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Deep-dive sessions 1 to 3 measured how buyers respond to a price a seller chose. An auction turns that around: the seller chooses nothing but the rules, and the buyers reveal, through their bids, what the seller could never have measured. The design of the rules decides what the bids reveal. Under one rule the best thing a bidder can do is tell the truth about her value; under a rule that looks almost identical, telling the truth leaves money on the table and everyone learns to shade. Deep-dive session 5 ended on moats and the two-sided marketplace; tonight is the pricing mechanism that most two-sided platforms actually run, and the trap inside it.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The reason auctions exist at all, the one-line difference between a first-price and a second-price rule and why it changes what people bid, Vickrey's 1961 result stated precisely enough to use, the generalised second-price ladder that sells ad positions and the 2007 proof that it is not truthful, a spot market for compute read as an auction, the winner's curse with its cure, and a numpy auction engine that shows in ten thousand random draws that shading a bid in a second-price auction never lowers the price you pay and sometimes loses you the item.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers unknown values, first price and second price</span>
+      <h2>Why a price is sometimes a question</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A seller who knows roughly what the thing is worth to buyers posts a price. A seller who has no idea, because the thing is unique, or new, or worth wildly different amounts to different people, cannot post one without either leaving money on the table or scaring everyone off. So the seller asks. The trouble is that a buyer asked "what is this worth to you?" has every reason to answer low, and the art of auction design is choosing rules under which the honest answer is also the smart one. The three bidders below are invented, and the mechanism they walk through is not.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three hand-drawn bidder cards on the left, Ana who values the item at 80, Bo at 65 and Cy at 50, each with a small sealed envelope, feed by arrows into a hatched box of sealed bids. From the box an arrow leads to a winner card reading Ana, highest bid 80, and from there to an amber price tag reading pays 65, the second bid. All values are labelled invented.">
+        <defs>
+          <filter id="d6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d6aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d6aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d6aL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d6aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d6aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d6aV { font: 800 18px Inter, sans-serif; fill: #142944; }
+          .d6aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d6aH" x="30" y="26">THREE SEALED BIDS, ONE WINNER, ONE PRICE THAT IS NOT THE WINNER'S BID</text>
+        <text class="d6aS" x="30" y="44">three constructed bidders; every value on this drawing is invented</text>
+
+        <g filter="url(#d6aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- three bidder cards -->
+          <rect x="30" y="64" width="170" height="48" rx="6" transform="rotate(-1.2 115 88)" fill="#FFFFFF"/>
+          <rect x="30" y="124" width="170" height="48" rx="6" transform="rotate(0.9 115 148)" fill="#FFFFFF"/>
+          <rect x="30" y="184" width="170" height="48" rx="6" transform="rotate(-0.7 115 208)" fill="#FFFFFF"/>
+          <!-- three small envelopes on the arrows -->
+          <rect x="222" y="80" width="22" height="15" rx="2" transform="rotate(-3 233 87)"/>
+          <path d="M222 80 L233 89 L244 80"/>
+          <rect x="222" y="140" width="22" height="15" rx="2" transform="rotate(2 233 147)"/>
+          <path d="M222 140 L233 149 L244 140"/>
+          <rect x="222" y="200" width="22" height="15" rx="2" transform="rotate(-2 233 207)"/>
+          <path d="M222 200 L233 209 L244 200"/>
+          <!-- the sealed box -->
+          <rect x="300" y="70" width="140" height="140" rx="8" transform="rotate(0.5 370 140)" fill="url(#d6aHc)"/>
+          <!-- the winner card -->
+          <rect x="500" y="96" width="160" height="88" rx="8" transform="rotate(-0.6 580 140)" fill="#EEF2F8"/>
+          <!-- the price tag: the one amber thing -->
+          <path d="M704 104 L830 104 L850 140 L830 176 L704 176 Z" transform="rotate(1 777 140)" fill="#FBEEDC" stroke="#A8570B"/>
+          <circle cx="716" cy="140" r="3" stroke="#A8570B"/>
+          <!-- arrows -->
+          <path d="M204 88 L218 88"/>
+          <path d="M248 88 L294 106" marker-end="url(#d6aAr)"/>
+          <path d="M204 148 L218 148"/>
+          <path d="M248 148 L294 144" marker-end="url(#d6aAr)"/>
+          <path d="M204 208 L218 208"/>
+          <path d="M248 208 L294 180" marker-end="url(#d6aAr)"/>
+          <path d="M444 140 L494 140" marker-end="url(#d6aAr)"/>
+          <path d="M664 140 L698 140" marker-end="url(#d6aAr)"/>
+        </g>
+
+        <text class="d6aL" x="42" y="84">Ana values it at 80</text>
+        <text class="d6aS" x="42" y="100">bids 80, her true value</text>
+        <text class="d6aL" x="42" y="144">Bo values it at 65</text>
+        <text class="d6aS" x="42" y="160">bids 65, his true value</text>
+        <text class="d6aL" x="42" y="204">Cy values it at 50</text>
+        <text class="d6aS" x="42" y="220">bids 50, his true value</text>
+
+        <text class="d6aL" x="370" y="60" text-anchor="middle">sealed bids, opened together</text>
+        <text class="d6aL" x="512" y="120">winner: Ana</text>
+        <text class="d6aS" x="512" y="138">the highest bid, 80</text>
+        <text class="d6aS" x="512" y="154">decides who wins</text>
+        <text class="d6aS" x="512" y="170">and nothing else</text>
+        <text class="d6aV" x="728" y="136">pays 65</text>
+        <text class="d6aB" x="728" y="156">the second bid, Bo's</text>
+
+        <text class="d6aS" x="30" y="262">Ana's bid decides whether she wins. Bo's bid decides what she pays. Ana cannot touch the 65 by changing her own bid.</text>
+        <text class="d6aN" x="30" y="300">The price is someone else's bid. Bidding your true value costs nothing; shading can only lose the item.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber tag is the whole trick: the winner pays a number that no change in her own bid can move, which is why she has no reason to lie about it</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The problem an auction solves: the seller does not know the value<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Posting a price needs an estimate of demand.</strong> Deep-dive sessions 1 to 3 built that estimate from months of repeated sales of the same product. An ad position on one search page at one second, or a block of spare compute for the next hour, has no such history: it is sold once, it is worth different amounts to different bidders, and those amounts are private. Post a price and one of two things happens. It is too low, and the buyer who valued it most pays less than she would have; or it is too high, and it goes unsold. Either way the seller has thrown away information that only the buyers had.</p>
+        <p><strong>An auction asks the buyers instead.</strong> The bids are the information the seller lacked. But asking is not free of trouble, because a buyer knows the answer will be used against her. Under a first-price rule, where the winner pays her own bid, "what is this worth to you?" is a question every rational bidder answers low. Under a second-price rule, where the winner pays the highest losing bid, the same question can be answered honestly with no regret. The difference between the two rules is one line of code, and it changes what every bid on the page means.</p>
+        <p><strong>The three bidders above are constructed.</strong> Ana values the item at 80, Bo at 65, Cy at 50, and none of them knows the others' numbers. The point of the drawing is the tag: Ana wins because her bid was highest, and she pays 65 because that was Bo's bid. Her own bid appears nowhere in the price.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>First price against second price, on the same three bids<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>First price:</strong> highest bid wins and pays its own bid. If Ana bids her true 80 she wins and pays 80, and her surplus is zero; she would have been just as happy losing. So she shades. Bid 70 and she still wins, paying 70, with 10 of surplus. Bid 66 and she wins with 14 of surplus, but she is guessing at Bo's bid, and if she guesses wrong she loses an item worth 80 to her. Every first-price bidder is playing a guessing game against the other bidders' unknown values, and the bids on the sheet are guesses, not values.</p>
+        <p><strong>Second price:</strong> highest bid wins and pays the highest losing bid. Ana bids 80, wins, and pays 65. Now try to improve on that. Bid 90: she still wins and still pays 65, because Bo's bid did not move. Bid 70: still wins, still pays 65. Bid 60: she loses to Bo, and forgoes an item worth 80 that she could have had for 65. There is no bid that beats bidding her true value, and several that are worse. The bids on the sheet are values, which is what the seller wanted to know in the first place.</p>
+        <p>The same three people, the same three values, and under one rule the sheet is a guessing game while under the other it is a survey with no reason to lie. That is the sense in which the rules decide what the data means.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Vickrey 1961, and what "dominant strategy" means precisely<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Vickrey 1961, "Counterspeculation, Auctions, and Competitive Sealed Tenders", Journal of Finance 16(1) 8-37, is the paper that made the second-price sealed-bid rule a named mechanism. Its result, in the form worth carrying: in a second-price sealed-bid auction for a single item, bidding your true value is a <strong>dominant strategy</strong>, meaning it is at least as good as any other bid no matter what every other bidder does. Not "in equilibrium", not "if the others are rational", not "on average". Whatever Bo and Cy bid, whatever they know, whatever they are trying to do, Ana's best move is 80.</p>
+        <p>The proof fits in four sentences. Let the highest rival bid be b. If Ana's value v is above b, any bid above b wins and pays b, so she gets v minus b, and any bid below b loses and gets zero; bidding v is in the first group. If v is below b, any bid above b wins and pays b, a loss of b minus v, and any bid below b loses and gets zero; bidding v is in the second group. In both cases bidding v does as well as the best available option, and it does so without Ana needing to know b, which is the whole point: she has to know only her own value, which is the one thing she does know.</p>
+        <p>The result is fragile in an instructive way. It needs one item, one winner, and a rule that charges the winner a price her own bid cannot influence. Change any of those, as the ad ladder in Part 2 does, and the dominance goes away.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The position that is sold while the page loads.</strong> A search page has a handful of ad positions and, for a given query, a set of advertisers who each have a private idea of what a click is worth to them. No history of that exact query, that exact set of advertisers and that exact second exists to fit a demand curve on, so the position is auctioned each time the page is requested. The advertisers do not attend; they leave a standing bid, and the auction runs between the request and the render. Everything that makes an auction the right tool is present: unique item, private values, no posted-price history. Everything that makes the rules matter is present too, which is Part 2.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the position ladder and GSP</span>
+      <h2>The ladder of positions, and why it is not Vickrey</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Vickrey's rule sells one item. An ad page sells several positions at once, and the top position gets more clicks than the second, which gets more than the third. The rule the industry settled on is called the generalised second price, GSP: rank the advertisers by bid, give the top bidder the top position, the second the second, and charge each of them the bid of the advertiser ranked just below. It sounds like Vickrey with more rungs. Edelman, Ostrovsky and Schwarz 2007, American Economic Review 97(1) 242-259, showed it is not: truth-telling is not an equilibrium of GSP, and the drawing below is the reason in one invented example.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn ladder with three rungs on the left: slot 1 with 100 clicks where bidder A bids 10 and pays 7, slot 2 with 80 clicks where B bids 7 and pays 4, slot 3 with 50 clicks where C bids 4 and pays 2, and a hatched no-slot region below where D bids 2 and gets nothing. On the right an amber panel works the shading: truthful in slot 1 earns 10 minus 7 times 100, 300; bidding 6.9 drops A to slot 2 and earns 10 minus 4 times 80, 480, so shading wins 180 more. All figures are labelled invented. A small figure stands beside the ladder.">
+        <defs>
+          <filter id="d6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d6bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d6bL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d6bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d6bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d6bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d6bH" x="30" y="26">FOUR BIDDERS, THREE POSITIONS: EACH PAYS THE BID BELOW</text>
+        <text class="d6bS" x="30" y="44">constructed bids and click counts; the ladder is the real mechanism, the numbers are invented</text>
+
+        <g filter="url(#d6bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the two rails -->
+          <path d="M60 58 L60 298" stroke="#1F3A5F" stroke-width="2.4"/>
+          <path d="M420 58 L420 298" stroke="#1F3A5F" stroke-width="2.4"/>
+          <!-- three rungs -->
+          <rect x="60" y="70" width="360" height="48" rx="4" transform="rotate(-0.4 240 94)" fill="#EEF2F8"/>
+          <rect x="60" y="130" width="360" height="48" rx="4" transform="rotate(0.5 240 154)" fill="#EEF2F8"/>
+          <rect x="60" y="190" width="360" height="48" rx="4" transform="rotate(-0.3 240 214)" fill="#EEF2F8"/>
+          <!-- no slot -->
+          <rect x="60" y="250" width="360" height="36" rx="4" transform="rotate(0.4 240 268)" fill="url(#d6bHc)"/>
+          <!-- the person beside the ladder -->
+          <circle cx="446" cy="96" r="7"/>
+          <path d="M446 103 L446 124 M446 110 L436 118 M446 110 L456 118 M446 124 L440 138 M446 124 L452 138"/>
+          <!-- the shading panel: the one amber thing -->
+          <rect x="470" y="70" width="380" height="136" rx="8" transform="rotate(0.5 660 138)" fill="#FBEEDC" stroke="#A8570B"/>
+          <!-- the VCG contrast box -->
+          <rect x="470" y="230" width="380" height="56" rx="8" transform="rotate(-0.4 660 258)" fill="#FFFFFF"/>
+        </g>
+
+        <text class="d6bL" x="76" y="90">position 1 · 100 clicks</text>
+        <text class="d6bL" x="250" y="90">A bids 10 · pays 7</text>
+        <text class="d6bS" x="76" y="108">the top rung, and the top price: B's bid</text>
+        <text class="d6bL" x="76" y="150">position 2 · 80 clicks</text>
+        <text class="d6bL" x="250" y="150">B bids 7 · pays 4</text>
+        <text class="d6bS" x="76" y="168">pays the bid one rung down: C's</text>
+        <text class="d6bL" x="76" y="210">position 3 · 50 clicks</text>
+        <text class="d6bL" x="250" y="210">C bids 4 · pays 2</text>
+        <text class="d6bS" x="76" y="228">pays the first losing bid: D's</text>
+        <text class="d6bL" x="76" y="273">no position</text>
+        <text class="d6bL" x="250" y="273">D bids 2 · pays 0</text>
+
+        <text class="d6bB" x="486" y="94">A's value is 10 per click (invented)</text>
+        <text class="d6bL" x="486" y="118">truthful, position 1: (10 - 7) x 100 = 300</text>
+        <text class="d6bL" x="486" y="140">bid 6.9, position 2: (10 - 4) x 80 = 480</text>
+        <text class="d6bB" x="486" y="166">shading wins 180 more: truth is not an equilibrium</text>
+        <text class="d6bS" x="486" y="190">Edelman, Ostrovsky and Schwarz 2007, AER 97(1) 242-259</text>
+        <text class="d6bL" x="486" y="252">VCG charges A for the harm A does to the others</text>
+        <text class="d6bS" x="486" y="270">and then truth is dominant again; self-study card</text>
+
+        <text class="d6bS" x="30" y="322">Click counts, bids and the value per click are invented; the payment rule is the real one.</text>
+        <text class="d6bN" x="30" y="350">GSP: you pay the bid below you. VCG: you pay the harm you cause. Only the second makes honesty safe.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber panel is the whole finding: A earns more by dropping one rung on purpose, so the bids on a GSP ladder are not values and were never meant to be read as values</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Rank by bid, pay the bid below: the generalised second price<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The rule.</strong> Take the standing bids for a query, sort them, and hand out the positions in order. The advertiser in position k pays the bid of the advertiser in position k plus 1, per click. The top bidder pays the second bid, the second pays the third, and the last position holder pays the first losing bid. With one position this is exactly Vickrey. With several it looks like Vickrey extended, and that resemblance is why it was adopted and why it is misread.</p>
+        <p><strong>Where the resemblance breaks.</strong> In Vickrey's single-item auction, a bidder who lowers her bid either keeps winning at the same price or loses everything; there is no third outcome. On a ladder there is: she can drop one rung. Dropping a rung means fewer clicks but a lower price per click, and whether that trade pays depends on the click counts and the bids beneath her. In the invented example, A values a click at 10. Truthful at the top she pays 7 per click on 100 clicks, for 300 of surplus. Bidding 6.9 puts her second, paying C's 4 on 80 clicks, for 480. She is better off lying, and she is better off lying by an amount that depends on numbers she has to guess. The sheet of bids is a set of strategic positions again, not a set of values.</p>
+        <p><strong>The 2007 result.</strong> Edelman, Ostrovsky and Schwarz 2007, American Economic Review 97(1) 242-259, state it directly: truth-telling is not an equilibrium of GSP. The paper goes further and characterises what the equilibria look like, but the sentence to carry is the one above. GSP is not VCG, and a bid on a GSP ladder is not a willingness to pay.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the finding means for anyone reading auction data<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The practical consequence is about interpretation, and it is the same lesson as deep-dive session 2 in a different costume. There, a slope fitted across products looked like an elasticity and was not one, because the products were not comparable. Here, a bid on a GSP ladder looks like a value and is not one, because the bidder had a reason to shade that depends on everyone else's bids. Anyone who takes a feed of GSP bids and reads it as "what advertisers think a click is worth" is reading a strategy as a measurement.</p>
+        <p>The honest reading of GSP bids is that they are bounded by values from above, a bidder will not bid more than a click is worth to her, and shaped by the ladder from below. What sits between the two is the bidder's guess about her rivals. That is enough to run the auction, which is all the platform needs, and not enough to recover the values, which is what an analyst wants. The values are recoverable only under a mechanism where honesty is dominant, and the ladder is not one.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>VCG in a paragraph<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The Vickrey-Clarke-Groves rule is Vickrey's idea carried to several items or positions. Instead of charging a winner the bid below her, it charges her the <strong>harm her presence does to everyone else</strong>: the total value the other bidders would have received had she not bid, minus the total value they actually receive with her in the auction. With one item that difference is exactly the second-highest bid, so VCG and Vickrey coincide. On the ladder it is different from GSP. In the invented example, A's presence pushes B from position 1 to 2, C from 2 to 3 and D out, and A is charged the sum of what those three lost, valued at their own bids. Because the charge depends only on the others' bids and the effect of A's position, A's own bid cannot lower her price without also changing her position, and the single-item argument goes through: truthful bidding is dominant again.</p>
+        <p>Why did the industry run GSP rather than VCG? The paper discusses it and the honest summary is that GSP arrived first, was simpler to explain, and was already in use when the difference was understood. The lesson for anyone designing a mechanism, an internal market for compute, a bidding round for a data budget, a ranking for who gets which project, is that "pay the next bid down" is intuitive and is not the truthful rule once there is more than one prize.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Reserve prices: the seller's own bid<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A reserve price is a bid the seller enters on her own behalf. In a second-price auction it works as a floor: if only one bidder is above it, that bidder wins and pays the reserve instead of the next bid, which would have been lower. Set well, a reserve raises the seller's revenue on average, because the second-highest bid is often well below the highest and the reserve fills the gap. Set too high, it leaves the item unsold in the draws where it would have sold at a lower price, and that is revenue lost.</p>
+        <p>The reserve does not disturb Vickrey's dominance for the bidders. Each bidder's price is still either the reserve or a rival's bid, and neither is something her own bid can move, so bidding her true value remains her best move. What the reserve changes is the seller's problem: she has to choose a number, and to choose it she needs an estimate of the distribution of values, which is exactly the thing she ran an auction to avoid estimating. In practice she learns it from past auctions, which is where auction data and the panel methods of deep-dive sessions 1 and 2 meet.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The internal market that copied the ladder.</strong> A common pattern in a company with more analysis requests than analysts is to let teams "bid" for the next quarter's capacity with a priority score, rank the requests, and serve them in order. It is a GSP ladder with the money removed. The same incentive appears: a team that would get served first at a high score and served second at a slightly lower one, with less scrutiny attached, learns to drop a rung. The fix is not to ask harder for honesty. It is to change the rule so that what a team says about its own priority cannot lower the cost of what it receives, which is Vickrey's condition, and it is harder to satisfy than a scoring sheet suggests.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Find the third outcome in a ladder you know" data-hint="Name a ranking your team runs: requests, budgets, positions. Write the rule in one line. Then write what happens to someone who drops one rung on purpose: what do they lose, and what gets cheaper? Three lines." data-seed="" data-cta="Write it"></div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers spot compute and the winner's curse</span>
+      <h2>Compute on the spot, and the curse of winning</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A spot market for compute is an auction that never closes. Capacity is fixed in the short run, buyers state the most they will pay per unit of time, and the price at any moment is the lowest bid that still gets served; when demand rises, the clearing price climbs past the lower bids and those jobs are stopped. No price is quoted on this page and no vendor is named, because the mechanism is the same regardless of either and the numbers change weekly. The second half of the Part is a different trap, the winner's curse, which appears whenever the thing being auctioned is worth the same to everyone and nobody knows what that is.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn horizontal value axis with a dashed vertical line at the true value of 100, which is unknown to every bidder. Five estimate dots sit on the axis at 84, 93, 101, 108 and 121. The dot at 121 is amber and marked as the winner with a small cup above it, and an amber bracket from 100 to 121 is labelled overestimate: 21. A side box reads five estimates of one value, each honest, each noisy, the highest one wins, and it is the most wrong. Every figure is labelled invented.">
+        <defs>
+          <filter id="d6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d6cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d6cL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d6cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d6cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d6cA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d6cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d6cH" x="30" y="26">ONE COMMON VALUE, FIVE HONEST GUESSES, AND THE WINNER IS THE WORST OF THEM</text>
+        <text class="d6cS" x="30" y="44">a used dataset, a mineral lease, a block of compute: worth the same to everyone, known to no one</text>
+
+        <g filter="url(#d6cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the axis -->
+          <path d="M60 200 L820 200" stroke="#1F3A5F" marker-end="url(#d6cAr)"/>
+          <!-- the true value, dashed -->
+          <path d="M440 92 L440 200" stroke="#4E5A75" stroke-dasharray="5 4"/>
+          <!-- the five estimates -->
+          <circle cx="312" cy="200" r="6" fill="#FFFFFF"/>
+          <circle cx="384" cy="200" r="6" fill="#FFFFFF"/>
+          <circle cx="448" cy="200" r="6" fill="#FFFFFF"/>
+          <circle cx="504" cy="200" r="6" fill="#FFFFFF"/>
+          <circle cx="608" cy="200" r="7" fill="#A8570B" stroke="#A8570B"/>
+          <!-- the overestimate bracket: amber -->
+          <path d="M440 158 L440 150 L608 150 L608 158" stroke="#A8570B" stroke-width="2.2"/>
+          <!-- a small cup over the winner -->
+          <path d="M598 168 L618 168 L614 182 L602 182 Z"/>
+          <path d="M604 182 L612 182 M608 182 L608 188 M602 188 L614 188"/>
+          <!-- side box -->
+          <rect x="660" y="60" width="190" height="90" rx="8" transform="rotate(-0.6 755 105)" fill="#EEF2F8"/>
+        </g>
+
+        <text class="d6cS" x="440" y="82" text-anchor="middle">true value 100, unknown to every bidder</text>
+        <text class="d6cB" x="524" y="142" text-anchor="middle">overestimate: 21</text>
+        <text class="d6cS" x="312" y="224" text-anchor="middle">84</text>
+        <text class="d6cS" x="384" y="224" text-anchor="middle">93</text>
+        <text class="d6cS" x="448" y="224" text-anchor="middle">101</text>
+        <text class="d6cS" x="504" y="224" text-anchor="middle">108</text>
+        <text class="d6cB" x="608" y="224" text-anchor="middle">121, wins</text>
+        <text class="d6cA" x="60" y="186">ESTIMATES</text>
+
+        <text class="d6cL" x="672" y="84">five estimates of one value</text>
+        <text class="d6cS" x="672" y="102">each honest, each noisy</text>
+        <text class="d6cS" x="672" y="120">the highest one wins</text>
+        <text class="d6cS" x="672" y="138">and it is the most wrong</text>
+
+        <text class="d6cS" x="30" y="258">The estimates are invented; the mechanism is not.</text>
+        <text class="d6cS" x="30" y="274">With one common value, the highest estimate wins, and the highest estimate is the most optimistic one.</text>
+        <text class="d6cN" x="30" y="304">Bid as if you have already won: shade more when there are more rivals, and never bid your own estimate.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the winner did nothing wrong except win; being selected for having the highest guess is what makes the guess wrong on average</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>A spot market is a sealed-bid auction that never closes<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The mechanism, with no numbers.</strong> A provider has capacity that would otherwise sit idle. Rather than post a price for it, the provider lets buyers state a maximum per unit of time and serves them from the highest maximum down until the capacity is used up. The price everyone pays is set by the last bid that got in, the marginal one, which is a second-price rule spread across many units: your own maximum decides whether you are served, and someone else's decides what you pay. When new demand arrives with higher maxima, the marginal bid rises, and any running job whose maximum is now below it is stopped. That stopping is the price of the discount, and it is not a failure of the system; it is the system.</p>
+        <p><strong>What it means for the bidder.</strong> The Vickrey logic applies per unit: the maximum you state should be what an hour of the job is actually worth to you, not what you hope the price will be, because your maximum does not set the price, it only sets whether you are in. Teams that state a low maximum to "save money" are not saving money; the price is the marginal bid whether their maximum is high or low. They are only raising the chance of being stopped. Teams that state a maximum above the on-demand price are paying nothing extra either, until the market clears above it, at which point they should have used on-demand anyway.</p>
+        <p><strong>What the page does not say.</strong> No price, because it changes weekly; no vendor, because the mechanism is the same at all of them and the details differ in ways that do not touch the economics. The exercise is to read your own provider's documentation with the mechanism in hand and check which parts are Vickrey and which are not.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The winner's curse: common values, private estimates<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Everything in Parts 1 and 2 assumed private values: the item is worth 80 to Ana and 65 to Bo, and those are different facts about different people. Many auctioned things are not like that. A dataset to be resold, a block of compute for a job whose payoff is a market outcome, a licence to something whose value is set by the world and not the buyer: these have a <strong>common value</strong>, one number worth the same to whoever wins, and the bidders differ only in their estimates of it. The five dots in the figure are five honest, unbiased estimates of the same 100, invented for the drawing.</p>
+        <p>Now run the auction. The highest estimate wins. But the highest of five unbiased estimates is not unbiased; it is biased upward, by construction, because it was selected for being highest. The winner is the bidder whose error was largest in the optimistic direction. If she bid her estimate, she paid 121 for something worth 100. That is the winner's curse: the news that you won is bad news about your estimate. The cure is to bid as if you already know you have won, meaning to condition your estimate on being the highest of n, which shades it downward by more when n is larger and when the estimates are noisier. Bidders who do not do this lose money on average and do not notice for a long time, because each individual win looks fine.</p>
+        <p>The cause and the cure are standard economics with no single source, and the page claims no figure for how large the curse is in any real market; the size depends on the noise in the estimates, which is the one thing the bidders cannot see. The mechanism, though, is worth carrying into every "we won the bid" celebration on a common-value item: ask what the winning implies about the estimate before asking what to do with the prize.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The training run that stopped at three in the morning.</strong> A constructed story with a real mechanism. A team put an overnight training job on spot capacity with a low maximum to keep the bill down, and it was stopped at 3 a.m. when demand rose and the marginal bid passed their number. In the morning the argument was about whether spot was "unreliable". It was not; it was doing exactly what its rule says. The team's maximum was a bid, not a price, and they had set it below what an hour of the job was worth to them, which under a second-price rule is the one mistake that costs you the item without ever saving you a cent. The fix was a maximum equal to the job's true hourly value, plus checkpoints so that being stopped costs an hour and not a night.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>A second-price auction in about twenty lines, and the shading check</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Four steps in plain Python and numpy. The bidders and their values are constructed and the page says so in every box; the auction rule is the real one. Step 1 runs one auction. Step 2 lets one bidder shade and shows the price does not move. Step 3 repeats it ten thousand times on random values with numpy's default generator and counts the wins lost by shading. Your numbers will differ from anyone else's, and the two things that will not differ are that the count is never negative and that shading never earns more.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as a hand-drawn track of five stations: draw invented values from a uniform distribution, form the bids either truthfully or with one bidder shading by ten percent, rank the bids so the highest wins, set the price to the second bid, and repeat ten thousand times counting the wins the shader lost. The price station is amber.">
+        <defs>
+          <filter id="d6dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d6dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d6dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d6dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d6dL { font: 700 11px Inter, sans-serif; fill: #16213A; }
+          .d6dS { font: 400 10.5px Inter, sans-serif; fill: #4E5A75; }
+          .d6dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d6dW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .d6dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d6dH" x="30" y="26">THE AUCTION ENGINE AS FIVE STATIONS</text>
+
+        <g filter="url(#d6dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 120 L812 120" stroke="#C9D2E2"/>
+          <rect x="40" y="90" width="148" height="60" rx="8" transform="rotate(-0.6 114 120)" fill="url(#d6dHc)"/>
+          <rect x="196" y="90" width="148" height="60" rx="8" transform="rotate(0.5 270 120)" fill="#FFFFFF"/>
+          <rect x="352" y="90" width="148" height="60" rx="8" transform="rotate(-0.4 426 120)" fill="#EEF2F8"/>
+          <rect x="508" y="90" width="148" height="60" rx="8" transform="rotate(0.6 582 120)" fill="#FBEEDC" stroke="#A8570B"/>
+          <rect x="664" y="90" width="148" height="60" rx="8" transform="rotate(-0.5 738 120)" fill="#1F3A5F" stroke="#1F3A5F"/>
+          <path d="M190 120 L194 120" marker-end="url(#d6dAr)"/>
+          <path d="M346 120 L350 120" marker-end="url(#d6dAr)"/>
+          <path d="M502 120 L506 120" marker-end="url(#d6dAr)"/>
+          <path d="M658 120 L662 120" marker-end="url(#d6dAr)"/>
+          <!-- a die, the doodle: the random draw -->
+          <rect x="112" y="48" width="18" height="18" rx="3" transform="rotate(8 121 57)"/>
+          <circle cx="117" cy="53" r="1.4" fill="#16213A"/>
+          <circle cx="125" cy="61" r="1.4" fill="#16213A"/>
+          <circle cx="121" cy="57" r="1.4" fill="#16213A"/>
+        </g>
+
+        <text class="d6dL" x="50" y="112">1 · draw values</text>
+        <text class="d6dS" x="50" y="128">n bidders, uniform</text>
+        <text class="d6dS" x="50" y="142">0 to 100, invented</text>
+        <text class="d6dL" x="206" y="112">2 · form the bids</text>
+        <text class="d6dS" x="206" y="128">truthful: bid = value</text>
+        <text class="d6dS" x="206" y="142">shader: 0.9 x value</text>
+        <text class="d6dL" x="362" y="112">3 · rank the bids</text>
+        <text class="d6dS" x="362" y="128">sort, descending</text>
+        <text class="d6dS" x="362" y="142">the highest wins</text>
+        <text class="d6dB" x="518" y="112">4 · the price</text>
+        <text class="d6dS" x="518" y="128">= the second bid</text>
+        <text class="d6dS" x="518" y="142">never the winner's</text>
+        <text class="d6dW" x="674" y="112">5 · repeat</text>
+        <text class="d6dW" x="674" y="128">10,000 draws</text>
+        <text class="d6dW" x="674" y="142">count wins lost</text>
+
+        <text class="d6dS" x="40" y="74">Station 4 is the whole mechanism. Station 2 is where the shader's mistake enters, and station 5 is where it is counted.</text>
+        <text class="d6dN" x="30" y="222">Count the draws where the shader held the highest value and still lost. That count is the lesson.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber station is the one line that makes honesty safe; everything else is bookkeeping around it</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>One auction, three bidders.</strong> The rule is a sort and two lookups. The values are the invented ones from the Part 1 figure; the comment says so, and the filename at the end will too.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · the rule</span>import numpy as np
+
+# Three constructed bidders. Every value is INVENTED; the mechanism is the point.
+values = {"Ana": 80, "Bo": 65, "Cy": 50}
+
+def second_price(bids):
+    """bids: name to bid. Highest bid wins and pays the highest LOSING bid."""
+    ranked = sorted(bids.items(), key=lambda kv: kv[1], reverse=True)
+    winner = ranked[0][0]
+    price  = ranked[1][1] if len(ranked) &gt; 1 else 0.0
+    return winner, price
+
+bids = dict(values)               # everyone bids their true value
+print(second_price(bids))         # ('Ana', 65): Ana wins and pays Bo's bid</div>
+      </div>
+      <div class="step">
+        <p><strong>Let Ana shade, and watch the price not move.</strong> Three shades. At 10 percent she still wins and still pays 65. At 20 percent her bid of 64 falls below Bo's 65 and she loses an item worth 80 to her, for which she would have paid 65. Nothing she does moves the 65; it is Bo's number.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · shading by hand</span>for shade in (0.9, 0.8, 0.7):
+    b = dict(values)
+    b["Ana"] = values["Ana"] * shade          # Ana bids below her value
+    print(shade, second_price(b))
+# 0.9 ('Ana', 65)     bid 72 still beats 65: same winner, same price
+# 0.8 ('Bo', 64.0)    bid 64 loses to Bo: Ana gives up 15 of surplus
+# 0.7 ('Bo', 56.0)    worse still; the price Bo pays is now Ana's shaded bid</div>
+      </div>
+      <div class="step">
+        <p><strong>Ten thousand random auctions.</strong> Three bidders with values drawn from a uniform distribution on 0 to 100, which is invented and labelled. Bidder 0 shades by 10 percent in one copy of each draw and bids truthfully in the other. Two counters: how many draws she wins each way, and her total surplus each way. Because the other bids are the same in both copies, the price she pays when she wins is identical, so shading can only remove wins, never cheapen them.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the shading check, many draws</span>rng = np.random.default_rng(20180901)     # any seed; your numbers will differ
+N, N_BIDDERS, SHADE = 10_000, 3, 0.9
+
+def surplus(bids, v0):
+    """bidder 0's surplus: value minus the second bid if she wins, else 0."""
+    if bids.argmax() != 0:
+        return 0.0
+    return v0 - np.sort(bids)[-2]
+
+wins_true = wins_shade = 0
+surp_true = surp_shade = 0.0
+for _ in range(N):
+    v = rng.uniform(0, 100, N_BIDDERS)     # invented values, one row per draw
+    truthful = v.copy()
+    shaded   = v.copy()
+    shaded[0] *= SHADE                     # bidder 0 shades by 10 percent
+    wins_true  += truthful.argmax() == 0
+    wins_shade += shaded.argmax() == 0
+    surp_true  += surplus(truthful, v[0])
+    surp_shade += surplus(shaded, v[0])
+
+print("wins, truthful:", wins_true, "  wins, shading:", wins_shade)
+print("wins lost by shading:", wins_true - wins_shade)
+print("surplus, truthful:", round(surp_true), "  surplus, shading:", round(surp_shade))
+# your numbers will differ; two things will not: the wins-lost count is never
+# negative, and the shading surplus is never above the truthful surplus</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the sentence.</strong> One line that is true of the run you just made and stops where the mechanism stops. Then save the draws with the word "constructed" in the filename so nobody reads them back as data.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the honest sentence</span>lost = wins_true - wins_shade
+sentence = (
+    f"In {N} constructed second-price auctions, shading by 10 percent lost "
+    f"{lost} wins and never lowered the price paid; bidding the true value "
+    f"is the dominant strategy (Vickrey 1961)."
+)
+print(sentence)          # your numbers will differ; the second clause never does
+
+np.save("auction_draws_constructed.npy", rng.uniform(0, 100, (N, N_BIDDERS)))</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Change the rule to first price and run Step 3 again.</strong> Replace <code>np.sort(bids)[-2]</code> with <code>bids[0]</code> in the surplus function, so the winner pays her own bid. Now the truthful bidder's surplus is zero on every win, and the shader's is positive: shading is the right move under a first-price rule, and the size of the right shade depends on how many rivals there are. Same values, one line changed, opposite advice. That is the whole of Part 1 in a diff.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before deep-dive session 7</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Run the four steps</strong> and then vary <code>N_BIDDERS</code> from 2 to 10. Write down how the wins-lost count changes with the number of rivals, and one sentence on why.</li>
+      <li><strong>Build the ladder.</strong> Extend Step 1 to three positions with invented click counts, charging each winner the bid below. Find a bid for the top bidder that beats her truthful bid, as in the Part 2 figure. Label every number invented.</li>
+      <li><strong>Read your provider's spot documentation</strong> with Part 3 in hand. Write which parts of the rule are Vickrey (your maximum decides whether you are in, not what you pay) and which parts are not. No prices in the write-up.</li>
+      <li><strong>Simulate the curse.</strong> Draw five noisy estimates of a common value of 100, invented, take the highest as the winner's bid, and repeat a thousand times. Report the average winning bid. It will be above 100, and the amount is the curse.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 6 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · In a second-price sealed-bid auction for one item, Ana values it at 80 and is thinking of bidding 70 "to save money". What does the shade do?</p>
+      <button class="qopt" type="button">A · Lowers the price she pays by 10 whenever she wins</button>
+      <button class="qopt" type="button">B · Lowers the price she pays only if the second bid is above 70</button>
+      <button class="qopt" type="button">C · Nothing to the price, which is the highest losing bid and does not depend on her own bid; it can only turn a win into a loss when the second bid lies between 70 and 80, so bidding 80 is a dominant strategy</button>
+      <button class="qopt" type="button">D · Raises her expected surplus, because a lower bid means a lower expected payment</button>
+      <p class="qwhy">Vickrey 1961, Journal of Finance 16(1) 8-37. The winner's price is somebody else's bid. Shading cannot move it and can only forfeit the item; the Step 3 count of wins lost is never negative and the shading surplus is never higher.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · The generalised second price ladder charges each position holder the bid of the advertiser ranked just below. Why is it not simply Vickrey with more rungs?</p>
+      <button class="qopt" type="button">A · Because ad clicks are not a real good, so no auction theory applies</button>
+      <button class="qopt" type="button">B · Because a bidder can drop one rung on purpose, taking fewer clicks at a lower price per click, and whether that pays depends on the other bids; Edelman, Ostrovsky and Schwarz 2007 show truth-telling is not an equilibrium of GSP, unlike VCG</button>
+      <button class="qopt" type="button">C · Because GSP charges the winner her own bid, like a first-price auction</button>
+      <button class="qopt" type="button">D · Because it is truthful only when there are exactly three positions</button>
+      <p class="qwhy">American Economic Review 97(1) 242-259. With one item a bidder can only win or lose; on a ladder she can also move down a rung, and that third outcome is what breaks the dominance argument. VCG, which charges the harm a bidder does to others, restores it.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · Five bidders each form an honest, unbiased estimate of a dataset's resale value, which is the same for all of them and known to none. The highest estimate wins at its own bid. What should the winner conclude?</p>
+      <button class="qopt" type="button">A · That her estimate was the best, since it won</button>
+      <button class="qopt" type="button">B · Nothing; unbiased estimates are unbiased whether or not they win</button>
+      <button class="qopt" type="button">C · That the other four bidders undervalued the dataset</button>
+      <button class="qopt" type="button">D · That winning is evidence her estimate was the most optimistic of the five, so it is biased upward on average; the cure is to bid as if you already know you have won, shading more when there are more rivals</button>
+      <p class="qwhy">The winner's curse. The highest of several unbiased estimates is not unbiased, because it was selected for being highest. Standard economics with no single source; the page claims no figure for its size, which depends on the noise the bidders cannot see.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why auctions exist: private values the seller cannot observe; first price against second price</span><span class="note">Standard economics, no single source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Vickrey 1961, "Counterspeculation, Auctions, and Competitive Sealed Tenders", Journal of Finance 16(1) 8-37: in a second-price sealed-bid auction, bidding your true value is a dominant strategy</span><span class="note">Primary; citation confirmed against the journal record</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Edelman, Ostrovsky and Schwarz 2007, American Economic Review 97(1) 242-259: the generalised second price auction; truth-telling is not an equilibrium of GSP, unlike VCG</span><span class="note">Primary; the abstract read at source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The three bidders (80, 65, 50), the four-bidder ladder with 100, 80 and 50 clicks, the five estimates around 100, and the 10,000 uniform draws</span><span class="note">Constructed; every value is invented and labelled, the rules are the real ones</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Spot markets for compute as a second-price rule spread across many units: your maximum decides whether you are served, the marginal bid decides the price</span><span class="note">Mechanism only; no price and no vendor is named, and the exercise is to check your own provider's rule against it</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The winner's curse: with a common value, the highest estimate wins and is biased upward by selection</span><span class="note">Standard economics, no single source; no figure for its size is claimed</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">VCG as the truthful multi-position rule; reserve prices as the seller's own bid</span><span class="note">Self-study; named and explained in a paragraph each, not built</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>An auction is a question</b><span>Run one when the value is private and unknown to the seller. The rules decide what the answers mean.</span></div>
+      <div class="cheat-item"><b>First price: guess. Second price: tell the truth</b><span>Pay your own bid and you shade. Pay the next bid and your own bid cannot touch the price.</span></div>
+      <div class="cheat-item"><b>Vickrey 1961, J. Finance 16(1)</b><span>Truthful bidding is dominant: best no matter what everyone else does. One item, one winner, price set by a rival.</span></div>
+      <div class="cheat-item"><b>GSP is not VCG</b><span>Edelman, Ostrovsky, Schwarz 2007, AER 97(1). Dropping a rung is the third outcome; truth is not an equilibrium.</span></div>
+      <div class="cheat-item"><b>Spot compute is an auction</b><span>Your maximum decides whether you are in; the marginal bid decides the price. Bid the job's true hourly worth.</span></div>
+      <div class="cheat-item"><b>The winner's curse</b><span>Common value, private estimates: the highest guess wins and is the most wrong. Bid as if you have already won.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Tonight priced things nobody could value in advance. Deep-dive session 7 turns to the argument everyone has an opinion on and almost nobody has measured: what generative models do to work. The move that makes it tractable is to stop talking about jobs and start talking about tasks. A job is a bundle of tasks, a tool touches one tile at a time, and Acemoglu and Restrepo 2019 draw the two forces, displacement and reinstatement, as two arrows on one line with the net left open. Three experiments since 2023 measured what a model does to specific tasks, one of them with a figure that is 19 percentage points and not 19 percent, and none of them measured what happens to the person whose week those tasks were part of. The build-along scores a task inventory for one role and ends in a sentence that stops exactly where the evidence does.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 6 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p5-network-effects-and-data-moats.html">← Prev: Network effects and data moats</a> &nbsp;·&nbsp; <a href="p7-labour-economics-of-ai.html">Next: Labour economics of AI →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

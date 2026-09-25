@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Foundations session 2 of 6. Elasticity as how much people respond; why an elastic product loses revenue when its price rises; who really pays a tax; and the 203 real marketplace products whose answer is a range between -1.5 and -2.2, not a point.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Incentives and elasticity - learn economics with phoebe">
+<meta property="og:description" content="Foundations session 2 of 6. How much do people respond when a price moves? One number, one revenue rule, one tax wedge, and a real answer that is honestly a range.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a2-incentives-and-elasticity.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Incentives and elasticity - learn economics with phoebe">
+<meta name="twitter:description" content="Foundations session 2 of 6. The number behind every pricing decision, and why it is a range.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Foundations session 2 · Incentives and elasticity - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Foundations session 2 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Foundations session 2 of 6</div>
+    <h1>Incentives and <span class="accent">elasticity</span></h1>
+    <p class="sub">Foundations session 1 ended with a count: of 32,216 products on a real marketplace, 203 moved their price often enough, over enough months, to say anything about how buyers answered. Tonight puts a number on the answer. Elasticity is the plainest question in economics, "if the price goes up 1 percent, how much less do people buy", and it is the number underneath every pricing decision, every tax, every discount and every "our customers are price-sensitive" sentence anyone has ever said in a meeting. The 203 products give an answer, and the honest shape of that answer is a range: between -1.5 and -2.2 depending on how the rows are weighted and filtered, about -1.8 at the default. The session is about what that means, what it lets you predict, and what it cannot say.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Leaders, product and data teams, anyone who prices anything</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Response, revenue, and who pays a tax</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: read the Olist number as an elasticity</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Every incentive works through the same question: when the cost of something changes, how much do people change what they do? Raise the price of a thing and people buy less of it; the whole of economics is in the words "how much less". A product where buyers barely move is called inelastic and a product where they walk away is called elastic, and which one you are holding decides whether a price rise makes you money or loses it. Nobody can tell from the product's name. You have to measure it, and measuring it well is harder than it looks, which is why the 203 Olist products get a range tonight rather than a decimal.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone works it through</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The ability to say what an elasticity of -1.8 means in one plain sentence, the revenue rule that tells you which way a price change moves the top line, the reason a tax on sellers can land on buyers, and a worked reading of a real number: on 203 marketplace products, each compared with itself across 21 months, a 10 percent price rise goes with about 15.7 percent fewer units and about 7.2 percent less revenue, under a constant-elasticity assumption. Plus the sentence that puts a range, not a point, in front of a leader.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers elasticity, elastic vs inelastic, the revenue rule</span>
+      <h2>How much do people respond</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Elasticity is a ratio of two percentages: the percent change in units bought, divided by the percent change in price that caused it. A demand elasticity of -2 says a 1 percent higher price goes with 2 percent fewer units. A demand elasticity of -0.3 says the same 1 percent costs only 0.3 percent of units. The dividing line is -1, where units fall exactly as fast as price rises, and that line matters because it is where revenue stops going up and starts going down.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels with the same price rise. Left, a steep demand curve labelled inelastic: the price rises, units barely fall, a wide amber strip of revenue is gained above the old price and a thin hatched strip is lost on the right, revenue goes up. Right, a flat demand curve labelled elastic: the same price rise, units fall a long way, a thin amber strip is gained and a wide hatched strip is lost, revenue goes down. A note says the Olist within-product answer is the right-hand panel.">
+        <defs>
+          <filter id="s2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="52" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s2aL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s2aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s2aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s2aV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .s2aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s2aA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s2aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s2aH" x="30" y="26">INELASTIC: STEEP, BUYERS BARELY MOVE</text>
+        <text class="s2aS" x="30" y="44">a price rise gains a wide strip and loses a thin one</text>
+        <text class="s2aH" x="470" y="26">ELASTIC: FLAT, BUYERS WALK AWAY</text>
+        <text class="s2aS" x="470" y="44">the same price rise loses a wide strip and gains a thin one</text>
+
+        <g filter="url(#s2aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- left axes -->
+          <path d="M60 270 L60 70" stroke="#1F3A5F" marker-end="url(#s2aAr)"/>
+          <path d="M60 270 L400 270" stroke="#1F3A5F" marker-end="url(#s2aAr)"/>
+          <!-- left: revenue gained (amber) and lost (hatched) -->
+          <rect x="60" y="150" width="118" height="50" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="178" y="200" width="32" height="70" fill="url(#s2aHc)" stroke="none"/>
+          <!-- left steep demand -->
+          <path d="M140 90 L250 262"/>
+          <!-- old and new points -->
+          <circle cx="210" cy="200" r="6" fill="#FFFFFF"/>
+          <circle cx="178" cy="150" r="8" fill="#A8570B" stroke="#A8570B"/>
+          <path d="M60 200 L210 200" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M210 200 L210 270" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M178 150 L178 270" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <!-- the price tag between the panels, the one rise applied to both -->
+          <path d="M420 96 L456 96 L468 108 L456 120 L420 120 Z" fill="#FBEEDC" stroke="#A8570B"/>
+          <circle cx="460" cy="108" r="2.5" stroke="#A8570B"/>
+          <!-- right axes -->
+          <path d="M500 270 L500 70" stroke="#1F3A5F" marker-end="url(#s2aAr)"/>
+          <path d="M500 270 L840 270" stroke="#1F3A5F" marker-end="url(#s2aAr)"/>
+          <!-- right: revenue gained (amber) and lost (hatched) -->
+          <rect x="500" y="150" width="72" height="50" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="572" y="200" width="129" height="70" fill="url(#s2aHc)" stroke="none"/>
+          <!-- right flat demand -->
+          <path d="M520 130 L830 250"/>
+          <circle cx="701" cy="200" r="6" fill="#FFFFFF"/>
+          <circle cx="572" cy="150" r="8" fill="#A8570B" stroke="#A8570B"/>
+          <path d="M500 200 L701 200" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M701 200 L701 270" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M572 150 L572 270" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+        </g>
+
+        <text class="s2aA" x="70" y="66">PRICE</text>
+        <text class="s2aA" x="340" y="288">UNITS</text>
+        <text class="s2aS" x="30" y="154">P1</text>
+        <text class="s2aS" x="30" y="204">P0</text>
+        <text class="s2aS" x="178" y="288" text-anchor="middle">Q1</text>
+        <text class="s2aS" x="210" y="288" text-anchor="middle">Q0</text>
+        <text class="s2aW" x="119" y="179" text-anchor="middle">gained</text>
+        <text class="s2aB" x="250" y="246">a thin strip lost</text>
+        <text class="s2aL" x="150" y="84">demand</text>
+        <text class="s2aB" x="70" y="304">revenue goes up</text>
+
+        <text class="s2aB" x="444" y="140" text-anchor="middle">+10%</text>
+        <text class="s2aS" x="444" y="156" text-anchor="middle">same rise</text>
+
+        <text class="s2aA" x="510" y="66">PRICE</text>
+        <text class="s2aA" x="780" y="288">UNITS</text>
+        <text class="s2aS" x="470" y="154">P1</text>
+        <text class="s2aS" x="470" y="204">P0</text>
+        <text class="s2aS" x="572" y="288" text-anchor="middle">Q1</text>
+        <text class="s2aS" x="701" y="288" text-anchor="middle">Q0</text>
+        <text class="s2aW" x="536" y="179" text-anchor="middle">gained</text>
+        <text class="s2aV" x="636" y="240" text-anchor="middle">lost</text>
+        <text class="s2aL" x="528" y="124">demand</text>
+        <text class="s2aB" x="510" y="304">revenue goes down</text>
+
+        <text class="s2aN" x="30" y="326">Same rise. Left gains more than it loses. Right loses more than it gains. Olist within product is the right panel.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two strips are the whole revenue rule; which one is wider is what elasticity measures</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>One ratio, one dividing line, and the revenue rule<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The ratio.</strong> Percent change in units over percent change in price. It is negative for almost everything, because people buy less of what got dearer, and the minus sign is usually said out loud rather than dropped: "minus one point eight". The size is what matters. Below 1 in absolute value is <strong>inelastic</strong>: buyers barely move, because they need the thing, have no substitute, or spend so little on it that they do not notice. Above 1 is <strong>elastic</strong>: buyers walk away, because a substitute is one click over, or the thing is a luxury, or the price is a big part of their budget.</p>
+        <p><strong>The revenue rule.</strong> Revenue is price times units. Raise the price and one goes up while the other goes down; which one wins is the whole question. On an inelastic product, units fall by less than the price rose, so revenue rises. On an elastic product, units fall by more than the price rose, so revenue falls. At exactly -1 the two cancel and revenue does not move. The figure draws it: the amber strip is what the higher price gains on the units you kept, the hatched strip is what you lost on the units that left, and elasticity is the ratio of their widths.</p>
+        <p><strong>With the real number.</strong> On the 203 Olist products, each compared with itself month by month, the default answer is about -1.8. Under a constant-elasticity assumption, a 10 percent price rise goes with 15.7 percent fewer units and 7.2 percent less revenue. Had the answer been the pooled -0.108, the same rise would go with 1.0 percent fewer units and 8.9 percent more revenue. Same rows, opposite sign on the revenue line, and the difference is only whether a product was compared with itself or with other products. Deep-dive session 2 shows exactly how that happens; tonight the point is that the revenue rule flips at -1, and the honest number sits well past it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why elasticity is not a property of the product<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The same product can be elastic in one setting and inelastic in another, and the settings are the interesting part. <strong>Substitutes:</strong> one brand of bed linen on a marketplace with fifty brands is elastic; bed linen as a category is not. <strong>Time:</strong> people cannot change their commute the week petrol rises, but they can change their car over three years, so the long-run response is bigger than the short-run one. The gasoline meta-analysis by Havranek, Irsova and Janda 2012 in Energy Economics, as reported, puts the short-run figure at about -0.09 and the long-run at about -0.31 after correcting for publication bias: both inelastic, and the long run three times the short. <strong>Share of budget:</strong> a 10 percent rise on a R$ 3 item is not noticed; on a R$ 3,000 item it is a family conversation. <strong>The scope of the price change:</strong> raising your price alone is elastic; the whole market raising together is not, because buyers have nowhere to go.</p>
+        <p>The data habit: never quote an elasticity without saying what it is an elasticity of. "Demand for our product is elastic" means nothing until you add "against the other sellers on the platform, over a month, for the 203 products that moved". The number is always attached to a scope, and the scope is often the part a leader most needs to hear.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Food, as collected across published studies.</strong> Andreyeva, Long and Brownell 2010, in the American Journal of Public Health, collected published price elasticities for US food categories. In absolute value, food away from home came out at 0.81, soft drinks at 0.79, and eggs at 0.27. Read them with the revenue rule in hand: a tax on soft drinks, close to but under 1, cuts units almost as fast as it raises the price, which is exactly why public health people like it and drinks companies do not. Eggs at 0.27 barely respond, because there is no substitute for an egg in a recipe that calls for one. None of those numbers transfer to a Brazilian marketplace, and the point of quoting them is the spread: the same word, elasticity, covers a factor of three inside one supermarket.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers tax incidence</span>
+      <h2>Who really pays a tax</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A government puts a tax on sellers. The law says the seller pays it. The market says something else: the seller raises the price, the buyer pays part of the tax in the higher price, and the seller absorbs the rest in a lower take. How the tax splits has nothing to do with who writes the cheque and everything to do with elasticities. The side that can walk away pays less. The side that cannot pays more. This is the cleanest demonstration that an incentive lands where behaviour lets it land, not where a rule points it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 354" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two supply and demand panels, each with an amber vertical wedge inserted between the demand and supply curves to the left of the crossing. Left panel, steep demand labelled buyers cannot switch: the wedge sits mostly above the old price, so buyers pay most of the tax in a higher price. Right panel, flat demand labelled buyers can switch: the wedge sits mostly below the old price, so sellers keep less and bear most of it. A stamp reading TAX sits between the panels.">
+        <defs>
+          <filter id="s2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="64" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s2bL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s2bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s2bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s2bW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s2bA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s2bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s2bH" x="30" y="26">BUYERS CANNOT SWITCH: STEEP DEMAND</text>
+        <text class="s2bS" x="30" y="44">the tax lands mostly on the buyer, whoever writes the cheque</text>
+        <text class="s2bH" x="470" y="26">BUYERS CAN SWITCH: FLAT DEMAND</text>
+        <text class="s2bS" x="470" y="44">the seller eats most of it, to stop buyers walking</text>
+
+        <g filter="url(#s2bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- left axes -->
+          <path d="M120 280 L120 70" stroke="#1F3A5F" marker-end="url(#s2bAr)"/>
+          <path d="M120 280 L400 280" stroke="#1F3A5F" marker-end="url(#s2bAr)"/>
+          <!-- left steep demand and supply -->
+          <path d="M220 90 L300 270"/>
+          <path d="M150 250 L390 110"/>
+          <!-- old crossing -->
+          <circle cx="262" cy="185" r="8" fill="#FFFFFF"/>
+          <path d="M120 185 L262 185" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <!-- the wedge -->
+          <rect x="239" y="146" width="12" height="49" fill="#A8570B" stroke="#A8570B"/>
+          <path d="M120 146 L239 146" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M120 195 L239 195" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <!-- the tax stamp between panels -->
+          <rect x="412" y="86" width="56" height="28" rx="4" transform="rotate(-3 440 100)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- right axes -->
+          <path d="M560 280 L560 70" stroke="#1F3A5F" marker-end="url(#s2bAr)"/>
+          <path d="M560 280 L840 280" stroke="#1F3A5F" marker-end="url(#s2bAr)"/>
+          <!-- right flat demand and supply -->
+          <path d="M580 130 L830 230"/>
+          <path d="M600 260 L820 100"/>
+          <circle cx="708" cy="181" r="8" fill="#FFFFFF"/>
+          <path d="M560 181 L708 181" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <rect x="659" y="164" width="12" height="49" fill="#A8570B" stroke="#A8570B"/>
+          <path d="M560 164 L659 164" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M560 213 L659 213" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+        </g>
+
+        <text class="s2bW" x="440" y="104" text-anchor="middle">TAX</text>
+
+        <text class="s2bA" x="130" y="66">PRICE</text>
+        <text class="s2bA" x="340" y="298">UNITS</text>
+        <text class="s2bS" x="30" y="150">buyers pay</text>
+        <text class="s2bS" x="30" y="199">sellers keep</text>
+        <text class="s2bL" x="226" y="86">demand</text>
+        <text class="s2bL" x="352" y="104">supply</text>
+        <text class="s2bB" x="256" y="160">the tax</text>
+        <text class="s2bS" x="300" y="248">no-tax price</text>
+        <text class="s2bB" x="130" y="322">buyers bear most of the wedge</text>
+
+        <text class="s2bA" x="570" y="66">PRICE</text>
+        <text class="s2bA" x="780" y="298">UNITS</text>
+        <text class="s2bS" x="470" y="168">buyers pay</text>
+        <text class="s2bS" x="470" y="217">sellers keep</text>
+        <text class="s2bL" x="586" y="126">demand</text>
+        <text class="s2bL" x="780" y="94">supply</text>
+        <text class="s2bB" x="680" y="166">the tax</text>
+        <text class="s2bS" x="722" y="248">no-tax price</text>
+        <text class="s2bB" x="570" y="322">sellers bear most of the wedge</text>
+
+        <text class="s2bN" x="30" y="344">Same wedge, same law. The split follows the slopes: whoever can walk away pays less of it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the wedge is the same height in both panels; where it sits relative to the old price is decided by the two slopes</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The wedge, and why the law's name for the payer does not matter<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Put a tax of a fixed amount per unit between buyer and seller. Whatever the buyer pays, the seller now receives that minus the tax. On the picture that is a vertical wedge inserted between the demand curve and the supply curve: the top of the wedge is what buyers pay, the bottom is what sellers keep, and the wedge slides left along the two curves until its height equals the tax. Fewer units are sold than before, and the old price sits somewhere inside the wedge.</p>
+        <p><strong>Where it sits is the whole story.</strong> If demand is steep, meaning buyers cannot easily switch, the wedge pokes mostly upward: buyers pay most of the tax in a higher price and sellers keep nearly what they kept. If demand is flat, meaning buyers can switch, the wedge pokes mostly downward: the seller cannot pass much on without losing the sale, so the seller keeps less and bears most of it. The same logic runs on the supply side: a seller who can easily stop supplying bears little, a seller who cannot bears a lot.</p>
+        <p>And it does not matter which side the law names. A tax "on sellers" and a tax "on buyers" of the same size produce the same wedge, the same units, the same buyer price and the same seller take. The law decides who fills in the form. The elasticities decide who is poorer. That is why a "tax on platforms" ends up in seller fees, why a "fee on sellers" ends up in shelf prices, and why the person who can walk away is always the person who pays least.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Deadweight, and the same wedge in a platform's take rate<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The units that stop being sold because of the wedge are not a transfer to anyone. The buyer who would have paid a bit more than the seller needed, but not the seller's price plus the tax, simply does not buy, and both sides lose the surplus that trade would have created. Economists call that the deadweight loss of the tax, and it is larger when both curves are flat, because more trades sit close to the line. A tax on something people cannot avoid raises money with little deadweight; a tax on something people can easily skip raises less and destroys more.</p>
+        <p>The same picture describes any wedge, not only a government's. A marketplace commission is a wedge between what a buyer pays and what a seller keeps. A payment fee is a wedge. A delivery surcharge is a wedge. In each case the question "who really pays the commission" has the same answer as the tax: the side that can walk away pays less. A seller who can list elsewhere passes the commission on; a seller who cannot absorbs it. Whether the platform sets a "seller fee" or a "buyer fee" is a labelling choice, and the market re-labels it.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Beira Goods, a constructed seller, meets a commission rise.</strong> Suppose the marketplace Beira sells on raises its take from 10 to 12 percent of each sale, "charged to sellers". Beira has 40 products. On the ones where buyers have fifty near-identical rivals one click away, Beira cannot raise the shelf price without losing the sale, so Beira keeps 2 percent less per unit and eats the rise. On the two products Beira makes itself, with no close substitute on the platform, Beira raises the price and the buyer pays nearly the whole 2 points. Same rule, same seller, opposite incidence, and the only thing that differed was how easily the buyer could walk. Beira is invented; every number here is illustrative.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the log-log line, the two-scope statement</span>
+      <h2>Reading a slope as an elasticity</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">If you plot the logarithm of units against the logarithm of price, the slope of the line through the points is the elasticity. That single trick is why elasticities are estimated rather than guessed: a straight line has a slope, a slope is one number, and the logarithm turns "percent change against percent change" into "rise over run". The 203 Olist products give 2,216 product-months to plot, and the line through them, when each product is compared only with itself, has a slope of about -1.8.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left, axes labelled log units and log price with a hand-placed scatter of monthly dots and a fitted line sloping down. A slope triangle on the line shows a run of plus 1 in log price and a rise of minus 1.8 in log units. Right, a panel titled read the slope: a 1 percent higher price goes with about 1.8 percent fewer units for the same product in its own months; minus 1.8 is one line through 2,216 rows and 203 products.">
+        <defs>
+          <filter id="s2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s2cL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s2cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s2cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s2cV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .s2cA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s2cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s2cH" x="30" y="26">ONE PRODUCT COMPARED WITH ITSELF, MONTH BY MONTH</text>
+        <text class="s2cS" x="30" y="44">each dot is one month; the slope of the line is the elasticity</text>
+
+        <g filter="url(#s2cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M70 280 L70 70" stroke="#1F3A5F" marker-end="url(#s2cAr)"/>
+          <path d="M70 280 L420 280" stroke="#1F3A5F" marker-end="url(#s2cAr)"/>
+          <!-- the months, hand placed -->
+          <circle cx="110" cy="98" r="4" fill="#EEF2F8"/>
+          <circle cx="128" cy="124" r="4" fill="#EEF2F8"/>
+          <circle cx="150" cy="108" r="4" fill="#EEF2F8"/>
+          <circle cx="168" cy="148" r="4" fill="#EEF2F8"/>
+          <circle cx="192" cy="128" r="4" fill="#EEF2F8"/>
+          <circle cx="214" cy="172" r="4" fill="#EEF2F8"/>
+          <circle cx="238" cy="132" r="4" fill="#EEF2F8"/>
+          <circle cx="258" cy="196" r="4" fill="#EEF2F8"/>
+          <circle cx="280" cy="172" r="4" fill="#EEF2F8"/>
+          <circle cx="302" cy="214" r="4" fill="#EEF2F8"/>
+          <circle cx="322" cy="166" r="4" fill="#EEF2F8"/>
+          <circle cx="346" cy="232" r="4" fill="#EEF2F8"/>
+          <circle cx="368" cy="208" r="4" fill="#EEF2F8"/>
+          <circle cx="388" cy="246" r="4" fill="#EEF2F8"/>
+          <!-- the fitted line -->
+          <path d="M100 100 L400 250" stroke="#1F3A5F" stroke-width="2.6"/>
+          <!-- the slope triangle -->
+          <path d="M220 160 L300 160" stroke="#A8570B" stroke-width="2.4" marker-end="url(#s2cAr)"/>
+          <path d="M300 160 L300 200" stroke="#A8570B" stroke-width="2.4" marker-end="url(#s2cAr)"/>
+          <!-- a magnifier on the slope -->
+          <circle cx="458" cy="110" r="14" stroke="#A8570B"/>
+          <path d="M468 121 L484 138" stroke="#A8570B" stroke-width="3"/>
+          <!-- side panel -->
+          <rect x="500" y="70" width="350" height="190" rx="10" transform="rotate(0.4 675 165)" fill="#EEF2F8"/>
+        </g>
+
+        <text class="s2cA" x="80" y="62">LOG UNITS</text>
+        <text class="s2cA" x="350" y="298">LOG PRICE</text>
+        <text class="s2cB" x="260" y="150" text-anchor="middle">+1 in log price</text>
+        <text class="s2cB" x="308" y="186">-1.8 in log units</text>
+        <text class="s2cS" x="100" y="266">low price, many units</text>
+        <text class="s2cS" x="290" y="110">high price, few units</text>
+
+        <text class="s2cH" x="516" y="96">READ THE SLOPE</text>
+        <text class="s2cS" x="516" y="118">slope of the log-log line = elasticity</text>
+        <text class="s2cS" x="516" y="138">1 percent higher price goes with</text>
+        <text class="s2cS" x="516" y="154">about 1.8 percent fewer units,</text>
+        <text class="s2cS" x="516" y="170">for the same product, in its own months.</text>
+        <text class="s2cB" x="516" y="196">-1.8 is one line through 2,216 rows,</text>
+        <text class="s2cB" x="516" y="212">203 products, 21 months.</text>
+        <text class="s2cS" x="516" y="236">One product alone: too few dots. The panel</text>
+        <text class="s2cS" x="516" y="250">is the unit. Deep-dive session 1 fits it.</text>
+
+        <text class="s2cN" x="30" y="326">Dots are hand-placed to show the shape. The real 2,216 rows and the fitted -1.788 live in the deep-dive track.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the triangle is the definition: one step right in log price, 1.8 steps down in log units</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The two-scope statement, and why a range is the honest shape<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Fit the line five reasonable ways and you get five numbers. Compare each product with itself and the slope is <strong>-1.788</strong>. Add month effects so that the marketplace's growth is removed too: <strong>-1.854</strong>. Weight each month by how many units it sold, so big months count more: <strong>-2.216</strong>. Drop the months where only a single unit sold: <strong>-1.480</strong>. Include freight in the price: <strong>-1.881</strong>. None of these is wrong. Each is a defensible choice about which rows to trust and how much, and a person who reports only one of them is hiding the other four.</p>
+        <p>So the statement that survives is in two scopes. <strong>The range:</strong> on these rows, the within-product elasticity is between -1.5 and -2.2 depending on the weighting and the row filter. <strong>The default:</strong> about -1.8. And the two things it is not: it is not -0.1, which is what you get by pooling all the products together without comparing each with itself, and it is not zero, which is what a shuffled placebo gives (mean -0.002 across 200 draws, standard deviation 0.159). The real slope sits more than 11 placebo standard deviations from zero. The range is wide; the sign and the size are not in doubt.</p>
+        <p>Publishing a range is not weakness. It is the only shape that lets a reader see how much the answer depends on choices you made, and it is the shape that stops the next person from quoting "-1.788" as if the third decimal meant something.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Cross-price, income, and Marshall's chapter<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two cousins of the price elasticity earn their keep. <strong>Cross-price elasticity</strong> is the percent change in units of one thing when the price of another thing changes. Positive means substitutes (dearer coffee, more tea); negative means complements (dearer printers, fewer cartridges). It is the number behind every "if we raise the price of A, what happens to B" question, and on a marketplace it is the number that says whether two sellers are really competing. <strong>Income elasticity</strong> is the percent change in units when income changes: above 1 for luxuries, between 0 and 1 for necessities, below 0 for the things people buy less of as they get richer. It is why a recession hits some categories and leaves others alone.</p>
+        <p>The word itself was formalised by Alfred Marshall in Principles of Economics, 1890, Book III, chapter IV, where he sets out "elasticity of demand" as the ratio of proportional changes and works through how it varies with price and with the wealth of the buyer. Earlier writers had the idea in pieces; Marshall gave it the name and the ratio. It is a short chapter, and reading it is a good way to notice that the questions have not changed since 1890, only the data available to answer them.</p>
+      </div>
+    </details>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Write the two-scope sentence for a number you already quote" data-hint="Take one number your team reports as a single decimal. Write it as a range with the choices that widen it, then the default, then what it is not. Three lines." data-seed="" data-cta="Count it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Read the Olist number as an elasticity, on paper</h2>
+      <span class="tag demo">★ 22 min · everyone works it through</span>
+    </div>
+    <p class="lede">No code tonight. Six worksheet steps that take the number the deep-dive track computes, -1.788 on 203 products compared with themselves, and turn it into a sentence a leader can act on. Every figure below is from the same computation described in Foundations session 1; the deep-dive track's second session shows the fit line by line. Work each step for one of your own products alongside.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A horizontal number line from minus 2.5 to zero. An amber range bar covers minus 2.2 to minus 1.5 with a marker at minus 1.8 labelled default. A dashed divider at minus 1 separates the elastic side, where a price rise loses revenue, from the inelastic side, where it gains. A hollow circle near minus 0.108 is labelled pooled, compares products, not an elasticity. A row below lists the alternative fits: weighted minus 2.216, single-unit months dropped minus 1.480, freight included minus 1.881, month effects minus 1.854.">
+        <defs>
+          <filter id="s2dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="88" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s2dL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s2dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s2dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s2dV { font: 800 18px Inter, sans-serif; fill: #142944; }
+          .s2dA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s2dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s2dH" x="30" y="26">THE OLIST NUMBER, READ AS AN ELASTICITY</text>
+        <text class="s2dS" x="30" y="44">203 products, each compared with itself, 2,216 product-months, 21 months</text>
+
+        <g filter="url(#s2dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- a reader, off to the left -->
+          <circle cx="44" cy="136" r="11"/><path d="M26 172 C30 154 58 154 62 172"/>
+          <!-- the number line -->
+          <path d="M80 170 L820 170" stroke="#1F3A5F" marker-end="url(#s2dAr)"/>
+          <!-- ticks -->
+          <path d="M80 164 L80 176 M224 164 L224 176 M512 164 L512 176 M656 164 L656 176 M800 164 L800 176" stroke="#1F3A5F"/>
+          <!-- the unit-elastic divider -->
+          <path d="M512 80 L512 232" stroke="#4E5A75" stroke-dasharray="5 4" stroke-width="1.4"/>
+          <!-- the range bar -->
+          <rect x="166" y="156" width="202" height="28" rx="4" transform="rotate(-0.4 267 170)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- the default marker -->
+          <path d="M285 140 L285 200" stroke="#142944" stroke-width="3"/>
+          <circle cx="285" cy="170" r="7" fill="#FFFFFF" stroke="#142944"/>
+          <!-- the pooled number, hollow -->
+          <circle cx="769" cy="170" r="6" fill="#FFFFFF"/>
+        </g>
+
+        <text class="s2dA" x="296" y="92" text-anchor="middle">ELASTIC SIDE: A PRICE RISE LOSES REVENUE</text>
+        <text class="s2dA" x="656" y="92" text-anchor="middle">INELASTIC SIDE: A RISE GAINS</text>
+        <text class="s2dV" x="285" y="128" text-anchor="middle">-1.8 default</text>
+        <text class="s2dS" x="80" y="210" text-anchor="middle">-2.5</text>
+        <text class="s2dB" x="166" y="210" text-anchor="middle">-2.2</text>
+        <text class="s2dB" x="368" y="210" text-anchor="middle">-1.5</text>
+        <text class="s2dS" x="512" y="210" text-anchor="middle">-1</text>
+        <text class="s2dL" x="512" y="226" text-anchor="middle">unit elastic</text>
+        <text class="s2dS" x="656" y="210" text-anchor="middle">-0.5</text>
+        <text class="s2dS" x="800" y="210" text-anchor="middle">0</text>
+        <text class="s2dS" x="769" y="232" text-anchor="middle">-0.108: pooled,</text>
+        <text class="s2dS" x="769" y="246" text-anchor="middle">compares products</text>
+        <text class="s2dL" x="267" y="246" text-anchor="middle">the range, depending on weighting and filter</text>
+
+        <text class="s2dS" x="80" y="274">Weighted by units: -2.216. Single-unit months dropped: -1.480. Freight included: -1.881. Month effects added: -1.854.</text>
+        <text class="s2dN" x="30" y="304">Publish the range, not a decimal. A within-product association with a placebo behind it, not a causal number.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - every defensible fit lands inside the amber bar and all of them sit on the elastic side of -1</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Say what -1.8 means in words.</strong> Not "the elasticity is minus one point eight" but the sentence a person who has never heard the word can act on. Write it out; then write it for one of your own products with a number you actually hold, or with "unknown" if you do not.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · the plain sentence</span>"For the same product, in the months when its price was 1 percent higher,
+ it sold about 1.8 percent fewer units."
+
+Your product: "For ________, when its price was 1 percent higher, it sold about ___ percent fewer units."
+                (write "unknown" if you have never measured it; that is the honest answer)</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · Apply the revenue rule.</strong> -1.8 is past -1, so a price rise loses revenue. Fill in the arithmetic for a 10 percent rise under a constant-elasticity assumption, using the modelled figures, then say which side of -1 your own number sits on.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the revenue rule applied</span>elasticity used              units for +10 percent price      revenue
+pooled, -0.108               about -1.0 percent               about +8.9 percent
+within product, -1.788       about -15.7 percent              about -7.2 percent
+with month effects, -1.854   about -16.2 percent              about -7.8 percent
+
+(modelled: constant elasticity; the third row is the second with the marketplace's growth removed)
+
+Your product sits on the: [ elastic side, a rise loses ]  [ inelastic side, a rise gains ]  [ unknown ]</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Write the range, not the decimal.</strong> Five defensible fits give five numbers between -1.480 and -2.216. Copy the range statement and then name, for your own number, the two choices that would most widen it (which rows count, and how much each counts).</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the range</span>"Between -1.5 and -2.2 depending on the weighting and the row filter; about -1.8 at the default."
+
+The five fits:  -1.788 (each product vs itself)   -1.854 (+ month effects)   -2.216 (weighted by units)
+                -1.480 (single-unit months dropped)   -1.881 (freight in the price)
+
+Your number would widen most if you changed:  1. ______________________   2. ______________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Say what it cannot say.</strong> The panel is observational. A seller cuts price when stock is high or a rival moves; a product's last months often show a price rise and a stock-out together. Comparing each product with itself removes "this product is cheap and popular"; month effects remove "the marketplace grew"; neither removes "the seller chose the price after seeing demand". Write the caveat in one line, and the same line for your own number.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · what it cannot say</span>"It is a within-product association with a placebo behind it (placebo mean -0.002, sd 0.159),
+ not a causal elasticity: the seller chose the price after seeing demand."
+
+What it IS NOT:  -0.108 (pooled: compares cheap products with popular ones)   zero (the shuffled placebo)
+
+Your caveat: "Our number is ____________ , not ____________ , because ____________________________."</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · The sentence for a leader.</strong> One sentence, four parts: the range, the default, the prediction under the revenue rule, the caveat. Practise it out loud; it takes about fifteen seconds and it is the version that survives a hard question.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the sentence</span>"On the 203 products we can read, each compared with itself, a 1 percent price rise goes with
+ between 1.5 and 2.2 percent fewer units, about 1.8 at our default; so a 10 percent rise across
+ them would cost about 7 percent of revenue, under a constant-elasticity assumption; and because
+ sellers chose those prices, it is an association we have tested against a placebo, not an experiment."
+
+Now yours, same four parts:  range ______  default ______  revenue prediction ______  caveat ______</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 6 · Apply it to one product you own.</strong> Pick one product and answer the three sieves from Foundations session 1 first (enough sales, enough price changes, enough months). If it passes all three, write the plan to measure it. If it fails any, write what you would need before an elasticity is even possible, and what you will say in the meantime.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · your product</span>product: ______________________
+sieve 1, 30 or more items sold:        [ yes ]  [ no ]
+sieve 2, 3 or more distinct prices:    [ yes ]  [ no ]
+sieve 3, 6 or more months with a sale: [ yes ]  [ no ]
+
+if all three yes:  plot log units against log price, month by month, and read the slope
+if any is no:      "We cannot measure how buyers respond to this price yet, because ______________.
+                    Until then any elasticity quoted for it is a belief."</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the four-part sentence as your standing shape.</strong> Range, default, prediction, caveat. Any elasticity that arrives as a single decimal with no range has hidden four other fits; any that arrives with no caveat has forgotten who chose the price.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Foundations session 3</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Sort ten of your products into elastic and inelastic</strong> by reasoning alone: substitutes, share of budget, time to adjust. Then mark which of the ten you could actually measure under the three sieves. The gap between the two lists is your honest position.</li>
+      <li><strong>Find one wedge in your business</strong> that is not a tax: a commission, a fee, a surcharge. Write who the rule says pays it and who the elasticities say pays it. Two sentences.</li>
+      <li><strong>Take one number your team reports as a single decimal</strong> and rewrite it in two scopes: the range with the choices that widen it, then the default. If you cannot name the choices, that is the finding.</li>
+      <li><strong>Bring one decision you are about to make at the margin,</strong> one more unit, one more hire, one more feature. Foundations session 3 is about why the cost that matters for it is the next unit's, not the average, and why the money already spent does not get a vote.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Foundations session 2 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · The within-product elasticity on the 203 Olist products is about -1.8. Under a constant-elasticity assumption, what does a 10 percent price rise across them do to revenue, and why?</p>
+      <button class="qopt" type="button">A · Revenue rises about 8.9 percent, because a higher price on every unit sold always adds up to more</button>
+      <button class="qopt" type="button">B · Revenue falls about 7.2 percent, because -1.8 is on the elastic side of -1: units fall about 15.7 percent, which is faster than the price rose, so the units lost outweigh the extra price on the units kept</button>
+      <button class="qopt" type="button">C · Revenue does not change, because price and units always cancel</button>
+      <button class="qopt" type="button">D · It cannot be said, because elasticity only describes units, never revenue</button>
+      <p class="qwhy">The revenue rule flips at -1. Past it, a rise loses revenue; short of it, a rise gains. The +8.9 percent belongs to the pooled -0.108, which compares different products with each other and is not an elasticity of anything a seller can act on.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Why is the honest published form "between -1.5 and -2.2, about -1.8 at the default" rather than "-1.788"?</p>
+      <button class="qopt" type="button">A · Because the computation is unreliable and any number could be right</button>
+      <button class="qopt" type="button">B · Because rounding to one decimal is a house style</button>
+      <button class="qopt" type="button">C · Because five defensible choices about which rows count and how much each counts (weighting by units, dropping single-unit months, including freight, adding month effects) give five numbers from -1.480 to -2.216, and a single decimal hides that the answer depends on those choices; the sign and the size are not in doubt, the third decimal is</button>
+      <button class="qopt" type="button">D · Because the placebo shows the true value is zero</button>
+      <p class="qwhy">A range is the shape that lets a reader see how much the answer depends on the analyst's choices. The placebo (mean -0.002, sd 0.159) shows what a null looks like, and the real slope is more than 11 placebo standard deviations away from it; the range is wide but nowhere near zero.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A marketplace adds a fee "charged to sellers". Which sellers end up bearing most of it?</p>
+      <button class="qopt" type="button">A · The sellers whose buyers can easily switch to a rival listing: they cannot raise the shelf price without losing the sale, so they absorb the fee; sellers with no close substitute pass most of it to buyers in a higher price</button>
+      <button class="qopt" type="button">B · All sellers equally, because the fee is charged to sellers</button>
+      <button class="qopt" type="button">C · None of them, because sellers always pass fees on in full</button>
+      <button class="qopt" type="button">D · The sellers with the highest prices, because the fee is a percentage</button>
+      <p class="qwhy">Incidence follows elasticities, not the name on the rule. The side that can walk away pays less of any wedge; the side that cannot pays more. A fee "on sellers" and a fee "on buyers" of the same size produce the same split.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Elasticity, elastic vs inelastic, the revenue rule, tax incidence, the wedge</span><span class="note">Standard economics, no single source; the mechanics are taught with the direction of each effect, no textbook figure is quoted</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The within-product elasticity: -1.788; the range -1.480 to -2.216 (weighted -2.216, single-unit months dropped -1.480, freight -1.881, month effects -1.854); pooled -0.108; placebo mean -0.002, sd 0.159, 200 draws</span><span class="note">Computed from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0), 203 products, 2,216 product-months, delivered orders before 1 September 2018; naive standard errors</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Revenue arithmetic for a 10 percent rise: +8.9 percent under -0.108, -7.2 percent under -1.788, -7.8 percent under -1.854; units -1.0, -15.7, -16.2 percent</span><span class="note">Modelled, under a constant-elasticity assumption, on the computed slopes</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Marshall formalised elasticity of demand</span><span class="note">Principles of Economics, 1890, Book III chapter IV; the chapter was read; "formalised", because earlier uses of the idea exist</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Gasoline demand, short run about -0.09, long run about -0.31</span><span class="note">Havranek, Irsova and Janda 2012, Energy Economics 34(1) 201-207, publication-bias-corrected; reported from the abstract, the full text was not opened</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Food elasticities in absolute value: food away from home 0.81, soft drinks 0.79, eggs 0.27</span><span class="note">Andreyeva, Long and Brownell 2010, American Journal of Public Health 100(2), Table 1; read at source</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Cross-price and income elasticity; deadweight loss</span><span class="note">Named in self-study with their direction; no figure is quoted</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Beira Goods</span><span class="note">Constructed seller; every Beira number is invented and the page says so</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Foundations session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Elasticity is a ratio of percentages</b><span>Percent change in units over percent change in price. -1.8: 1 percent dearer, 1.8 percent fewer units.</span></div>
+      <div class="cheat-item"><b>The revenue rule flips at -1</b><span>Past -1 a rise loses revenue; short of it a rise gains. Olist within product: -1.8, so a 10 percent rise costs about 7 percent.</span></div>
+      <div class="cheat-item"><b>Who pays a wedge</b><span>Not who the rule names. The side that can walk away pays less; the side that cannot pays more.</span></div>
+      <div class="cheat-item"><b>The slope of the log-log line</b><span>Is the elasticity. One product is too few dots; the panel of 2,216 product-months is the unit.</span></div>
+      <div class="cheat-item"><b>Publish two scopes</b><span>The range, -1.5 to -2.2 depending on weighting and filter; the default, about -1.8. Not -0.1, not zero.</span></div>
+      <div class="cheat-item"><b>Say what it cannot say</b><span>A within-product association with a placebo behind it. The seller chose the price; it is not an experiment.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You can now put a number on how buyers respond and say it as a range. Foundations session 3 moves from the price to the decision: marginal thinking, the habit of asking what one more unit costs and earns rather than what the average does; why money already spent does not get a vote; opportunity cost as the next best use of an hour or a real; comparative advantage as two people and two tasks; and why a physical unit, a software copy and an inference have three different marginal costs, which is the whole economics of a prediction in one sentence.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Foundations session 2 of 6 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a1-prices-are-information.html">← Prev: Prices are information</a> &nbsp;·&nbsp; <a href="a3-marginal-thinking.html">Next: Marginal thinking and opportunity cost →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 7 of 10. A job is a bundle of tasks and a tool touches tasks, not jobs. Displacement and reinstatement as two arrows on one line (Acemoglu and Restrepo 2019), the three task-level experiments with their exact figures (about 14 percent, about 40 percent, 12.2 percent and 19 percentage points), and the honest sentence about what a task study cannot say about employment. Python build-along: a scored task inventory for one role.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Labour economics of AI - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 7 of 10. Tasks, not jobs. Two arrows, not one verdict. Three experiments that measured tasks and the question none of them can answer.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p7-labour-economics-of-ai.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Labour economics of AI - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 7 of 10. Tasks, not jobs. Two arrows, not one verdict.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 7 · Labour economics of AI - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 7 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 7 of 10</div>
+    <h1>Labour economics of <span class="accent">AI</span></h1>
+    <p class="sub">Every second headline says AI will take the jobs and every other one says it will create them, and both are answering a question no study has measured. What the studies measured is tasks: a support ticket resolved, a memo drafted, a consulting exercise completed. A job is a bundle of those, held by one person, and what happens to the bundle when a tool changes three of its tiles is a different question from what happens to the tiles. Tonight builds the vocabulary that keeps the two apart: tasks against jobs, substitution against complementarity, displacement against reinstatement, and the three experiments with their exact figures, including the one that is 19 percentage points and not 19 percent. You leave with a scored inventory of one role and one honest sentence about it, and with no verdict on employment, because the evidence does not hold one.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Analysts, people leads, anyone planning a team</span>
+      <span class="chip audience">Python, pandas</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Tasks, two arrows, three experiments</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: a task inventory, scored</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Labour economics has one move that makes the AI argument tractable: stop talking about occupations and start talking about tasks. An occupation is a name on a payslip; a task is a thing that gets done, with hours attached, and a tool either does it, helps with it, or leaves it alone. Once the unit is the task, the evidence sorts itself. Three experiments since 2023 have measured what a generative model does to specific tasks, and they agree on more than the headlines suggest. None of them measured what happens to the person whose week those tasks were part of. That gap is not a flaw in the studies; it is the shape of the open question, and the page draws it rather than filling it in.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The task-versus-job distinction as a habit, the two arrows of displacement and reinstatement drawn on one line with the net left open, the three task-level figures with their exact units and evidence tiers, a scored task inventory for one role built in pandas with the scores labelled invented, and one sentence you can say in a planning meeting that is true: "X of Y weekly hours sit in tasks the studies measured, and none of the studies measured what happens to the role".</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers tasks, jobs, substitution and complementarity</span>
+      <h2>A job is a bundle of tasks</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Take any role and write down what its week is made of: the report, the questions in chat, the SQL, the cleaning, the meetings, the deciding, the mentoring. That list is the job, and the hours beside each line are how the job is weighted. A tool never meets the list. It meets one line at a time, and for each line there are only three outcomes: the tool does it instead of the person, the tool makes the person faster or better at it, or the tool is irrelevant to it. The first is substitution, the second is complementarity, and a single job usually contains both.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn job drawn as a bundle holding eight task tiles for an invented analyst role; three tiles, the weekly narrative, routine questions and standard SQL, are hatched as exposed and five are plain. Two arrows lead from the bundle to two boxes on the right: substitution, where the tool does the task and the hours leave the person, and complementarity, where the tool raises the person's output and the hours stay. A small figure stands between the arrows.">
+        <defs>
+          <filter id="d7aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d7aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d7aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d7aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d7aL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d7aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d7aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d7aW { font: 800 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .d7aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d7aH" x="30" y="26">ONE JOB, EIGHT TASKS, THREE OF THEM EXPOSED</text>
+
+        <g filter="url(#d7aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the bundle -->
+          <rect x="30" y="50" width="420" height="220" rx="10" transform="rotate(-0.5 240 160)" fill="#FFFFFF"/>
+          <!-- eight tiles, three hatched -->
+          <rect x="44" y="66" width="190" height="40" rx="4" transform="rotate(-1 139 86)" fill="url(#d7aHc)"/>
+          <rect x="246" y="66" width="190" height="40" rx="4" transform="rotate(0.8 341 86)" fill="url(#d7aHc)"/>
+          <rect x="44" y="116" width="190" height="40" rx="4" transform="rotate(0.6 139 136)" fill="url(#d7aHc)"/>
+          <rect x="246" y="116" width="190" height="40" rx="4" transform="rotate(-0.7 341 136)" fill="#EEF2F8"/>
+          <rect x="44" y="166" width="190" height="40" rx="4" transform="rotate(-0.5 139 186)" fill="#EEF2F8"/>
+          <rect x="246" y="166" width="190" height="40" rx="4" transform="rotate(0.9 341 186)" fill="#EEF2F8"/>
+          <rect x="44" y="216" width="190" height="40" rx="4" transform="rotate(0.7 139 236)" fill="#EEF2F8"/>
+          <rect x="246" y="216" width="190" height="40" rx="4" transform="rotate(-0.8 341 236)" fill="#EEF2F8"/>
+          <!-- the exposed tag: the one amber thing -->
+          <rect x="360" y="10" width="120" height="24" rx="12" transform="rotate(2 420 22)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- two outcome boxes -->
+          <rect x="530" y="60" width="310" height="78" rx="8" transform="rotate(0.5 685 99)" fill="#FFFFFF"/>
+          <rect x="530" y="166" width="310" height="78" rx="8" transform="rotate(-0.4 685 205)" fill="#EEF2F8"/>
+          <!-- arrows from bundle to boxes -->
+          <path d="M452 90 L522 90" marker-end="url(#d7aAr)"/>
+          <path d="M452 230 L522 230" marker-end="url(#d7aAr)"/>
+          <!-- the person, between the arrows -->
+          <circle cx="486" cy="150" r="8"/>
+          <path d="M486 158 L486 184 M486 166 L474 178 M486 166 L498 178 M486 184 L478 200 M486 184 L494 200"/>
+        </g>
+
+        <text class="d7aW" x="420" y="26" text-anchor="middle">3 of 8 exposed</text>
+        <text class="d7aL" x="52" y="90">draft the weekly narrative</text>
+        <text class="d7aL" x="254" y="90">answer routine questions</text>
+        <text class="d7aL" x="52" y="140">write standard SQL pulls</text>
+        <text class="d7aL" x="254" y="140">clean and reconcile data</text>
+        <text class="d7aL" x="52" y="190">sit in planning meetings</text>
+        <text class="d7aL" x="254" y="190">decide what to measure</text>
+        <text class="d7aL" x="52" y="240">investigate an anomaly</text>
+        <text class="d7aL" x="254" y="240">mentor the new hire</text>
+
+        <text class="d7aH" x="542" y="84">Substitution</text>
+        <text class="d7aS" x="542" y="102">the tool does the task;</text>
+        <text class="d7aS" x="542" y="118">the hours leave the person</text>
+        <text class="d7aH" x="542" y="190">Complementarity</text>
+        <text class="d7aS" x="542" y="208">the tool raises the person's output;</text>
+        <text class="d7aS" x="542" y="224">the hours stay and produce more</text>
+
+        <text class="d7aS" x="30" y="288">the role and its eight tasks are invented for the drawing; your bundle will differ</text>
+        <text class="d7aN" x="30" y="326">A person holds the bundle; a tool touches a tile. Every study on this page measured tiles, not bundles.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the hatched tiles are where a tool has been measured; the plain tiles are the rest of the week, and the week is what the person is paid for</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Tasks are what a tool touches; jobs are what a person holds<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The unit matters because the arithmetic changes with it.</strong> Say a tool halves the time a task takes. If that task is the whole job, the job needs half the hours. If it is three of eight tiles weighted by hours, the saving is whatever those three tiles were worth, and the other five tiles are untouched. Most real weeks are the second case. The habit is to ask "which tiles?" before "which jobs?", and to refuse to answer the second until someone has done the first.</p>
+        <p><strong>Substitution</strong> is the tool doing the task instead of the person. The hours leave the person, and where they go is a decision someone makes: reassigned to other tiles, or removed from the payroll, or filled with tiles that did not exist before. <strong>Complementarity</strong> is the tool making the person more productive at the task. The hours stay and produce more, and a task that was a bottleneck can stop being one, which raises the value of the tiles around it. The same tool on the same job usually does both, tile by tile, and a sentence about "AI and this job" that does not say which tile it means is not yet a sentence.</p>
+        <p><strong>Exposure</strong> is the word for "a tool could plausibly touch this tile". It is a statement about the tile, not about what happens next. A highly exposed task can be complemented rather than substituted, and a substituted task can free hours into work that was previously starved of them. Exposure is where the analysis starts. It is not where it ends.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the same tool substitutes for one person and complements another<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two people hold the same job title and different bundles. One spends most of the week on the three exposed tiles; the other spends most of it on the five plain ones and picks up the exposed three for an hour a day. The tool arrives. For the first person, the exposed tiles were the job, and the outcome depends entirely on what management does with the freed hours. For the second, the tool takes an hour a day off tasks that were never the point, and the week gets better. Same title, same tool, opposite experiences, and a job-level statistic would average them into a number that describes neither.</p>
+        <p>This is also why the experiments in Part 3 report different effects for novices and for experienced workers on the very same task. The tool's contribution to a task is measured against what the person could already do. Where the person was already good, there is little to add; where they were new, the tool carries expertise the person has not yet built. Whether that narrows the gap between them for good or only for now is one of the contested questions, and the page leaves it contested.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The support desk that got measured.</strong> Brynjolfsson, Li and Raymond, "Generative AI at Work", NBER Working Paper 31161 (2023; later published in the Quarterly Journal of Economics, 2025), studied customer-support agents given a generative assistant. The task was one tile: issues resolved per hour. It rose by 14 percent on average, by 34 percent for novice and low-skilled workers, and minimally for experienced and highly skilled workers. Read it through the bundle: a tile got faster, most for the people who were slowest on it. What the company then did with the hours, and what happened to headcount, is not in the tile and the study does not claim it.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers displacement, reinstatement and the open net</span>
+      <h2>Two arrows on one line</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Zoom out from one job to all of them and the task vocabulary still holds, with two forces instead of three outcomes. Acemoglu and Restrepo, "Automation and New Tasks: How Technology Displaces and Reinstates Labor", Journal of Economic Perspectives 33(2) 3-30 (2019), name them: the displacement effect, where machines take over tasks that labour used to do, and the reinstatement effect, where new tasks are created in which labour has an edge. Draw them as two arrows on one line. The net is the difference in their lengths, and nothing on the drawing fixes it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A single hand-drawn horizontal line labelled labour's share of tasks, with fewer tasks at the left end and more tasks at the right. A small figure stands at the middle. An arrow runs left from the figure labelled displacement, machines take over tasks labour used to do, and an arrow runs right labelled reinstatement, new tasks are created in which labour has an edge. Below, an amber box reads net effect with a question mark, and a note says the sign is the difference between the two arrows and nothing on the drawing fixes it.">
+        <defs>
+          <filter id="d7bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d7bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d7bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d7bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d7bL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d7bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d7bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d7bV { font: 800 18px Inter, sans-serif; fill: #142944; }
+          .d7bA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d7bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d7bH" x="30" y="26">TWO EFFECTS ON ONE LINE: LABOUR'S SHARE OF TASKS</text>
+        <text class="d7bS" x="30" y="44">Acemoglu and Restrepo 2019, Journal of Economic Perspectives 33(2), read as two arrows</text>
+
+        <g filter="url(#d7bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the labour line with end ticks -->
+          <path d="M60 150 L820 150" stroke="#1F3A5F" stroke-width="2.4"/>
+          <path d="M60 142 L60 158 M820 142 L820 158" stroke="#1F3A5F"/>
+          <!-- the person standing on the line -->
+          <circle cx="440" cy="112" r="9"/>
+          <path d="M440 121 L440 140 M440 128 L428 136 M440 128 L452 136 M440 140 L432 150 M440 140 L448 150"/>
+          <!-- displacement arrow, leftward -->
+          <path d="M416 150 L140 150" stroke="#A8570B" stroke-width="2.4" marker-end="url(#d7bAr)"/>
+          <!-- reinstatement arrow, rightward -->
+          <path d="M464 150 L740 150" stroke="#A8570B" stroke-width="2.4" marker-end="url(#d7bAr)"/>
+          <!-- the net box: the one amber-filled thing -->
+          <rect x="340" y="210" width="200" height="50" rx="8" transform="rotate(-1 440 235)" fill="#FBEEDC" stroke="#A8570B"/>
+        </g>
+
+        <text class="d7bA" x="60" y="132">FEWER TASKS</text>
+        <text class="d7bB" x="280" y="132" text-anchor="middle">DISPLACEMENT</text>
+        <text class="d7bB" x="600" y="132" text-anchor="middle">REINSTATEMENT</text>
+        <text class="d7bA" x="820" y="132" text-anchor="end">MORE TASKS</text>
+        <text class="d7bS" x="280" y="172" text-anchor="middle">machines take over tasks labour used to do</text>
+        <text class="d7bS" x="600" y="172" text-anchor="middle">new tasks are created in which labour has an edge</text>
+        <text class="d7bV" x="440" y="241" text-anchor="middle">net effect: ?</text>
+        <text class="d7bS" x="560" y="232">the sign is the difference between the two arrows,</text>
+        <text class="d7bS" x="560" y="248">and nothing on the drawing fixes it</text>
+
+        <text class="d7bN" x="30" y="296">Displacement pulls the marker left, reinstatement pulls it right. Where it lands is the open question.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the arrows are drawn the same length on purpose; anyone who draws one longer is making a claim the drawing does not contain</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The displacement effect and the reinstatement effect<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Displacement</strong> is the arrow everyone sees. A machine, or a model, takes over a task that a person used to do, and the share of tasks performed by labour falls. It is the mechanism behind every "jobs at risk" headline, and it is real; it is also only half of the paper. <strong>Reinstatement</strong> is the arrow that the headline leaves out: the creation of new tasks in which people have a comparative advantage over the machine. New tasks are hard to count because they do not exist yet when the forecast is made, which is why forecasts systematically see the first arrow more clearly than the second.</p>
+        <p>The paper's contribution is to put both on the same line and make the net a question about their relative sizes rather than a slogan. That is why the page cites the 2019 Journal of Economic Perspectives paper, "Automation and New Tasks: How Technology Displaces and Reinstates Labor", 33(2) 3-30, and not the 2018 American Economic Review paper by the same authors, which is a different model with a different argument. Getting the citation right is part of getting the claim right: the claim is two arrows and an open net.</p>
+        <p>For generative models specifically, the honest position is that displacement is being measured tile by tile (Part 3) and reinstatement is, by its nature, not yet countable. So the net is not known, and the page says so rather than picking a side.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The productivity paradox, and why measurement lags a technology<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Robert Solow, reviewing a book in the New York Times Book Review on 12 July 1987, is widely reported to have written that you can see the computer age everywhere but in the productivity statistics. The line is reported here, not read from the microfilm, and it names a pattern that has recurred with every general-purpose technology since: adoption is visible long before its effect on measured output is. Three reasons, none of them exotic. Firms adopt the tool before they reorganise the work around it, and the gain is in the reorganisation. The complementary investments, in training, in data, in new processes, are spent before they pay. And the statistics that would show the gain are built around the old tasks, so a new task that the tool created is measured badly or not at all.</p>
+        <p>The consequence for tonight is a warning in both directions. Early task-level gains, like those in Part 3, do not automatically show up in output statistics, so their absence in the aggregate numbers is not evidence that the task gains are illusory. And the task gains do not automatically become aggregate gains either, because the reorganisation between the tile and the economy has not happened yet. Both readings are open. Someone who tells you which one is right has more information than the statistics contain.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Wages: the disagreement, stated as a disagreement<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Whether a tool that complements a task raises or lowers the wage of the person doing it is contested, and the contest is not a failure of research; it is that the answer depends on things the task-level studies do not measure. If the tool raises the output of novices most, as the support-desk study found, one reading is that the wage gap between novice and expert narrows because the expert's edge is now partly in the tool. Another reading is that the expert's remaining edge, on the tasks the tool cannot do, becomes scarcer and more valuable, and the gap widens. Both are coherent, both have supporters, and the same experiment is compatible with each because the experiment measured a tile and the wage is paid for the bundle.</p>
+        <p>The professional norm is therefore to say what is measured and what is inferred, in separate sentences. "Novices resolved 34 percent more issues per hour with the assistant" is measured. "Therefore novice wages will rise" is inferred, and the inference needs an argument about the labour market that the study did not make. Keeping the two apart is most of what it means to read this literature well.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The forecast that only saw one arrow.</strong> Every decade produces a list of occupations "at risk" from the technology of the moment, and every such list is a displacement estimate: it counts the tiles a machine could plausibly take and sums them into jobs. The reinstatement arrow is missing from the method, not because the authors forgot it, but because it cannot be listed in advance. The right way to read an at-risk list is as one arrow drawn carefully, with the other arrow's length unknown. That reading is duller than the headline and it is the only one the method supports.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Draw both arrows for one role you know" data-hint="Name a role. Write two lines: one task a tool now does instead of the person, and one task that did not exist before the tool and is now someone's job. If you cannot fill the second line, write why not. Three lines." data-seed="" data-cta="Draw it"></div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the three task-level experiments</span>
+      <h2>Three experiments, three task counts, zero jobs</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Since 2023 three experiments have put a generative model into a real or realistic task and measured the difference against a control group. They are the best evidence there is on the displacement arrow at the tile level, and each carries its figure, its unit and its evidence tier. Two things are true of all three: they randomised access to the tool, which is why their numbers are worth more than a survey; and they measured tasks in an experiment, not jobs in an economy, which is why their numbers do not answer the employment question, and do not try to.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn panel split by an amber jagged frontier line. Inside the frontier, on the left, three tiles carry the Dell'Acqua figures: 12.2 percent more tasks completed, 25.1 percent faster, more than 40 percent higher quality. Outside the frontier, on the right, one red-edged tile reads 19 percentage points less likely to reach a correct solution, with a note that the unit is points, not percent. A small figure stands near the frontier.">
+        <defs>
+          <filter id="d7cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d7cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d7cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d7cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d7cL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d7cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d7cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d7cV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .d7cR { font: 800 16px Inter, sans-serif; fill: #991B1B; }
+          .d7cRs { font: 400 11px Inter, sans-serif; fill: #991B1B; }
+          .d7cA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d7cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d7cH" x="30" y="26">THE JAGGED FRONTIER: THE SAME TOOL, TWO SIDES</text>
+        <text class="d7cS" x="30" y="44">Dell'Acqua et al. 2023, Harvard Business School Working Paper 24-013; consultants with and without the model</text>
+
+        <g filter="url(#d7cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the panel -->
+          <rect x="30" y="60" width="820" height="220" rx="6" transform="rotate(0.3 440 170)" fill="#FFFFFF"/>
+          <!-- the hatched outside region -->
+          <path d="M470 62 L848 62 L848 278 L440 278 L462 250 L426 222 L478 194 L430 166 L486 138 L446 110 L500 84 Z" fill="url(#d7cHc)" stroke="none"/>
+          <!-- the frontier itself: the amber thing -->
+          <path d="M470 62 L500 84 L446 110 L486 138 L430 166 L478 194 L426 222 L462 250 L440 278" stroke="#A8570B" stroke-width="2.6"/>
+          <!-- three inside tiles -->
+          <rect x="50" y="100" width="200" height="48" rx="6" transform="rotate(-0.8 150 124)" fill="#EEF2F8"/>
+          <rect x="50" y="158" width="200" height="48" rx="6" transform="rotate(0.6 150 182)" fill="#EEF2F8"/>
+          <rect x="50" y="216" width="200" height="48" rx="6" transform="rotate(-0.5 150 240)" fill="#EEF2F8"/>
+          <!-- the outside tile, wrong-way red -->
+          <rect x="555" y="130" width="280" height="64" rx="6" transform="rotate(1 695 162)" fill="#FEF2F2" stroke="#991B1B"/>
+          <!-- the person, near the frontier, inside -->
+          <circle cx="330" cy="212" r="8"/>
+          <path d="M330 220 L330 246 M330 228 L318 240 M330 228 L342 240 M330 246 L322 262 M330 246 L338 262"/>
+          <!-- a small arrow from the outside note to the tile -->
+          <path d="M600 214 L600 200" marker-end="url(#d7cAr)"/>
+        </g>
+
+        <text class="d7cA" x="50" y="84">INSIDE THE FRONTIER</text>
+        <text class="d7cA" x="560" y="84">OUTSIDE THE FRONTIER</text>
+        <text class="d7cV" x="60" y="120">12.2 percent</text>
+        <text class="d7cS" x="60" y="138">more tasks completed</text>
+        <text class="d7cV" x="60" y="178">25.1 percent</text>
+        <text class="d7cS" x="60" y="196">faster</text>
+        <text class="d7cV" x="60" y="236">over 40 percent</text>
+        <text class="d7cS" x="60" y="254">higher quality</text>
+        <text class="d7cR" x="565" y="156">19 percentage points</text>
+        <text class="d7cRs" x="565" y="176">less likely to reach a correct solution</text>
+        <text class="d7cB" x="608" y="228">points, not percent: a gap between two rates</text>
+        <text class="d7cS" x="560" y="264">the same consultants, the same tool</text>
+
+        <text class="d7cN" x="30" y="314">The frontier is drawn jagged because the capability is uneven, and which side a task sits on is not visible from its difficulty.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three good numbers on one side of a line and one bad number on the other, from the same people using the same tool; the line is the finding</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The three studies, each with its figure, its unit and its tier<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Brynjolfsson, Li and Raymond, "Generative AI at Work", NBER Working Paper 31161</strong> (2023; later published in the Quarterly Journal of Economics, 2025). Customer-support agents, a generative assistant, one task: issues resolved per hour. Up 14 percent on average, 34 percent for novice and low-skilled workers, minimal for experienced and highly skilled workers. Read at source; primary. The unit is a rate per hour, and the headline is the gradient by experience as much as the average.</p>
+        <p><strong>Noy and Zhang 2023, Science 381(6654).</strong> Professional writing tasks, done with and without a model. Reported as about 40 percent faster with about 18 percent higher quality. The figures are reported here from the abstract as reproduced by a secondary index; the article itself was not opened in this build, so the tier is secondary and the page says "reported". The unit is time on a task and a graded quality score, both at the task.</p>
+        <p><strong>Dell'Acqua et al. 2023, "Navigating the Jagged Technological Frontier", Harvard Business School Working Paper 24-013.</strong> Consultants given a model, on a set of tasks the authors chose to sit inside the model's capability and one task chosen to sit outside it. Inside: 12.2 percent more tasks completed, 25.1 percent faster, more than 40 percent higher quality. Outside: 19 percentage points less likely to produce a correct solution. Read from the working paper; primary. The two-sided result is the reason the study matters more than its good numbers: the same tool, the same people, and the sign flips with the task.</p>
+        <p>What the three share is the design. Each randomised who got the tool, so the difference is the tool and not the kind of person who chooses to use one. What the three also share is the unit. Every figure above is a task in an experiment. Not one is a job in an economy, and not one of the papers claims otherwise.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Percent against percentage points, on the number people most often misquote<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"19 percentage points less likely to produce a correct solution" is a gap between two rates: the share of the tool group who got it right, minus the share of the control group who did. A percentage point is one hundredth of the whole, subtracted. "19 percent less likely" would be a proportion of the control group's rate, multiplied. They are only the same number when the base rate is 100 percent, which it never is.</p>
+        <p>Make it concrete with an invented base rate, used only for the arithmetic and not the paper's own figure: if the control group got 80 of 100 right, 19 points takes the tool group to 61 of 100. Nineteen percent of 80 is about 15, which would take the tool group to about 65. The misquote understates the finding by four people in a hundred on that base rate, and by a different amount on any other base rate, which is exactly why the unit has to travel with the number. The paper says points. Say points.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a task study cannot say, and why that is not a criticism<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A task study holds the job fixed and changes the tool. It cannot see what the firm does with the freed hours, because in the experiment the firm did nothing yet; it cannot see whether the task still exists as a human task a year later, because the experiment ran for weeks; and it cannot see reinstatement at all, because a task that does not exist cannot be randomised. These are not gaps a better experiment would close. They are the boundary of what a task experiment is, and the papers state their boundary plainly.</p>
+        <p>The open question therefore has a precise shape: given that these tiles got faster or better, what happens to the bundles that contain them, and to the people who hold the bundles? Answering it needs data on jobs over time, which is a different kind of evidence with different problems, and the results so far do not agree with each other. The professional stance is to carry the task figures with their units and their tiers, to carry the employment question as a question, and to notice when someone joins the two with a "therefore" that no study supplied.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The consultants who could not see the line.</strong> In the Dell'Acqua experiment the tasks on either side of the frontier were chosen to look comparable to the people doing them. On one side the model made them faster and better; on the other it made them 19 percentage points less likely to be right. The lesson for a team adopting a tool is not "use it less". It is that the frontier does not announce itself, so a team needs a way to find out which side a task is on before trusting the output, and that finding out is itself a new task, sitting in someone's bundle, that did not exist last year.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>A task inventory for one role, scored</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Five short steps in pandas. The role is a reporting analyst on a marketing team, and every hour and every score below is invented to show the arithmetic; the only real column is which published study measured a task like it. Replace the rows with a role you actually know, keep the scores honest about being guesses, and the sentence at the end will still be true of whatever you typed. Your numbers will differ, and they should.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 342" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn checklist for an invented reporting analyst role: seven tasks with weekly hours, an exposure score and the study that measured a task like it. Four rows are ticked as measured: the weekly narrative by Noy and Zhang, routine questions by Brynjolfsson and colleagues, standard SQL by Dell'Acqua inside the frontier, and investigating an anomaly by Dell'Acqua outside the frontier. Three rows, cleaning data, planning meetings and deciding what to measure, have no study. The sum line reads 23 of 40 hours measured, 18.1 exposure-weighted hours, and no row for what happens to the role.">
+        <defs>
+          <filter id="d7dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="109" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d7dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d7dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d7dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d7dL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d7dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d7dB { font: 800 12px Inter, sans-serif; fill: #8A4409; }
+          .d7dA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d7dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d7dH" x="30" y="26">A TASK INVENTORY, SCORED: ONE ROLE, SEVEN TASKS, EVERY NUMBER INVENTED</text>
+
+        <g filter="url(#d7dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the sheet -->
+          <rect x="30" y="44" width="820" height="250" rx="4" transform="rotate(-0.3 440 169)" fill="#FFFFFF"/>
+          <path d="M30 74 L850 74" stroke="#C9D2E2"/>
+          <!-- the three unmeasured rows, hatched -->
+          <rect x="34" y="154" width="812" height="72" fill="url(#d7dHc)" stroke="none"/>
+          <!-- checkboxes, one per row -->
+          <rect x="40" y="80" width="12" height="12" rx="2" transform="rotate(-3 46 86)"/>
+          <rect x="40" y="106" width="12" height="12" rx="2" transform="rotate(2 46 112)"/>
+          <rect x="40" y="132" width="12" height="12" rx="2" transform="rotate(-2 46 138)"/>
+          <rect x="40" y="158" width="12" height="12" rx="2" transform="rotate(3 46 164)"/>
+          <rect x="40" y="184" width="12" height="12" rx="2" transform="rotate(-1 46 190)"/>
+          <rect x="40" y="210" width="12" height="12" rx="2" transform="rotate(2 46 216)"/>
+          <rect x="40" y="236" width="12" height="12" rx="2" transform="rotate(-3 46 242)"/>
+          <!-- ticks on the four measured rows -->
+          <path d="M42 86 L46 90 L52 81" stroke="#A8570B" stroke-width="2.2"/>
+          <path d="M42 112 L46 116 L52 107" stroke="#A8570B" stroke-width="2.2"/>
+          <path d="M42 138 L46 142 L52 133" stroke="#A8570B" stroke-width="2.2"/>
+          <path d="M42 242 L46 246 L52 237" stroke="#A8570B" stroke-width="2.2"/>
+          <!-- the sum line: the one amber thing -->
+          <path d="M34 262 L846 262" stroke="#A8570B" stroke-width="2.4"/>
+          <!-- a clock doodle by the hours column -->
+          <circle cx="830" cy="58" r="9"/>
+          <path d="M830 52 L830 58 L834 61"/>
+        </g>
+
+        <text class="d7dA" x="62" y="66">TASK</text>
+        <text class="d7dA" x="380" y="66">H/WEEK</text>
+        <text class="d7dA" x="460" y="66">EXPOSURE</text>
+        <text class="d7dA" x="560" y="66">WHICH STUDY MEASURED A TASK LIKE IT</text>
+
+        <text class="d7dL" x="62" y="90">write the weekly report narrative</text>
+        <text class="d7dS" x="380" y="90">6</text>
+        <text class="d7dS" x="460" y="90">0.8</text>
+        <text class="d7dS" x="560" y="90">Noy and Zhang: writing tasks</text>
+        <text class="d7dL" x="62" y="116">answer routine questions in chat</text>
+        <text class="d7dS" x="380" y="116">5</text>
+        <text class="d7dS" x="460" y="116">0.7</text>
+        <text class="d7dS" x="560" y="116">Brynjolfsson et al.: support</text>
+        <text class="d7dL" x="62" y="142">draft SQL for standard pulls</text>
+        <text class="d7dS" x="380" y="142">7</text>
+        <text class="d7dS" x="460" y="142">0.6</text>
+        <text class="d7dS" x="560" y="142">Dell'Acqua et al.: inside the frontier</text>
+        <text class="d7dL" x="62" y="168">clean and reconcile source data</text>
+        <text class="d7dS" x="380" y="168">8</text>
+        <text class="d7dS" x="460" y="168">0.4</text>
+        <text class="d7dS" x="560" y="168">none</text>
+        <text class="d7dL" x="62" y="194">sit in planning meetings</text>
+        <text class="d7dS" x="380" y="194">6</text>
+        <text class="d7dS" x="460" y="194">0.1</text>
+        <text class="d7dS" x="560" y="194">none</text>
+        <text class="d7dL" x="62" y="220">decide what to measure next quarter</text>
+        <text class="d7dS" x="380" y="220">3</text>
+        <text class="d7dS" x="460" y="220">0.1</text>
+        <text class="d7dS" x="560" y="220">none</text>
+        <text class="d7dL" x="62" y="246">investigate an anomaly nobody expected</text>
+        <text class="d7dS" x="380" y="246">5</text>
+        <text class="d7dS" x="460" y="246">0.3</text>
+        <text class="d7dS" x="560" y="246">Dell'Acqua et al.: outside the frontier</text>
+
+        <text class="d7dB" x="62" y="282">measured: 23 of 40 hours</text>
+        <text class="d7dB" x="380" y="282">exposure-weighted: 18.1 h</text>
+        <text class="d7dB" x="560" y="282">what happens to the role: no row</text>
+
+        <text class="d7dN" x="30" y="328">Scores are invented to show the arithmetic; the real column is which study measured a task like it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the hatched rows are the hours no experiment has touched, and the last column has no row for the question everyone asks</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Write the inventory as data.</strong> One row per task, hours per week, and an exposure score between 0 and 1 that is your guess at how much of the task a tool could plausibly touch. The scores are the honest part of the exercise only if you admit they are guesses.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · the inventory</span>import pandas as pd
+
+# One role, seven tasks. Hours and exposure scores are INVENTED for the
+# arithmetic. Replace them with a role you know; your numbers will differ.
+ROLE = "reporting analyst, marketing team (constructed)"
+
+inv = pd.DataFrame({
+    "task": [
+        "write the weekly report narrative",
+        "answer routine questions in chat",
+        "draft SQL for standard pulls",
+        "clean and reconcile source data",
+        "sit in planning meetings",
+        "decide what to measure next quarter",
+        "investigate an anomaly nobody expected",
+    ],
+    "hours":    [6, 5, 7, 8, 6, 3, 5],          # invented
+    "exposure": [.8, .7, .6, .4, .1, .1, .3],  # invented guesses, 0 to 1
+})
+print(inv["hours"].sum())    # 40 here; your numbers will differ</div>
+      </div>
+      <div class="step">
+        <p><strong>Attach the study, or "none".</strong> This is the one column that is not a guess: for each task, name the published experiment that measured a task like it, and leave it empty when none did. The mapping is a judgement and the page says so; the point is that the judgement is written down.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · which study measured a task like it</span>study = {
+    "write the weekly report narrative":      "Noy and Zhang 2023, Science 381(6654): writing tasks",
+    "answer routine questions in chat":       "Brynjolfsson, Li, Raymond, NBER WP 31161: support",
+    "draft SQL for standard pulls":           "Dell'Acqua et al. 2023, HBS WP 24-013: inside the frontier",
+    "investigate an anomaly nobody expected": "Dell'Acqua et al. 2023, HBS WP 24-013: outside the frontier",
+}
+inv["study"]    = inv["task"].map(study).fillna("none")
+inv["measured"] = inv["study"] != "none"
+print(inv[["task", "hours", "exposure", "measured"]].to_string(index=False))</div>
+      </div>
+      <div class="step">
+        <p><strong>Sum the hours two ways.</strong> Measured hours are the hours in tasks a study touched, whatever it found. Exposure-weighted hours multiply each task's hours by its score, which is a softer number and a more honest one, because it carries the guess with it.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · two sums</span>total    = inv["hours"].sum()
+measured = inv.loc[inv["measured"], "hours"].sum()
+weighted = (inv["hours"] * inv["exposure"]).sum()
+
+print(total, measured, round(weighted, 1))
+# 40 23 18.1 on the invented rows above; your numbers will differ</div>
+      </div>
+      <div class="step">
+        <p><strong>Keep the sign with the study.</strong> "Measured" is not "helped". One of the four measured rows maps to the outside of the frontier, where the tool made consultants 19 percentage points less likely to be right. Split the measured hours by which side of the frontier the study put them on, so the inventory never quietly counts a wrong-way result as a gain.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · inside and outside</span>inv["side"] = "not measured"
+inv.loc[inv["measured"], "side"] = "inside or neutral"
+inv.loc[inv["study"].str.contains("outside"), "side"] = "outside the frontier"
+
+print(inv.groupby("side")["hours"].sum())
+# inside or neutral      18
+# not measured           17
+# outside the frontier    5     on the invented rows; your numbers will differ</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the sentence.</strong> The output of the build-along is one line of prose that is true of the numbers you typed, and that stops exactly where the evidence stops. Print it, paste it into the planning document, and let the next sentence be a question.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the honest sentence</span>sentence = (
+    f"For this role, {measured} of {total} weekly hours sit in tasks the "
+    f"studies measured, and none of the studies measured what happens to the role."
+)
+print(sentence)
+# For this role, 23 of 40 weekly hours sit in tasks the studies measured,
+# and none of the studies measured what happens to the role.
+# (on the invented rows; your numbers will differ)
+
+inv.to_csv("task_inventory_constructed.csv", index=False)  # "constructed" in the filename</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the exposure scores visibly invented.</strong> The moment a column of guesses is saved without the word "constructed" in the filename, it will be read back in a month as a measurement. The studies measured tiles; the inventory guesses at which tiles those were in your team. Both are useful, and they are not the same kind of number, so they should never share a filename without the label.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before deep-dive session 8</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Inventory a role you actually know,</strong> yours or a teammate's, with real hours from a real week. Score exposure honestly, mark each score as a guess, and print the sentence.</li>
+      <li><strong>Draw the frontier for that role.</strong> For each measured task, write whether you believe it sits inside or outside the tool's frontier and why. Then write how you would find out, because the Dell'Acqua consultants could not tell from the task itself.</li>
+      <li><strong>Find one misquote.</strong> Search for a news write-up of the Dell'Acqua result and check whether it says percent or percentage points. Write down which, and what the difference would be on an invented base rate.</li>
+      <li><strong>Write both arrows.</strong> For the role, one task the tool now does instead of the person, and one task that exists because of the tool and did not last year. If the second line is empty, that is a finding too.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 7 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · The support-desk study found issues resolved per hour rose 14 percent on average with the assistant. A colleague concludes that support headcount can fall by 14 percent. What is wrong with the step?</p>
+      <button class="qopt" type="button">A · Nothing; a 14 percent gain in output per hour means 14 percent fewer hours are needed for the same output</button>
+      <button class="qopt" type="button">B · The number is too small to act on; only a gain above 20 percent justifies a headcount decision</button>
+      <button class="qopt" type="button">C · The study measured one task in an experiment, not a job in an economy; a job is a bundle of tasks, the freed hours go wherever the firm sends them, and no study measured what happens to the role, so the headcount claim is an inference the evidence did not supply</button>
+      <button class="qopt" type="button">D · The study was not randomised, so the 14 percent could be the kind of agent who chose to use the tool</button>
+      <p class="qwhy">The study did randomise access, which is why the 14 percent is worth more than a survey. Its unit is still a task. The gain was 34 percent for novices and minimal for experienced agents, and whether a firm reassigns, retrains or reduces is a decision the experiment did not observe.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · Dell'Acqua et al. report consultants were 19 percentage points less likely to produce a correct solution on the task outside the frontier. Using an invented control-group rate of 80 in 100 for the arithmetic only, what does the finding say about the tool group?</p>
+      <button class="qopt" type="button">A · About 65 in 100 correct, because 19 percent of 80 is about 15</button>
+      <button class="qopt" type="button">B · 61 in 100 correct, because a percentage point is a gap between two rates and 19 points is subtracted from 80, not multiplied into it</button>
+      <button class="qopt" type="button">C · 19 in 100 correct, because the finding is the tool group's rate</button>
+      <button class="qopt" type="button">D · It cannot be said without the paper's own base rate, because points and percent are the same unit</button>
+      <p class="qwhy">Points subtract; percent multiplies. On this invented base rate the misquote understates the gap by four people in a hundred, and by a different amount on any other base rate, which is why the unit has to travel with the number. The paper says points.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · Acemoglu and Restrepo (2019) draw displacement and reinstatement as two effects on labour's share of tasks. What does the drawing, on its own, say about the net effect of generative models on employment?</p>
+      <button class="qopt" type="button">A · Displacement dominates, so employment falls</button>
+      <button class="qopt" type="button">B · Reinstatement dominates, so employment rises</button>
+      <button class="qopt" type="button">C · The two arrows cancel, so employment is unchanged</button>
+      <button class="qopt" type="button">D · Nothing; the net is the difference between two arrows of unknown length, displacement is being measured task by task while reinstatement cannot be counted in advance, and the honest statement is that the question is open</button>
+      <p class="qwhy">The paper's contribution is to put both effects on one line and make the net an empirical question about their relative sizes. The page cites the 2019 Journal of Economic Perspectives paper, 33(2) 3-30, and makes no claim about total employment because the evidence does not hold one.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Tasks against jobs; substitution against complementarity; exposure as a statement about a task</span><span class="note">Standard labour economics, no single source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Acemoglu and Restrepo 2019, "Automation and New Tasks: How Technology Displaces and Reinstates Labor", Journal of Economic Perspectives 33(2) 3-30: the displacement effect and the reinstatement effect</span><span class="note">Primary; abstract read at source. Cited as the 2019 JEP paper, not the 2018 AER paper by the same authors</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Brynjolfsson, Li and Raymond, "Generative AI at Work", NBER Working Paper 31161 (2023; QJE 2025): 14 percent more issues resolved per hour on average, 34 percent for novice and low-skilled workers, minimal for experienced and highly skilled workers</span><span class="note">Primary; the working paper abstract read at source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Noy and Zhang 2023, Science 381(6654): professional writing tasks about 40 percent faster and about 18 percent higher quality</span><span class="note">Reported, secondary; the article was not opened, the abstract wording is as reproduced by a secondary index</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Dell'Acqua et al. 2023, "Navigating the Jagged Technological Frontier", HBS Working Paper 24-013: 12.2 percent more tasks, 25.1 percent faster, more than 40 percent higher quality inside the frontier; 19 percentage points less likely correct outside it</span><span class="note">Primary; working paper read. The unit is percentage points and the page teaches the difference</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Solow, New York Times Book Review, 12 July 1987: the computer age everywhere but in the productivity statistics; measurement lag</span><span class="note">Reported, secondary; self-study only, the microfilm was not opened</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Wage effects and total employment effects of AI</span><span class="note">Not claimed; the disagreement is taught and no side is taken</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The task inventory for a reporting analyst: 7 tasks, 40 hours, 23 measured, 18.1 exposure-weighted</span><span class="note">Constructed; every hour and score is invented and labelled, the study mapping is a stated judgement</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 7 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>A job is a bundle of tasks</b><span>A tool touches a tile. Ask "which tiles?" before "which jobs?".</span></div>
+      <div class="cheat-item"><b>Substitution against complementarity</b><span>The tool does the task, or the tool makes the person better at it. One job holds both.</span></div>
+      <div class="cheat-item"><b>Two arrows, open net</b><span>Displacement left, reinstatement right. Acemoglu and Restrepo 2019, JEP 33(2). Nobody knows the difference yet.</span></div>
+      <div class="cheat-item"><b>Three task figures, three tiers</b><span>Support: 14 percent, 34 for novices (primary). Writing: about 40 and 18 (reported). Consultants: 12.2, 25.1, over 40 (primary).</span></div>
+      <div class="cheat-item"><b>19 percentage points, not percent</b><span>A gap between two rates, subtracted. Outside the frontier the same tool made people less likely to be right.</span></div>
+      <div class="cheat-item"><b>The honest sentence</b><span>"X of Y hours sit in tasks the studies measured, and none measured what happens to the role."</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Tonight's frontier had a problem the consultants could not solve from the task: which side a piece of work sits on is not visible before the output is checked. Deep-dive session 8 makes that invisibility the subject. A model, or a dataset, is a good whose quality cannot be observed before purchase, which is Akerlof's lemons problem wearing a model card. Benchmarks and evals are the signals sellers send, Goodhart says what happens to any signal that becomes a target, and inside the ML team the same problem shows up as a metric between a principal and an agent. The build-along reads a real model card as a signal and asks what it can and cannot tell you.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 7 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p6-auctions.html">← Prev: Auctions: how ads and compute are priced</a> &nbsp;·&nbsp; <a href="p8-information-economics-of-models.html">Next: Information economics of models →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

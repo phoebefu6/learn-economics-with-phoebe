@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Foundations session 3 of 6. Decisions at the margin; why money already spent does not get a vote; opportunity cost as the next best use; comparative advantage as two people and two tasks; and why a physical unit, a software copy and an inference have three different marginal costs.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Marginal thinking and opportunity cost - learn economics with phoebe">
+<meta property="og:description" content="Foundations session 3 of 6. The next unit, not the average. The pile behind you does not vote. The hour has a next best use. And the three marginal costs that decide what a prediction is worth.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a3-marginal-thinking.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Marginal thinking and opportunity cost - learn economics with phoebe">
+<meta name="twitter:description" content="Foundations session 3 of 6. The next unit, the fork, the next best use, and three marginal costs.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Foundations session 3 · Marginal thinking and opportunity cost - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Foundations session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Foundations session 3 of 6</div>
+    <h1>Marginal thinking and <span class="accent">opportunity cost</span></h1>
+    <p class="sub">Foundations session 2 put a number on how buyers respond to a price. Tonight moves from the price to the decision behind it, and the decision is almost never "should we do this" but "should we do one more". One more unit, one more listing, one more hire, one more month of a product that has not paid back. The habit that answers those questions has three parts. Look at the next unit, not the average. Ignore what is already spent, because it is the same whichever way you go. And price every hour and every real by the best thing you could have done with it instead. The session closes on the reason those three habits matter more now than they did: a physical unit, a software copy and a prediction from a model have three different costs at the margin, and most pricing mistakes about AI come from using the wrong one.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Leaders, product and data teams, anyone who prices anything</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The margin, the fork, the next best use</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: three decisions at Beira Goods</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Most business numbers are averages. Cost per unit, revenue per customer, hours per listing. Averages are fine for describing what happened and nearly useless for deciding what to do next, because nobody ever decides an average. They decide whether to make one more, keep one more, spend one more hour. The cost that matters for that decision is the cost of the next one, and the next one is often nothing like the average. A factory's thousandth unit is cheaper than its first; a support team's hundredth ticket of the day is dearer than its tenth; a software company's millionth copy costs almost nothing. Marginal thinking is the discipline of asking about the next one, and it turns out to be the same discipline that tells you when to walk away.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone works it through</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The question that replaces "is this worth it" with "is one more worth it"; the test that shows why money already spent cannot change a decision; a way to price an hour by its next best use; the two-person, two-task rule that says who should do what even when one person is better at everything; and one sentence that separates a physical unit, a software copy and a prediction by what the next one costs. Plus three worked decisions at Beira Goods, a constructed seller, with every number invented and labelled.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers decisions at the margin, sunk costs</span>
+      <h2>The next unit, not the average</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">A decision at the margin compares two things only: what the next unit will cost and what the next unit will earn. If the second is bigger, make it. If not, stop. Everything else, the money spent last year, the average cost across the whole run, the hours already sunk into the product page, is either the same on both paths or not about the next unit, and a number that is the same on both paths cannot tell you which path is better. That last point is the sunk cost rule, and it is the one people know and still break, because the pile behind them is large and visible and the next unit is small and abstract.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A sketched person stands at a fork. Behind them on the left is a hatched pile labelled already spent. Two paths lead ahead: the upper path to a panel headed keep the product listed, showing the costs ahead as next month's fee and hours and the earnings ahead as the units it will sell times the margin; the lower path to a panel headed delist it, showing nothing more on either line. Both panels say the money already spent is identical on both paths.">
+        <defs>
+          <filter id="s3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="17" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s3aL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s3aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s3aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s3aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s3aH" x="30" y="26">MONEY ALREADY SPENT DOES NOT GET A VOTE</text>
+        <text class="s3aS" x="30" y="44">the fork compares only what lies ahead; the pile behind is the same on both paths</text>
+
+        <g filter="url(#s3aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the pile already spent -->
+          <rect x="30" y="140" width="64" height="80" rx="6" transform="rotate(-1.2 62 180)" fill="url(#s3aHc)"/>
+          <!-- the person at the fork -->
+          <circle cx="170" cy="150" r="12"/><path d="M150 188 C154 168 186 168 190 188"/>
+          <!-- two paths ahead -->
+          <path d="M200 166 C260 150 340 118 430 108" marker-end="url(#s3aAr)"/>
+          <path d="M200 176 C260 200 340 236 430 246" marker-end="url(#s3aAr)"/>
+          <!-- keep panel -->
+          <rect x="440" y="66" width="400" height="94" rx="10" transform="rotate(-0.5 640 113)" fill="#EEF2F8"/>
+          <!-- delist panel -->
+          <rect x="440" y="196" width="400" height="98" rx="10" transform="rotate(0.6 640 245)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <!-- the one thing: the two lines ahead, marked amber -->
+          <path d="M448 104 L452 104" stroke="#A8570B" stroke-width="4"/>
+          <path d="M448 120 L452 120" stroke="#A8570B" stroke-width="4"/>
+        </g>
+
+        <text class="s3aB" x="62" y="128" text-anchor="middle">already spent</text>
+        <text class="s3aL" x="170" y="210" text-anchor="middle">Beira, at the fork</text>
+        <text class="s3aL" x="290" y="126">keep going</text>
+        <text class="s3aL" x="290" y="232">stop</text>
+
+        <text class="s3aH" x="460" y="90">KEEP THE PRODUCT LISTED</text>
+        <text class="s3aS" x="460" y="108">costs ahead: next month's fee and the hours it takes</text>
+        <text class="s3aS" x="460" y="124">earns ahead: the units it will sell, times the margin</text>
+        <text class="s3aB" x="460" y="146">decide on these two lines only</text>
+
+        <text class="s3aH" x="460" y="220">DELIST IT</text>
+        <text class="s3aS" x="460" y="240">costs ahead: nothing more</text>
+        <text class="s3aS" x="460" y="256">earns ahead: nothing more, and the hours go elsewhere</text>
+        <text class="s3aB" x="460" y="278">the R$ already spent is identical on both paths</text>
+
+        <text class="s3aN" x="30" y="326">Sunk means unrecoverable. It appears on both branches of the fork, so it cannot change which branch is better.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the pile is real and it is behind the person; neither path can get it back, so neither path is charged for it</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Marginal cost, marginal revenue, and the one comparison that decides<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Marginal cost</strong> is what the next unit costs to make, ship or serve. Not the total divided by the count, which is the average, but the extra: total cost with the unit minus total cost without it. <strong>Marginal revenue</strong> is what the next unit brings in, which is the price if selling one more does not move the price, and less than the price if it does, because the price cut applies to every unit you were already selling. Foundations session 2 gave you the tool for that second case: on an elastic product the price cut needed to sell one more costs more on the old units than it earns on the new one.</p>
+        <p><strong>The rule</strong> is one comparison. Make the next unit if its marginal revenue is above its marginal cost. Stop at the unit where they meet. Every unit before that point added to profit; every unit after it subtracts. A firm that stops earlier leaves money on the table; a firm that goes further pays for the privilege. Nothing in the rule mentions the average, and that is deliberate: the average cost of a run can be above the price while the next unit is still worth making, and it can be below the price while the next unit is a loss.</p>
+        <p><strong>Where the average misleads.</strong> A product with a large up-front cost and a small per-unit cost has an average that falls with every unit sold. Early on the average is far above the price and a leader reading only averages will call the product a loser. At the margin it was a winner from the first sale, because each sale earned more than it cost to make. The opposite trap is a product whose average is fine but whose next unit is dear, because the team is at capacity and the next order needs overtime, a new courier contract, or a second shift. The average says yes; the margin says the next order is the one that loses money.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why sunk costs feel like they should count, and the two honest exceptions<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Money already spent is unrecoverable on every path, which is exactly why it cannot rank the paths. The reason people count it anyway is that it feels like a debt the product owes them, and stopping feels like admitting the debt will never be paid. It will never be paid either way. Keeping the product running does not recover the listing fees or the photographer's invoice; it only adds next month's costs to the pile. The test that clears the fog is to write both paths on one page with only the costs and earnings that lie ahead, as the figure does. If the pile appears on both, it cancels, and what remains is the decision.</p>
+        <p>Two things that look like sunk costs are not. <strong>A recoverable asset</strong> is not sunk: stock that can be returned, a licence that can be resold, a deposit that comes back. Its resale value is a real earning on the "stop" path and belongs in the comparison. <strong>Information already bought</strong> is not sunk in the useful sense: three months of sales data cost money to collect, and that money is gone, but the data itself changes what you expect the next month to earn. Use what the spend taught you; ignore what it cost.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>One real Olist product, read at the margin.</strong> The most-sold eligible product on the marketplace used throughout these sessions held a price of R$ 75 through 2017 and cut it to R$ 69.90 in January 2018, and its units went from 45 to 121 that month. Multiply price by units and revenue roughly went from 3,400 to 8,500 reais, simple arithmetic on those two months. Was the cut a good decision? Revenue cannot say. Seventy-six extra units had to be bought, packed and shipped, and whether the margin on 121 units at 69.90 beat the margin on 45 at 75 depends on the marginal cost of a unit, which the dataset does not hold. It is the most common gap in a pricing review: a revenue line that went up, a cost of the next unit nobody wrote down, and a decision judged on the half of the picture that happened to be in the table.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers opportunity cost, comparative advantage</span>
+      <h2>The next best use of the hour</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The true cost of doing anything is the best thing you did not do instead. An hour spent writing a product listing is an hour not spent answering support tickets; a real spent on stock is a real not spent on advertising. That is opportunity cost, and it is the reason a "free" thing is never free and a cheap thing can be dear. It also leads to a result that surprises everyone the first time: two people should split their work by what each gives up, not by who is faster, and that holds even when one of them is faster at everything.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two sketched people, Ana and Bruno, on the left. A hand-drawn table gives listings per hour and tickets per hour for each: Ana 4 and 8, Bruno 1 and 4. Two more columns give what one listing costs in tickets given up, Ana 2 and Bruno 4, and what one ticket costs in listings given up, Ana 0.5 and Bruno 0.25. Ana's listing cell and Bruno's ticket cell are filled amber as the lower cost. A panel below says split by the lower cost, not by who is faster.">
+        <defs>
+          <filter id="s3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s3bL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s3bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s3bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s3bV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .s3bW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s3bA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s3bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s3bH" x="30" y="26">TWO PEOPLE, TWO TASKS, ONE HOUR EACH</text>
+        <text class="s3bS" x="30" y="44">Beira Goods, constructed: Ana is faster at both tasks, and it still pays to split them</text>
+
+        <g filter="url(#s3bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Ana -->
+          <circle cx="60" cy="100" r="12"/><path d="M40 138 C44 118 76 118 80 138"/>
+          <!-- Bruno -->
+          <circle cx="60" cy="220" r="12"/><path d="M40 258 C44 238 76 238 80 258"/>
+          <!-- Ana's row -->
+          <rect x="200" y="90" width="110" height="44" rx="6" transform="rotate(-0.8 255 112)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <rect x="340" y="90" width="110" height="44" rx="6" transform="rotate(0.6 395 112)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <rect x="480" y="90" width="130" height="44" rx="6" transform="rotate(-0.5 545 112)" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="640" y="90" width="130" height="44" rx="6" transform="rotate(0.7 705 112)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <!-- Bruno's row -->
+          <rect x="200" y="210" width="110" height="44" rx="6" transform="rotate(0.5 255 232)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <rect x="340" y="210" width="110" height="44" rx="6" transform="rotate(-0.7 395 232)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <rect x="480" y="210" width="130" height="44" rx="6" transform="rotate(0.8 545 232)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <rect x="640" y="210" width="130" height="44" rx="6" transform="rotate(-0.6 705 232)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- arrows from people to their rows -->
+          <path d="M96 112 L188 112" marker-end="url(#s3bAr)"/>
+          <path d="M96 232 L188 232" marker-end="url(#s3bAr)"/>
+          <!-- result panel -->
+          <rect x="200" y="272" width="570" height="54" rx="10" transform="rotate(0.3 485 299)" fill="#EEF2F8"/>
+        </g>
+
+        <text class="s3bA" x="255" y="76" text-anchor="middle">LISTINGS / HOUR</text>
+        <text class="s3bA" x="395" y="76" text-anchor="middle">TICKETS / HOUR</text>
+        <text class="s3bA" x="545" y="76" text-anchor="middle">ONE LISTING COSTS</text>
+        <text class="s3bA" x="705" y="76" text-anchor="middle">ONE TICKET COSTS</text>
+
+        <text class="s3bL" x="60" y="156" text-anchor="middle">Ana</text>
+        <text class="s3bV" x="255" y="118" text-anchor="middle">4</text>
+        <text class="s3bV" x="395" y="118" text-anchor="middle">8</text>
+        <text class="s3bW" x="545" y="116" text-anchor="middle">2 tickets</text>
+        <text class="s3bV" x="705" y="118" text-anchor="middle">0.5 listing</text>
+
+        <text class="s3bB" x="200" y="176">Ana is faster at both. Bruno still has the lower cost on tickets.</text>
+
+        <text class="s3bL" x="60" y="276" text-anchor="middle">Bruno</text>
+        <text class="s3bV" x="255" y="238" text-anchor="middle">1</text>
+        <text class="s3bV" x="395" y="238" text-anchor="middle">4</text>
+        <text class="s3bV" x="545" y="238" text-anchor="middle">4 tickets</text>
+        <text class="s3bW" x="705" y="236" text-anchor="middle">0.25 listing</text>
+
+        <text class="s3bH" x="216" y="294">SPLIT BY THE LOWER COST, NOT BY WHO IS FASTER</text>
+        <text class="s3bS" x="216" y="312">Ana lists, Bruno answers tickets: the pair gets more of both done than any other split</text>
+
+        <text class="s3bN" x="30" y="350">Constructed rates. The rule survives any numbers: compare what each person gives up, never how fast each is.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber cells are the two lowest opportunity costs, and they belong to different people even though one person is faster at both jobs</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Opportunity cost, and the two-person rule that follows from it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Opportunity cost</strong> is the value of the next best alternative you gave up. It is the honest price of an hour, a real, a server, a desk, and it is nearly always higher than the price on the invoice, because the invoice records what you paid and not what you could have done with it. A meeting with eight people has an invoice cost of zero and an opportunity cost of eight hours of whatever those people would otherwise have done. That is why "it is free" is a claim about the invoice and never about the cost.</p>
+        <p><strong>Comparative advantage</strong> is what opportunity cost says about who should do what. In the figure, Ana writes 4 listings an hour or answers 8 tickets; Bruno writes 1 or answers 4. Ana is better at both, which is called an absolute advantage, and it tempts a manager to give Ana everything. But look at what each gives up. When Ana writes a listing she gives up 2 tickets; when Bruno writes one he gives up 4. Ana's listings are cheaper in tickets, so Ana should list. When Ana answers a ticket she gives up half a listing; when Bruno answers one he gives up a quarter. Bruno's tickets are cheaper in listings, so Bruno should answer. Split that way, the two of them together produce more of both than under any other split, and Bruno has a job even though Ana is faster at it.</p>
+        <p><strong>The rule</strong> generalises far past two people. It is why a country that is worse at making everything still exports something, why a platform does the storefront and the seller does the sourcing, and why a senior engineer who is faster at writing tests than the junior should still not be the one writing them. The question is never "who is best at this"; it is "who gives up the least to do this".</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Diminishing returns, and why the fourth hire earns less than the first<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Add one more unit of an input while holding the others fixed and, past some point, each added unit produces less than the one before. One more packer in a warehouse of fixed size adds a lot of throughput; the tenth adds a little; the twentieth gets in the way. That is diminishing marginal returns, and it is the reason marginal cost eventually rises: once the cheap capacity is used, the next unit needs the expensive input, the overtime hour, the rented van. It is a statement about the short run, when something is fixed. Given time to add warehouse as well as packers, the constraint moves.</p>
+        <p>The data habit it gives you: when a team says "we doubled the ad budget and got 40 percent more sales" the interesting number is not the 40, it is the shape. Was the first half of the budget earning far more per real than the second half? A spend that has hit diminishing returns has a marginal return below its average return, and a report that quotes only the average will keep recommending the next increase long after the next increase stopped paying. Any number in this paragraph is illustrative; the shape is the point.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Beira Goods, a constructed seller, and the hours nobody prices.</strong> Beira has 40 products and two people. Ana writes four listings an hour or clears eight support tickets; Bruno writes one or clears four. For a year Ana did both, because she was better at both, and Bruno was given "whatever is left". Priced by opportunity cost, every ticket Ana answered cost Beira half a listing, and every listing Bruno wrote cost four tickets. The fix took no hiring and no tool: swap so that each does the task that costs them least. Ana and Bruno are invented; the rates are invented; the reason the swap works is the same reason a marketplace does storefronts and leaves sourcing to sellers.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers fixed vs marginal cost, information goods</span>
+      <h2>Three things, three marginal costs</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">A fixed cost is paid once, whether you make one unit or a million: the factory, the codebase, the trained model. A marginal cost is paid again for every unit. Most of the economics of the last thirty years comes from one observation about that split, made by Shapiro and Varian in 1998 and reported here from the publisher's record: an information good is expensive to make the first time and nearly free to copy, so its marginal cost is close to zero, and a price that tracks marginal cost tracks zero. A prediction from a model breaks that story in one specific way, and the break is the whole economics of AI in a sentence.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Axes of cost of the next unit against units made. A tall hatched bar at the far left is the fixed cost, paid once. Three lines run to the right: a physical unit at a real level that rises near capacity; a software copy along the floor at near zero; and an inference, drawn amber, as a low flat line above zero labelled small, real, per token. A note says the fixed cost looks alike for all three and they part at the next unit.">
+        <defs>
+          <filter id="s3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s3cL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s3cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s3cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s3cA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s3cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s3cH" x="30" y="26">WHAT THE NEXT UNIT COSTS, FOR THREE KINDS OF THING</text>
+        <text class="s3cS" x="30" y="44">one fixed cost up front for all three; the line after it is what differs</text>
+
+        <g filter="url(#s3cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M70 280 L70 70" stroke="#1F3A5F" marker-end="url(#s3cAr)"/>
+          <path d="M70 280 L560 280" stroke="#1F3A5F" marker-end="url(#s3cAr)"/>
+          <!-- the fixed cost, paid once, as a tall hatched bar -->
+          <rect x="80" y="106" width="32" height="174" rx="3" transform="rotate(-0.8 96 193)" fill="url(#s3cHc)"/>
+          <!-- a physical unit: real level, rising near capacity -->
+          <path d="M120 180 C300 176 440 166 540 130"/>
+          <!-- an inference: small, real, flat, metered -->
+          <path d="M120 240 L540 238" stroke="#A8570B" stroke-width="2.6"/>
+          <!-- a software copy: near zero along the floor -->
+          <path d="M120 272 L540 272"/>
+          <!-- a parcel doodle on the physical line -->
+          <rect x="290" y="150" width="26" height="20" rx="2" transform="rotate(-3 303 160)" fill="#FFFFFF"/>
+          <path d="M290 160 L316 160"/>
+        </g>
+
+        <text class="s3cA" x="80" y="66">COST OF THE NEXT UNIT</text>
+        <text class="s3cA" x="470" y="298">UNITS MADE</text>
+        <text class="s3cS" x="56" y="284">0</text>
+        <text class="s3cB" x="96" y="84" text-anchor="middle">fixed cost</text>
+        <text class="s3cS" x="96" y="98" text-anchor="middle">paid once</text>
+        <text class="s3cS" x="380" y="196">rises near capacity</text>
+        <text class="s3cS" x="300" y="228">not zero</text>
+
+        <text class="s3cL" x="548" y="134">a physical unit</text>
+        <text class="s3cS" x="548" y="150">the item, the box, the delivery</text>
+        <text class="s3cB" x="548" y="242">an inference</text>
+        <text class="s3cS" x="548" y="258">small, real, per token</text>
+        <text class="s3cL" x="548" y="276">a software copy</text>
+        <text class="s3cS" x="548" y="292">near zero (Shapiro and Varian, reported)</text>
+
+        <text class="s3cN" x="30" y="336">Fixed cost looks alike for all three: a factory, a codebase, a trained model. They part at the next unit.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber line is the new case: not the physical unit's real cost, not the copy's near-zero, but a meter that runs every time</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Fixed, marginal, and the economics of a prediction in words<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>A physical unit</strong> has a marginal cost that is real and visible: the item from the supplier, the packaging, the courier, the commission. It is roughly flat while there is spare capacity and rises when there is not. Pricing it is Foundations session 2's job: the price sits above the marginal cost by an amount the elasticity decides.</p>
+        <p><strong>A software copy</strong> has a marginal cost close to zero. The first copy cost the whole development budget; the millionth costs a few seconds of bandwidth. Shapiro and Varian's argument, as reported, is that this is why information goods are priced by what they are worth to the buyer and not by what they cost to make, and why the same product gets sold in versions at different prices to different buyers. Deep-dive session 3 takes that apart. Tonight the point is only the shape: a fixed cost that is enormous, a marginal cost that is nearly nothing, and an average cost that falls forever.</p>
+        <p><strong>A prediction from a model</strong> sits between the two, and the position matters. Training the model is a fixed cost, like writing the software. But each answer the model gives is not a copy; it is a computation, metered per token in and per token out, and it costs something every single time. Small, but not zero, and multiplied by every request. That means the average cost of an inference does not fall to nothing the way a software copy's does; it falls towards the per-token floor and stops. Every decision about whether to build, rent or switch off a model comes down to that floor times the volume against the fixed cost, and deep-dive session 4 puts dated list prices on it. No price is quoted here on purpose: the shape is the lesson, and the numbers move.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Economies of scale, and Coase on why a firm exists at all<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Economies of scale</strong> are what a large fixed cost does to the average: the more units it is spread across, the lower the cost per unit, until the marginal cost stops falling and takes over. They are the reason big producers can undercut small ones and the reason a market with a large fixed cost tends towards a few big players. They are also the reason "our cost per unit fell 30 percent" can be entirely a statement about volume and not at all a statement about efficiency; an illustrative figure, and a common confusion.</p>
+        <p><strong>Coase</strong>, in "The Nature of the Firm", Economica 4(16) 386-405, 1937, asked a question that sounds naive and is not: if markets coordinate so well, why do firms exist? Why not hire every hour and buy every part on the open market? His answer is that using a market has costs of its own, finding a counterparty, agreeing a price, writing and enforcing a contract, and a firm exists wherever doing the thing inside, by instruction, is cheaper than buying it outside, by contract. The boundary of the firm sits where those two costs meet. It is opportunity cost applied to organisation: every task is either coordinated by a price or by a manager, and the cheaper coordinator wins. Deep-dive session 9 uses exactly that line to decide whether to build, buy or rent a data platform.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>A marketplace is a Coase boundary drawn 3,095 times.</strong> The Olist data used throughout these sessions holds 3,095 sellers and 96,096 customers, counts from the RFM course that shares the dataset. Every one of those sellers made the same decision: rather than build a storefront, a checkout, a payment rail and a delivery contract, they rented all of it from a platform and kept sourcing and pricing inside. The platform does the tasks where its opportunity cost is lowest, the seller does the rest, and the commission is the price of the boundary. Nothing about the split is fixed. When a seller's volume makes the commission dearer than running their own shop, the boundary moves, and that is the whole of Coase in one marketplace.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Write the three marginal costs for something you sell" data-hint="Name one physical unit, one thing you copy, and one thing a model produces for you. For each, write what the next one costs and what is fixed. Three lines." data-seed="" data-cta="Count it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Three decisions at Beira Goods, on paper</h2>
+      <span class="tag demo">★ 22 min · everyone works it through</span>
+    </div>
+    <p class="lede">No code tonight. Beira Goods is a constructed seller with 40 products and two people, and every number below is invented and labelled so. Three decisions, each worked with the tonight's tools: whether to make one more of an item, whether to keep a product that cost a lot to list, and where Ana's and Bruno's hours are best spent. Then the same three for one thing you own. Work alongside; the blanks are yours.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two columns for Beira Goods, constructed. Left, one more unit shipped: four stacked boxes reading the item 38 reais, packaging 3, delivery 14, commission 7, summed to 62 reais per extra unit, all invented. Right, one more prediction: a single amber box reading a per-token cost, small and real, followed by lines saying no box, no courier, no stock, but never zero, each call is metered, and that deep-dive session 4 prices it. A bar across the bottom says make one more only if the next one earns more than it costs.">
+        <defs>
+          <filter id="s3dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="58" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s3dL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s3dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s3dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s3dV { font: 800 18px Inter, sans-serif; fill: #142944; }
+          .s3dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s3dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s3dH" x="30" y="26">ONE MORE UNIT SHIPPED VS ONE MORE PREDICTION, AT BEIRA GOODS (CONSTRUCTED)</text>
+        <text class="s3dS" x="30" y="44">every real below is invented; the shape of each column is not</text>
+
+        <g filter="url(#s3dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- left stack: the unit -->
+          <rect x="60" y="84" width="240" height="34" rx="6" transform="rotate(-0.6 180 101)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <rect x="60" y="124" width="240" height="34" rx="6" transform="rotate(0.5 180 141)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <rect x="60" y="164" width="240" height="34" rx="6" transform="rotate(-0.4 180 181)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <rect x="60" y="204" width="240" height="34" rx="6" transform="rotate(0.7 180 221)" fill="#FFFFFF" stroke="#C9D2E2"/>
+          <!-- sum line -->
+          <path d="M60 250 L300 250" stroke="#1F3A5F"/>
+          <!-- a parcel doodle beside the stack -->
+          <rect x="330" y="140" width="36" height="30" rx="3" transform="rotate(-4 348 155)" fill="#EEF2F8"/>
+          <path d="M330 155 L366 155"/>
+          <path d="M348 140 L348 170"/>
+          <!-- right: the prediction, one amber box -->
+          <rect x="520" y="84" width="300" height="34" rx="6" transform="rotate(0.6 670 101)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- a small meter doodle: a dial -->
+          <path d="M746 160 A34 34 0 0 1 814 160" stroke="#A8570B"/>
+          <path d="M780 160 L798 138" stroke="#A8570B" stroke-width="2.4"/>
+          <!-- the rule bar -->
+          <rect x="60" y="290" width="760" height="34" rx="8" transform="rotate(-0.3 440 307)" fill="#EEF2F8"/>
+        </g>
+
+        <text class="s3dH" x="60" y="70">ONE MORE UNIT SHIPPED</text>
+        <text class="s3dL" x="72" y="106">the item from the supplier: R$ 38</text>
+        <text class="s3dL" x="72" y="146">packaging: R$ 3</text>
+        <text class="s3dL" x="72" y="186">delivery: R$ 14</text>
+        <text class="s3dL" x="72" y="226">commission: R$ 7</text>
+        <text class="s3dV" x="60" y="274">R$ 62 per extra unit</text>
+        <text class="s3dS" x="306" y="274">invented</text>
+        <text class="s3dS" x="348" y="190" text-anchor="middle">a real thing</text>
+
+        <text class="s3dH" x="520" y="70">ONE MORE PREDICTION</text>
+        <text class="s3dW" x="532" y="106">a per-token cost, small and real</text>
+        <text class="s3dS" x="520" y="150">no box, no courier, no stock</text>
+        <text class="s3dS" x="520" y="166">never zero: each call is metered</text>
+        <text class="s3dB" x="520" y="186">no figure here; deep-dive session 4</text>
+        <text class="s3dB" x="520" y="202">prices it with dated list prices</text>
+        <text class="s3dS" x="780" y="180" text-anchor="middle">a meter</text>
+
+        <text class="s3dB" x="76" y="312">SAME RULE FOR BOTH: make one more only if the next one earns more than the next one costs</text>
+
+        <text class="s3dN" x="30" y="346">Every real is invented. The shape is not: the unit's cost is a stack of real things, the prediction's is a meter.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - one column is a stack you can point at, the other is a meter you can only read; the decision rule is identical for both</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Decision 1 · One more of an item.</strong> Beira's best-selling towel set sells at R$ 89 (invented). The next unit costs R$ 62 to buy, pack, ship and pay commission on, as the figure stacks it. Beira's average cost per unit, including a share of the rent and the photographer, comes out at R$ 95 (invented). Should Beira make one more? Fill in the margin, then do the same for one item you sell.</p>
+        <div class="prompt-box good"><span class="label">★ Decision 1 · one more unit (Beira, invented)</span>price of the next unit:        R$ 89
+marginal cost of the next unit: R$ 62   (item 38 + packaging 3 + delivery 14 + commission 7)
+average cost per unit:          R$ 95   (includes rent and photos already paid)
+
+next unit earns minus next unit costs:  89 - 62 = +27    make it
+the average says:                       89 - 95 = -6     the average is not about the next unit
+
+Yours:  price ______   marginal cost ______   (do NOT add the fixed costs)   verdict ______</div>
+      </div>
+      <div class="step">
+        <p><strong>Decision 2 · Keep a product that cost a lot to list.</strong> Beira spent R$ 4,000 (invented) on photography, copy and a launch discount for a lamp that now sells three units a month at R$ 12 margin each, against a R$ 50 monthly listing fee (all invented). The R$ 4,000 is gone on both paths. Write the two paths with only what lies ahead, and then decide.</p>
+        <div class="prompt-box good"><span class="label">★ Decision 2 · the fork (Beira, invented)</span>already spent (sunk):    R$ 4,000    appears on BOTH paths, so it cancels
+
+keep listed, per month:  earns 3 x 12 = R$ 36     costs R$ 50 fee     net  -14 per month
+delist, per month:       earns 0                  costs 0             net    0
+
+verdict:  delist, unless something ahead changes (a price rise, a fee cut, a bundle)
+the R$ 4,000 did not vote. What it TAUGHT (three units a month at this price) did.
+
+Yours:  sunk ______   keep: earns ______ costs ______   stop: earns ______ costs ______   verdict ______</div>
+      </div>
+      <div class="step">
+        <p><strong>Decision 3 · Where the hours go.</strong> Ana writes 4 listings or clears 8 tickets an hour; Bruno writes 1 or clears 4 (invented). Beira needs both listings and tickets done. Work out what each gives up for each task, circle the lower cost in each column, and assign. Then do it for two people on your own team with two tasks they both do.</p>
+        <div class="prompt-box good"><span class="label">★ Decision 3 · two people, two tasks (Beira, invented)</span>                 listings/hr   tickets/hr   one listing costs   one ticket costs
+Ana                  4             8          2 tickets           0.5 listing
+Bruno                1             4          4 tickets           0.25 listing
+
+lower cost of a listing:  Ana   (2 &lt; 4)      so Ana lists
+lower cost of a ticket:   Bruno (0.25 &lt; 0.5) so Bruno answers tickets
+
+Ana is faster at BOTH. She still should not do both.
+
+Yours:  person A ____  rate task 1 ____  rate task 2 ____     person B ____  rate task 1 ____  rate task 2 ____
+        A gives up ____ per task 1, ____ per task 2     B gives up ____ per task 1, ____ per task 2
+        assignment: ______________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Decision 4 · The same three for a prediction.</strong> Beira is thinking of paying a model to draft every product description and to answer the simple tickets. Write the three marginal costs side by side in words, with no prices: what the next unit shipped costs, what the next copy of a description costs once written, and what the next model call costs. Then say which of the three rules from tonight applies to each.</p>
+        <div class="prompt-box good"><span class="label">★ Decision 4 · three marginal costs in words (no prices)</span>the next unit shipped:            a stack of real things (item, box, courier, commission)
+the next copy of a description:   near zero once it is written
+the next model call:              small, real, metered per token in and out; never zero
+
+rule for the unit:      make one more if the next one earns more than R$ 62
+rule for the copy:      price by what it is worth to the buyer, not by the copy cost
+rule for the call:      the meter times the volume, against what the answer is worth each time
+
+what is fixed and paid once:  the model's training (not Beira's cost; Beira rents)
+what Beira pays every time:   the meter</div>
+      </div>
+      <div class="step">
+        <p><strong>Decision 5 · The sentence for a leader.</strong> One sentence per decision, in the shape that survives a hard question: the next unit's cost, the next unit's earning, what was left out and why. Practise it out loud for Decision 2, where the pile is largest and the temptation strongest.</p>
+        <div class="prompt-box good"><span class="label">★ Decision 5 · the sentence</span>"Ahead of us, the lamp earns 36 a month and costs 50, so it loses 14 a month for as long as we keep it.
+ The 4,000 we spent is gone whichever way we go, so it does not enter the comparison.
+ What that spend taught us, three units a month at this price, is why the forecast ahead is 36 and not more."
+
+Now yours, for the decision you brought:  next unit costs ______  earns ______  left out ______ because ______</div>
+      </div>
+      <div class="step">
+        <p><strong>Decision 6 · What the data cannot tell you.</strong> Every one of Beira's numbers was handed to you. In a real catalogue the marginal cost of a unit is usually not in any table: the supplier's invoice is in one system, the courier's in another, the commission in a third, and the hours nowhere. Write, for one thing you sell, which of the four stack items you could find tonight and which you could not. The gap is the first thing to fix before any pricing decision.</p>
+        <div class="prompt-box good"><span class="label">★ Decision 6 · where the marginal cost lives</span>item cost:        [ have it ]  [ could find it ]  [ nobody records it ]
+packaging:        [ have it ]  [ could find it ]  [ nobody records it ]
+delivery:         [ have it ]  [ could find it ]  [ nobody records it ]
+commission/fees:  [ have it ]  [ could find it ]  [ nobody records it ]
+hours per unit:   [ have it ]  [ could find it ]  [ nobody records it ]
+
+"We can price at the margin for ____ of our products. For the rest, any margin we quote is an average wearing a costume."</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the three questions as your standing rule.</strong> What does the next one cost? What is on both paths and therefore cancels? What is the best thing I could do with this hour or this real instead? Any decision that arrives with an average, a pile of past spend, or the word "free" in it has skipped at least one of the three.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Foundations session 4</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Find one decision your team made on an average</strong> and rewrite it at the margin: what did the next unit cost and earn? If the verdict flips, write down why the average pointed the wrong way.</li>
+      <li><strong>Find one product, project or tool that is kept because of what it already cost.</strong> Draw the fork on one page with only what lies ahead on each branch. Say which branch wins and what the sunk spend taught you that still counts.</li>
+      <li><strong>Take two people who both do two tasks</strong> and write the four rates and the four opportunity costs. Circle the lower cost in each column. If the assignment you get is not the one you have, write the sentence that explains the swap without the word "better".</li>
+      <li><strong>Bring one purchase where you could not see the quality before you paid:</strong> a dataset, a tool, a contractor, a used car. Foundations session 4 is about what happens to a market when one side knows more than the other, and why the good sellers leave first.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Foundations session 3 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Beira Goods (constructed) spent R$ 4,000 listing a lamp that now earns R$ 36 a month in margin against a R$ 50 monthly fee. What should Beira do, and why?</p>
+      <button class="qopt" type="button">A · Keep it listed until the R$ 4,000 has been earned back, because delisting now wastes the launch spend</button>
+      <button class="qopt" type="button">B · Keep it, because the average cost including the launch is already paid and only the fee remains</button>
+      <button class="qopt" type="button">C · Delist it, unless something ahead changes: on the keep path it loses R$ 14 a month for as long as it stays, and the R$ 4,000 is gone on both paths so it cannot rank them</button>
+      <button class="qopt" type="button">D · Delist it because the launch spend was a mistake and mistakes should be reversed</button>
+      <p class="qwhy">Sunk means unrecoverable on every path, so it cancels out of the comparison. Only what lies ahead ranks the branches, and ahead the lamp loses money each month. What the spend taught, three units a month at this price, is the one part of it that still counts.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · Ana writes 4 listings an hour or clears 8 tickets; Bruno writes 1 or clears 4 (constructed). Who should answer tickets, and why?</p>
+      <button class="qopt" type="button">A · Ana, because she clears twice as many tickets an hour as Bruno</button>
+      <button class="qopt" type="button">B · Bruno, because a ticket costs him a quarter of a listing while it costs Ana half a listing; the lower opportunity cost decides, not the higher speed</button>
+      <button class="qopt" type="button">C · Ana, because she is better at both tasks and should do both</button>
+      <button class="qopt" type="button">D · Whoever is free, because with two tasks and two people the split makes no difference to total output</button>
+      <p class="qwhy">Comparative advantage is about what each person gives up, never who is faster. Ana has the absolute advantage in both tasks and the comparative advantage in listings only; Bruno's tickets are cheaper in listings forgone, so the pair produces more of both when Bruno answers them.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · Which statement about marginal cost is correct?</p>
+      <button class="qopt" type="button">A · A prediction from a model, like a software copy, has a marginal cost of zero once the model is trained</button>
+      <button class="qopt" type="button">B · A physical unit and a software copy have the same marginal cost because both have a large fixed cost</button>
+      <button class="qopt" type="button">C · The average cost is the right number for deciding whether to make one more, because it includes everything</button>
+      <button class="qopt" type="button">D · A software copy's marginal cost is near zero, a physical unit's is a real stack of costs, and a model's prediction sits between: small but never zero, metered on every call, so its average cost falls towards a floor rather than towards nothing</button>
+      <p class="qwhy">The three shapes are the whole of Part 3. Shapiro and Varian's near-zero copy cost, as reported, is why information goods are priced by value; inference breaks that story because each answer is a computation with a per-token cost. Deep-dive session 4 puts dated prices on it.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Decisions at the margin, marginal cost and revenue, sunk costs, the fork</span><span class="note">Standard economics, no single source; taught with the two-path test and the two honest exceptions (recoverable assets, information already bought)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Opportunity cost, absolute vs comparative advantage, two people two tasks</span><span class="note">Standard economics, no single source; Ana and Bruno's rates are constructed and the page says so</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Fixed vs marginal cost; information goods at near-zero marginal cost</span><span class="note">Shapiro and Varian 1998, Information Rules, Harvard Business School Press; reported from the publisher's record, the chapter text was not opened</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The three marginal costs: a physical unit, a software copy, an inference</span><span class="note">Taught as a shape in words; no token price, no GPU price on the page; deep-dive session 4 carries the dated list prices</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The headline Olist product: R$ 75 through 2017, R$ 69.90 from January 2018, units 45 to 121</span><span class="note">Computed from the Brazilian E-Commerce Public Dataset by Olist (Kaggle, CC BY-NC-SA 4.0); the revenue figures are arithmetic on those two months; the marginal cost is not in the data and the page says so</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why firms exist: transaction costs decide the boundary</span><span class="note">Coase 1937, "The Nature of the Firm", Economica 4(16) 386-405; the argument is summarised; the Olist counts of 3,095 sellers and 96,096 customers are the RFM course's, from the same dataset</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Diminishing returns, economies of scale</span><span class="note">Named in self-study with their direction; the percentages in those paragraphs are illustrative and labelled so</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Beira Goods</span><span class="note">Constructed seller; every Beira number is invented and the page says so</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Foundations session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The next one, not the average</b><span>Make one more if it earns more than it costs. The average is about the past run, not the next unit.</span></div>
+      <div class="cheat-item"><b>Sunk costs do not vote</b><span>Unrecoverable on every path, so they cancel. Use what the spend taught; ignore what it cost.</span></div>
+      <div class="cheat-item"><b>Opportunity cost is the real price</b><span>The best thing you did not do with the hour or the real. "Free" is about the invoice, never the cost.</span></div>
+      <div class="cheat-item"><b>Split by what each gives up</b><span>Comparative advantage, not speed. The faster person at everything still hands one task over.</span></div>
+      <div class="cheat-item"><b>Three marginal costs</b><span>Physical: a real stack. Software copy: near zero. Inference: small, real, metered, never zero.</span></div>
+      <div class="cheat-item"><b>The firm ends where the market is cheaper</b><span>Coase: coordinate by instruction inside, by price outside. The boundary moves when the costs do.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You can now decide at the margin and price an hour by its next best use. Foundations session 4 is about the cases where a market, left alone, gets the price wrong: a cost that lands on someone who did not choose it, a good that nobody can be charged for, a purchase where the seller knows the quality and the buyer does not and the good sellers leave first, and a metric that stopped measuring anything the day it became a target. Each one has a name, a mechanism, and a direct copy in the market for data and models.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Foundations session 3 of 6 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a2-incentives-and-elasticity.html">← Prev: Incentives and elasticity</a> &nbsp;·&nbsp; <a href="a4-when-markets-fail.html">Next: When markets fail →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

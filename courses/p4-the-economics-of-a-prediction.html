@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Deep-dive session 4 of 10. Software had a marginal cost near zero; a prediction does not. Per-token pricing is a pure marginal cost, owning a model turns it back into a fixed cost with a utilisation problem, and the break-even between the two is one division. A constructed 2,000,000-request month priced at Anthropic's list prices as published on 25 September 2026, and a Python cost function with no GPU price anywhere in it.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The economics of a prediction - learn economics with phoebe">
+<meta property="og:description" content="Deep-dive session 4 of 10. Rent is c times N. Own is F. The break-even is F divided by c, and the only invented number is F.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p4-the-economics-of-a-prediction.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The economics of a prediction - learn economics with phoebe">
+<meta name="twitter:description" content="Deep-dive session 4 of 10. Fixed, marginal, and the volume where they cross.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Deep-dive session 4 · The economics of a prediction - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Deep-dive session 4 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Deep-dive session 4 of 10</div>
+    <h1>The economics of a <span class="accent">prediction</span></h1>
+    <p class="sub">For thirty years the economics of software rested on one fact: the second copy costs nothing. A prediction from a model is not a copy. Every request burns tokens, every token has a price on a public list, and the bill is a straight line through the origin with no fixed part at all. That is a pure marginal cost, and it is the first thing about AI that a finance team has seen before: it is a cost of goods sold. Tonight prices one constructed workload, 2,000,000 requests a month at 1,200 input and 300 output tokens each, at the list prices published on 25 September 2026: 27,000 dollars a month on Claude Opus 5, 10,800 on Claude Sonnet 5, 5,400 on Claude Haiku 4.5. Then it asks the only question owning a model ever answers: at what volume does a flat monthly cost beat a line through the origin? The answer is one division, and the only invented number in it is the flat cost.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Analysts, platform and finance teams</span>
+      <span class="chip audience">Python</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Fixed, marginal, and the crossing</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the cost function and the break-even</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Foundations session 3 drew two marginal cost curves: a physical good, where the next unit costs about what the last one did, and an information good, where the next copy costs nothing. Inference sits in neither picture. The next prediction costs a fixed number of tokens times a fixed price per token, every time, forever. That makes the choice between renting a model by the request and owning one by the month a textbook fixed-versus-variable problem, and textbook problems have textbook answers: find the volume where the two lines cross, then ask which side of it you are on. Tonight builds that crossing from list prices and a constructed workload, and keeps the one number nobody can publish, the cost of owning, as a variable you move.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A cost function that turns a request into dollars from a dated price list, the monthly bill for a constructed workload on three models, a break-even volume you can defend as F divided by c, and the habit of writing the price list's date next to every number that came from it.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers fixed cost, marginal cost, and the price list</span>
+      <h2>A prediction has a marginal cost, and it is on a price list</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A fixed cost is paid whether or not a request arrives: a server, a licence, a team. A marginal cost is paid per request and only per request. Per-token API pricing has no fixed part: send nothing, pay nothing; send twice as much, pay twice as much. The list prices as published on 25 September 2026 are 5 dollars per million input tokens and 25 per million output tokens for Claude Opus 5, 2 and 10 for Claude Sonnet 5, 1 and 5 for Claude Haiku 4.5, with cache reads at about a tenth of the input price. The list carries more models than these three; the page names only these, and you re-check the list before you decide anything.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn chart of monthly cost against requests a month. A rent line rises from the origin with slope c, the cost per request. An own line sits flat at height F, the fixed monthly cost. They cross at a break-even volume marked with an amber dot and labelled N star equals F over c. Left of the crossing the rent line is lower; right of it the flat line is lower.">
+        <defs>
+          <filter id="d4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d4aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d4aL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d4aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d4aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d4aA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .d4aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d4aH" x="30" y="26">TWO COSTS, ONE CROSSING</text>
+        <text class="d4aS" x="220" y="26">rent is a line through the origin, own is a flat line, and the break-even is where they meet</text>
+
+        <g filter="url(#d4aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M80 280 L80 60" stroke="#1F3A5F" marker-end="url(#d4aAr)"/>
+          <path d="M80 280 L830 280" stroke="#1F3A5F" marker-end="url(#d4aAr)"/>
+          <!-- rent: c x N -->
+          <path d="M80 280 L780 88"/>
+          <!-- own: F, flat -->
+          <path d="M80 186 L830 186" stroke="#1F3A5F" stroke-width="2.4"/>
+          <!-- the crossing -->
+          <path d="M423 186 L423 280" stroke="#A8570B" stroke-dasharray="4 5"/>
+          <circle cx="423" cy="186" r="7" fill="#A8570B" stroke="#A8570B"/>
+          <!-- the cheaper side, shaded under the lower line -->
+          <path d="M80 280 L423 186 L423 280 Z" fill="url(#d4aHc)" stroke="none"/>
+          <!-- price tag on the rent line -->
+          <path d="M700 148 L752 148 L764 160 L752 172 L700 172 Z" transform="rotate(-2 732 160)" fill="#FBEEDC" stroke="#A8570B"/>
+        </g>
+
+        <text class="d4aA" x="90" y="56">MONTHLY COST</text>
+        <text class="d4aA" x="690" y="298">REQUESTS A MONTH</text>
+        <text class="d4aL" x="66" y="190" text-anchor="end">F</text>
+        <text class="d4aL" x="100" y="178">own: F, flat until the box is full</text>
+        <text class="d4aL" x="560" y="80">rent: c x N, no fixed part</text>
+        <text class="d4aB" x="726" y="164" text-anchor="middle">c each</text>
+        <text class="d4aB" x="423" y="298" text-anchor="middle">N* = F / c</text>
+        <text class="d4aS" x="250" y="250" text-anchor="middle">rent is cheaper here</text>
+        <text class="d4aS" x="650" y="250" text-anchor="middle">own is cheaper here</text>
+
+        <text class="d4aN" x="30" y="326">Below N* the line through the origin is under the flat one; above it the flat one wins. Every number tonight sits somewhere on this picture.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber dot is the whole decision: rent below it, own above it, and F is the only number on the page that has to be invented</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Per-token pricing is a pure marginal cost<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The shape of the bill.</strong> Cost equals requests times cost per request, and cost per request equals input tokens times the input price plus output tokens times the output price, both per million. Nothing in that expression is paid when no request arrives. Economists call a cost with that property purely variable, and a cost per additional unit a marginal cost; here the two are the same number, c, and c does not change with volume until a volume discount is negotiated, which the public list does not carry.</p>
+        <p><strong>Why the output price matters more than it looks.</strong> Output tokens are priced five times the input tokens on every one of the three models named tonight: 25 against 5, 10 against 2, 5 against 1. A request that reads 1,200 tokens and writes 300 pays more for the 300 than for the 1,200. A feature that writes long answers is a dear feature even if it reads almost nothing, and that is visible only if you split the request into its two token counts before pricing it.</p>
+        <p><strong>The date on the list.</strong> The prices above are list prices as published on 25 September 2026. They have moved before and will move again; the map that feeds these pages records that Claude Sonnet 5's price was introductory earlier in the year and is now standard. Every cost you compute from a list carries the list's date, and a break-even computed on a stale list is a stale break-even.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The zero-marginal-cost story, and why inference breaks it<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Shapiro and Varian 1998, Information Rules, is the reported source of the modern version: an information good is expensive to produce and cheap to reproduce, so its cost structure is almost all fixed, competition drives the price toward the near-zero marginal cost, and the only defence is to differentiate, version, and lock in. Software companies built their margins on that sentence for three decades: the thousandth user of a spreadsheet costs the vendor a few cents of bandwidth.</p>
+        <p>Inference breaks the sentence at the word reproduce. A prediction is not reproduced; it is produced, every time, from tokens through a model on hardware that draws power. The thousandth request costs as much as the first. The fixed cost of training is still enormous, so the story is half right, but the half that is wrong is the half a finance team lives in: a cost of goods sold line that rises with usage, and a gross margin that can fall as the product succeeds. Software margins assumed volume was free. Inference margins have to be earned per request.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The summariser that got cheaper by writing less (constructed).</strong> A team ships a document summariser and prices it in their head by the size of the documents: long inputs, so a dear feature. The bill says otherwise. At the list prices above a request reading 1,200 tokens on Claude Opus 5 costs 0.006 dollars for the reading and 0.0075 for a 300-token summary; the summary is more than half the cost. Cutting the summary from 300 tokens to 150 saves more than trimming the input by a third would. The story is invented; the arithmetic is the list price times the token counts, and it is the reason to price the two halves of a request separately.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the constructed workload and the monthly bill</span>
+      <h2>One request, priced token by token, times two million</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The workload is constructed: 2,000,000 requests a month, 1,200 input tokens and 300 output tokens each. It is a plausible shape for a customer-facing assistant and it is invented, so the bills below are arithmetic, not evidence. The arithmetic: 2,000,000 requests times 1,200 tokens is 2,400 million input tokens; times 300 is 600 million output tokens. At Claude Opus 5's list prices that is 2,400 times 5 plus 600 times 25, or 12,000 plus 15,000, which is 27,000 dollars a month. Claude Sonnet 5 comes to 4,800 plus 6,000, 10,800 dollars. Claude Haiku 4.5 comes to 2,400 plus 3,000, 5,400 dollars.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A request drawn as two bars, a long hatched input bar of 1,200 tokens and a short amber output bar of 300 tokens with a price tag. Beside them the arithmetic for Claude Opus 5: 1,200 over a million times 5 dollars is 0.006, 300 over a million times 25 dollars is 0.0075, total 0.0135 a request. Below, a sketched table prices the constructed month of 2,000,000 requests on three models: 27,000, 10,800 and 5,400 dollars.">
+        <defs>
+          <filter id="d4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d4bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d4bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d4bL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d4bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d4bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d4bV { font: 800 16px Inter, sans-serif; fill: #142944; }
+          .d4bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d4bH" x="30" y="26">ONE REQUEST, PRICED TOKEN BY TOKEN</text>
+        <text class="d4bS" x="300" y="26">the input is four times longer; the output costs more</text>
+
+        <g filter="url(#d4bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- input bar: 1,200 tokens -->
+          <rect x="30" y="60" width="360" height="32" rx="3" transform="rotate(-0.4 210 76)" fill="url(#d4bHc)"/>
+          <!-- output bar: 300 tokens, a quarter as long -->
+          <rect x="30" y="118" width="90" height="32" rx="3" transform="rotate(0.6 75 134)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- price tag on the output -->
+          <path d="M130 120 L176 120 L188 134 L176 148 L130 148 Z" transform="rotate(-3 159 134)" fill="#FBEEDC" stroke="#A8570B"/>
+          <!-- arrows from bars to the arithmetic -->
+          <path d="M396 76 L426 76" marker-end="url(#d4bAr)"/>
+          <path d="M194 134 L426 106" marker-end="url(#d4bAr)"/>
+          <!-- the sheet -->
+          <rect x="30" y="176" width="820" height="100" rx="4" transform="rotate(-0.3 440 226)" fill="#FFFFFF"/>
+          <path d="M30 200 L850 200" stroke="#C9D2E2"/>
+          <path d="M180 176 L180 276 M310 176 L310 276 M450 176 L450 276 M640 176 L640 276" stroke="#C9D2E2"/>
+        </g>
+
+        <text class="d4bL" x="30" y="52">1,200 input tokens</text>
+        <text class="d4bL" x="30" y="110">300 output tokens</text>
+        <text class="d4bB" x="159" y="138" text-anchor="middle">x 5</text>
+        <text class="d4bS" x="438" y="66">Claude Opus 5, list prices dated 25 September 2026</text>
+        <text class="d4bL" x="438" y="84">1,200 / 1,000,000 x 5 = 0.0060</text>
+        <text class="d4bL" x="438" y="110">300 / 1,000,000 x 25 = 0.0075</text>
+        <text class="d4bV" x="438" y="140">= 0.0135 dollars a request</text>
+
+        <text class="d4bL" x="44" y="192">model</text>
+        <text class="d4bL" x="192" y="192">input, per M</text>
+        <text class="d4bL" x="322" y="192">output, per M</text>
+        <text class="d4bL" x="462" y="192">per request</text>
+        <text class="d4bL" x="652" y="192">per month at 2,000,000</text>
+        <text class="d4bS" x="44" y="220">Claude Opus 5</text><text class="d4bS" x="192" y="220">5</text><text class="d4bS" x="322" y="220">25</text><text class="d4bB" x="462" y="220">0.0135</text><text class="d4bB" x="652" y="220">27,000</text>
+        <text class="d4bS" x="44" y="244">Claude Sonnet 5</text><text class="d4bS" x="192" y="244">2</text><text class="d4bS" x="322" y="244">10</text><text class="d4bB" x="462" y="244">0.0054</text><text class="d4bB" x="652" y="244">10,800</text>
+        <text class="d4bS" x="44" y="268">Claude Haiku 4.5</text><text class="d4bS" x="192" y="268">1</text><text class="d4bS" x="322" y="268">5</text><text class="d4bB" x="462" y="268">0.0027</text><text class="d4bB" x="652" y="268">5,400</text>
+
+        <text class="d4bS" x="30" y="300">List prices as published on 25 September 2026: re-check before you decide. Only three of the listed models are named here.</text>
+        <text class="d4bN" x="30" y="334">Constructed workload: 2,000,000 requests a month, 1,200 tokens in, 300 out. Per request x 2,000,000 is the bill.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the short amber bar costs more than the long hatched one, because output is priced five times input on all three models</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The monthly bill, and what it is a bill for<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The three bills.</strong> 27,000, 10,800 and 5,400 dollars a month for the same constructed 2,000,000 requests, a factor of five between the dearest and the cheapest. That factor is the reason model choice is a cost decision before it is a quality decision: if the cheaper model does the job as well on your evaluation set, the difference is margin. If it does not, the difference is the price of quality, and it is now a number rather than a feeling.</p>
+        <p><strong>What the bill is not.</strong> It is not the cost of the feature. It is the marginal cost of the feature's requests. The engineers who built it, the evaluation harness, the on-call, the retrieval index the requests read from: all of those are fixed costs that the API bill does not carry and that an honest cost per request has to be spread over the volume, which is the utilisation question of Part 3.</p>
+        <p><strong>Where the workload came from.</strong> It is invented. Real workloads have a distribution of input and output lengths, not a point, and the mean of a distribution is what the bill charges; a tail of long conversations can dominate. The first thing to do with a real product is to pull the token counts from the logs and replace the two constants with two means and two 95th percentiles.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Caching as a marginal-cost cut, and latency as a cost<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Caching.</strong> Cache reads are listed at about a tenth of the input price. If 1,000 of the 1,200 input tokens are a system prompt and a shared context that every request repeats, a constructed share and a plausible one, the input cost of a Claude Opus 5 request falls from 0.006 to 0.001 for the 200 fresh tokens plus 0.0005 for the 1,000 cached, 0.0015 in total, and the request from 0.0135 to 0.009. Over the constructed month that is 18,000 instead of 27,000. The list also prices cache writes; add that line from the list before you count the saving. Caching is the rare cost lever that cuts c itself rather than N.</p>
+        <p><strong>Latency.</strong> A request that takes four seconds instead of one is not dearer on the bill, and it is dearer to the business: a user who waits leaves, an agent that waits blocks the request behind it, a batch that waits ties up the machine. Latency is a cost with no line on the invoice, which is why it needs its own number, measured, next to c. The two trade against each other: a smaller model is cheaper and faster, a cached prefix is cheaper and faster, a longer output is dearer and slower. When a lever moves both the same way it is not a trade-off, and those are the levers to pull first.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The month the bill doubled and the traffic did not (constructed).</strong> A team's API bill rises 90 percent in a month on 5 percent more requests. The logs explain it: a prompt change added a worked example to the system prompt, and the mean input length went from 1,200 tokens to 2,300. Nothing about the product changed; c changed. The story is invented; the lesson is that c is a function of the prompt, and a prompt is a cost decision that engineers make without a finance review.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers utilisation and the break-even volume</span>
+      <h2>Utilisation, and the volume where owning wins</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Owning a model means paying a fixed monthly cost F, for hardware, hosting and the people who keep it up, whether or not a request arrives. No public list prices that, and no figure is asserted here: F is a variable the page moves. What owning does is turn a marginal cost into a fixed one, and a fixed cost has a utilisation problem: F spread over N requests is F over N per request, which falls as N rises. Rent costs c per request at every N. Owning wins when F over N drops below c, which is the same as N rising above F over c. That quotient is the break-even volume, and it is the only sentence the decision needs.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An amber block labelled F, 40,000 a month, invented, feeds three panels. In each the same fixed cost is spread over more requests: at 1,000,000 requests the bar for F over N stands at 0.04 a request, at 2,000,000 it is 0.02, at 4,000,000 it is 0.01. A dashed line across all three panels marks the Claude Opus 5 rent price of 0.0135 a request. The first two bars stand above the dashed line; the third is below it.">
+        <defs>
+          <filter id="d4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="59" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d4cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d4cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d4cL { font: 600 11px Inter, sans-serif; fill: #16213A; }
+          .d4cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .d4cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d4cV { font: 800 20px Inter, sans-serif; fill: #142944; }
+          .d4cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d4cH" x="30" y="26">ONE FIXED COST, SPREAD THIN OR THICK</text>
+        <text class="d4cS" x="330" y="26">the same F, three volumes; the bar is F / N, the dashed line is what renting costs per request</text>
+
+        <g filter="url(#d4cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the fixed cost block -->
+          <rect x="30" y="70" width="150" height="110" rx="6" transform="rotate(-0.8 105 125)" fill="#FBEEDC" stroke="#A8570B"/>
+          <!-- three panels -->
+          <rect x="240" y="56" width="170" height="150" rx="8" transform="rotate(0.5 325 131)" fill="#FFFFFF"/>
+          <rect x="430" y="56" width="170" height="150" rx="8" transform="rotate(-0.4 515 131)" fill="#FFFFFF"/>
+          <rect x="620" y="56" width="170" height="150" rx="8" transform="rotate(0.6 705 131)" fill="#FFFFFF"/>
+          <!-- base lines -->
+          <path d="M250 190 L400 190 M440 190 L590 190 M630 190 L780 190" stroke="#C9D2E2"/>
+          <!-- the pile of requests under each panel: width grows with N -->
+          <rect x="250" y="193" width="40" height="10" fill="url(#d4cHc)" stroke="none"/>
+          <rect x="440" y="193" width="80" height="10" fill="url(#d4cHc)" stroke="none"/>
+          <rect x="630" y="193" width="150" height="10" fill="url(#d4cHc)" stroke="none"/>
+          <!-- F / N bars: height falls with N -->
+          <rect x="310" y="110" width="30" height="80" transform="rotate(-1 325 150)" fill="#EEF2F8"/>
+          <rect x="500" y="150" width="30" height="40" transform="rotate(1 515 170)" fill="#EEF2F8"/>
+          <rect x="690" y="170" width="30" height="20" transform="rotate(-1 705 180)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- rent per request, the same at every N -->
+          <path d="M232 163 L800 163" stroke="#1F3A5F" stroke-dasharray="5 5"/>
+          <!-- arrows: F into panel 1, then more N -->
+          <path d="M184 125 L236 125" marker-end="url(#d4cAr)"/>
+          <path d="M412 125 L426 125" marker-end="url(#d4cAr)"/>
+          <path d="M602 125 L616 125" marker-end="url(#d4cAr)"/>
+          <!-- the dial: utilisation -->
+          <circle cx="105" cy="232" r="20" fill="#FFFFFF"/>
+          <path d="M105 232 L118 218" stroke="#A8570B" stroke-width="2.4"/>
+          <path d="M91 246 L119 246" stroke="#C9D2E2"/>
+        </g>
+
+        <text class="d4cV" x="105" y="122" text-anchor="middle">F</text>
+        <text class="d4cL" x="105" y="146" text-anchor="middle">40,000 a month</text>
+        <text class="d4cS" x="105" y="164" text-anchor="middle">invented</text>
+        <text class="d4cS" x="105" y="272" text-anchor="middle">utilisation</text>
+
+        <text class="d4cL" x="252" y="74">N = 1,000,000</text>
+        <text class="d4cL" x="442" y="74">N = 2,000,000</text>
+        <text class="d4cL" x="632" y="74">N = 4,000,000</text>
+        <text class="d4cB" x="325" y="100" text-anchor="middle">0.04 each</text>
+        <text class="d4cB" x="515" y="140" text-anchor="middle">0.02 each</text>
+        <text class="d4cB" x="726" y="186">0.01 each</text>
+        <text class="d4cS" x="626" y="156">Opus 5 rent: 0.0135 each</text>
+        <text class="d4cS" x="252" y="226">F / N: dearer than rent</text>
+        <text class="d4cS" x="442" y="226">F / N: still dearer</text>
+        <text class="d4cB" x="632" y="226">F / N: now cheaper</text>
+        <text class="d4cS" x="252" y="242">the box is mostly idle</text>
+        <text class="d4cS" x="442" y="242">the constructed month</text>
+        <text class="d4cS" x="632" y="242">past N* = 2,962,963</text>
+
+        <text class="d4cN" x="30" y="310">Owning moves the cost from the request to the calendar; it pays off only if the requests come. Here they come at 4,000,000.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bar is the same 40,000 dollars every time; only the pile it is spread over changes, and the amber bar is the first one under the rent line</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Break-even is one division, and F is a slider<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The division.</strong> Rent costs c times N a month; own costs F. Set them equal and N star is F over c. With c at 0.0135 for Claude Opus 5 at the list prices and an invented F of 40,000 dollars a month, N star is 40,000 over 0.0135, about 2,962,963 requests a month. The constructed workload is 2,000,000, under N star, so on those numbers renting Opus 5 at 27,000 a month beats owning at 40,000. Raise the volume past 2.96 million and the flat line wins; halve F to 20,000 and N star halves to about 1,481,481, which the workload clears.</p>
+        <p><strong>Why F is a slider and not a number.</strong> The fixed cost of owning depends on hardware you have not priced, a hosting contract you have not signed, an on-call rota you have not staffed, and a utilisation you have not measured. Any single figure would be a guess dressed as a fact. So the page carries none. It varies F across a range and shows the break-even as a function of it, and the honest output is a table, not a point: at F of 20,000, 40,000 and 80,000, N star for Opus 5 is about 1.48, 2.96 and 5.93 million requests a month. Your F comes from your quotes, and the division is the same.</p>
+        <p><strong>The cheaper model moves the break-even the other way.</strong> Renting Claude Haiku 4.5 costs 0.0027 a request, so N star at F of 40,000 is about 14.8 million requests a month. The cheaper the rented model, the more volume owning needs to justify itself. If a smaller model passes your evaluation, owning is usually not the next question; it is the answer to a question you no longer have.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the flat line hides<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Capacity.</strong> A flat F is flat until the box is full. Past its capacity a second box is needed and F steps up, so the own line is a staircase, not a line, and the break-even arithmetic holds only on the first step. If your volume sits just past N star, the first extra step can put you back on the rent side.</p>
+        <p><strong>Peak against mean.</strong> Owning has to be sized for the busiest hour, not the average one; renting charges the average. A workload with a sharp daily peak needs a bigger box than its monthly mean suggests, which raises F and moves N star out. The quantity that decides this is the ratio of peak to mean load, and it is measurable from a week of logs.</p>
+        <p><strong>The people.</strong> Hardware is the visible part of F. The team that patches, upgrades, monitors and answers the pager at three in the morning is the part that is left out of a quote and turns up in the salary line. Put it in F before the division, or the break-even is a marketing number.</p>
+      </div>
+    </details>
+
+    <div class="callout tip" id="be-calc">
+      <p><strong>Move the fixed cost and watch the break-even move.</strong> The cost per request is fixed by the list prices and the constructed 1,200 in and 300 out; F is invented, so it is yours to drag. The constructed workload is 2,000,000 requests a month.</p>
+      <p><label for="be-f">Self-hosted fixed cost, dollars a month, invented: <b id="be-f-out">40,000</b></label></p>
+      <p><input type="range" id="be-f" min="5000" max="120000" step="5000" value="40000" aria-label="Fixed monthly cost of owning, invented" style="width:100%; accent-color:#A8570B"></p>
+      <p class="mono" id="be-out"></p>
+    </div>
+    <script>
+      (function () {
+        var C = [["Claude Opus 5", 0.0135], ["Claude Sonnet 5", 0.0054], ["Claude Haiku 4.5", 0.0027]];
+        var N = 2000000;
+        var f = document.getElementById("be-f"), fo = document.getElementById("be-f-out"), out = document.getElementById("be-out");
+        if (!f || !fo || !out) return;
+        function fmt(x) { return Math.round(x).toLocaleString("en-US"); }
+        function draw() {
+          var F = Number(f.value);
+          fo.textContent = fmt(F);
+          var lines = C.map(function (m) {
+            var nstar = F / m[1], rent = m[1] * N;
+            return m[0] + ": N* = " + fmt(nstar) + " requests a month; at 2,000,000 renting costs " + fmt(rent) +
+              (rent < F ? ", under F, so rent" : ", over F, so own") + ".";
+          });
+          out.textContent = lines.join(" ");
+        }
+        f.addEventListener("input", draw);
+        draw();
+      })();
+    </script>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The box that ran at a fifth of capacity (constructed).</strong> A platform team takes on a model to stop paying by the request. Six months later the box is busy one hour in five, the on-call rota has three names on it, and the per-request cost, F over the requests that actually came, is above the list price they left. Nobody did the division with a measured N; they did it with the N from the business case. The story is invented; the failure is the general one: a fixed cost is a bet on volume, and the bet is only as good as the forecast.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Write your own F, line by line" data-hint="List every monthly cost that owning a model would carry for your team: hardware or hosting, power, the people on the rota, monitoring, upgrades. One line each, with who would pay it. Then say what N you have actually measured." data-seed="" data-cta="Count it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>A cost function, a monthly bill, and a break-even table</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Six steps in plain Python, no data download. The prices are the list prices as published on 25 September 2026 and the code carries that date in a constant; the workload and every F are invented and the code says so. Nothing in the file prices a GPU, and the last step checks that it does not.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The break-even calculator drawn as six stations: the dated list prices, the cost per request function, times the constructed 2,000,000 requests giving 27,000, 10,800 and 5,400 a month, the invented fixed cost F of 20,000, 40,000 or 80,000, the break-even N star equals F over c giving 2.96 million requests for Claude Opus 5 at 40,000, and the sentence with its date.">
+        <defs>
+          <filter id="d4dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="d4dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="d4dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .d4dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .d4dL { font: 700 11px Inter, sans-serif; fill: #16213A; }
+          .d4dS { font: 400 10.5px Inter, sans-serif; fill: #4E5A75; }
+          .d4dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .d4dW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .d4dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="d4dH" x="30" y="26">THE CALCULATOR AS A MACHINE</text>
+
+        <g filter="url(#d4dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 120 L844 120" stroke="#C9D2E2"/>
+          <rect x="40" y="90" width="124" height="60" rx="8" transform="rotate(-0.6 102 120)" fill="#FFFFFF"/>
+          <rect x="176" y="90" width="124" height="60" rx="8" transform="rotate(0.5 238 120)" fill="#1F3A5F" stroke="#1F3A5F"/>
+          <rect x="312" y="90" width="124" height="60" rx="8" transform="rotate(-0.4 374 120)" fill="#EEF2F8"/>
+          <rect x="448" y="90" width="124" height="60" rx="8" transform="rotate(0.6 510 120)" fill="#FBEEDC" stroke="#A8570B"/>
+          <rect x="584" y="90" width="124" height="60" rx="8" transform="rotate(-0.5 646 120)" fill="url(#d4dHc)"/>
+          <rect x="720" y="90" width="124" height="60" rx="8" transform="rotate(0.4 782 120)" fill="#FFFFFF"/>
+          <path d="M166 120 L172 120" marker-end="url(#d4dAr)"/>
+          <path d="M302 120 L308 120" marker-end="url(#d4dAr)"/>
+          <path d="M438 120 L444 120" marker-end="url(#d4dAr)"/>
+          <path d="M574 120 L580 120" marker-end="url(#d4dAr)"/>
+          <path d="M710 120 L716 120" marker-end="url(#d4dAr)"/>
+        </g>
+
+        <text class="d4dL" x="52" y="112">1 · list prices</text>
+        <text class="d4dS" x="52" y="128">5/25, 2/10, 1/5</text>
+        <text class="d4dS" x="52" y="142">dollars per M</text>
+        <text class="d4dW" x="188" y="112">2 · per request</text>
+        <text class="d4dW" x="188" y="128">c = tok / 1e6</text>
+        <text class="d4dW" x="188" y="142">x price, in+out</text>
+        <text class="d4dL" x="324" y="112">3 · x 2,000,000</text>
+        <text class="d4dS" x="324" y="128">27,000 / 10,800</text>
+        <text class="d4dS" x="324" y="142">/ 5,400 a month</text>
+        <text class="d4dB" x="460" y="112">4 · F, invented</text>
+        <text class="d4dS" x="460" y="128">20,000, 40,000</text>
+        <text class="d4dS" x="460" y="142">or 80,000</text>
+        <text class="d4dL" x="596" y="112">5 · N* = F / c</text>
+        <text class="d4dL" x="596" y="128">Opus 5, 40,000:</text>
+        <text class="d4dL" x="596" y="142">2.96M requests</text>
+        <text class="d4dL" x="732" y="112">6 · say it</text>
+        <text class="d4dS" x="732" y="128">range, dated</text>
+        <text class="d4dS" x="732" y="142">re-check prices</text>
+
+        <text class="d4dS" x="40" y="74">Stations 1 to 3 are the rent side. Station 4 is the only invented number, so the page varies it. Station 5 is where they meet.</text>
+        <text class="d4dN" x="30" y="212">Write c with the date of the price list in the docstring. A break-even computed on a stale list is a stale break-even.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber station is the only invented input; the navy one is the only function; everything else is multiplication</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>The price list, dated.</strong> Three models, input and output prices per million tokens, and the cache-read share. The date is a constant so that every number downstream can say where it came from.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · the list, with its date</span># list prices as published on 25 September 2026, dollars per million tokens
+# re-check before you decide; the list carries more models than these three
+PRICE_LIST_DATE = "2026-09-25"
+PRICES = {                          # (input, output)
+    "Claude Opus 5":    (5.00, 25.00),
+    "Claude Sonnet 5":  (2.00, 10.00),
+    "Claude Haiku 4.5": (1.00,  5.00),
+}
+CACHE_READ_SHARE = 0.10             # cache reads cost about a tenth of the input price
+
+def cost_per_request(model, in_tokens, out_tokens, cached_tokens=0):
+    """Dollars for one request at the list prices dated PRICE_LIST_DATE.
+    Pure marginal cost: no fixed part, and nothing here prices hardware."""
+    p_in, p_out = PRICES[model]
+    fresh = in_tokens - cached_tokens
+    return ((fresh / 1e6) * p_in
+            + (cached_tokens / 1e6) * p_in * CACHE_READ_SHARE
+            + (out_tokens / 1e6) * p_out)
+
+print(round(cost_per_request("Claude Opus 5", 1200, 300), 4))     # 0.0135</div>
+      </div>
+      <div class="step">
+        <p><strong>The constructed workload and the monthly bill.</strong> Two million requests, 1,200 in and 300 out. The three bills are arithmetic on the list; the workload is invented and the comment says so.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the bill</span>REQUESTS = 2_000_000                # constructed workload, invented for teaching
+IN_TOK, OUT_TOK = 1200, 300
+
+for m in PRICES:
+    c = cost_per_request(m, IN_TOK, OUT_TOK)
+    print(f"{m:17s} {c:.4f} a request  {c * REQUESTS:&gt;9,.0f} a month")
+# Claude Opus 5     0.0135 a request     27,000 a month
+# Claude Sonnet 5   0.0054 a request     10,800 a month
+# Claude Haiku 4.5  0.0027 a request      5,400 a month</div>
+      </div>
+      <div class="step">
+        <p><strong>Split the bill into its two halves.</strong> Input and output separately, because output is priced five times input and the short half is the dear half. This is the check that catches a long-answer feature before the invoice does.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · input against output</span>for m, (p_in, p_out) in PRICES.items():
+    month_in  = REQUESTS * IN_TOK  / 1e6 * p_in
+    month_out = REQUESTS * OUT_TOK / 1e6 * p_out
+    print(f"{m:17s} input {month_in:&gt;7,.0f}  output {month_out:&gt;7,.0f}  "
+          f"output share {month_out / (month_in + month_out):.0%}")
+# Claude Opus 5     input  12,000  output  15,000  output share 56%
+# Claude Sonnet 5   input   4,800  output   6,000  output share 56%
+# Claude Haiku 4.5  input   2,400  output   3,000  output share 56%</div>
+      </div>
+      <div class="step">
+        <p><strong>Utilisation: one F, three volumes.</strong> F is invented. Spread it over more or fewer requests and compare the result with c; the crossing is visible before any formula.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · F over N</span>F = 40_000                          # invented fixed monthly cost of owning; yours comes from quotes
+c_opus = cost_per_request("Claude Opus 5", IN_TOK, OUT_TOK)
+
+for n in (1_000_000, 2_000_000, 4_000_000):
+    own = F / n
+    print(f"N = {n:&gt;9,}  own {own:.4f} a request  rent {c_opus:.4f}  "
+          f"{'own wins' if own &lt; c_opus else 'rent wins'}")
+# N = 1,000,000  own 0.0400 a request  rent 0.0135  rent wins
+# N = 2,000,000  own 0.0200 a request  rent 0.0135  rent wins
+# N = 4,000,000  own 0.0100 a request  rent 0.0135  own wins</div>
+      </div>
+      <div class="step">
+        <p><strong>The break-even table.</strong> N star is F over c, for three invented values of F and the three models. The output is a table because F is not known; the reader finds their row.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · N* = F / c</span>def break_even(model, F, in_tokens=IN_TOK, out_tokens=OUT_TOK):
+    """Requests a month at which a fixed cost F equals the rented bill."""
+    return F / cost_per_request(model, in_tokens, out_tokens)
+
+print("F (invented)   " + "  ".join(f"{m:&gt;16s}" for m in PRICES))
+for F in (20_000, 40_000, 80_000):
+    row = "  ".join(f"{break_even(m, F):&gt;16,.0f}" for m in PRICES)
+    print(f"{F:&gt;12,}   {row}")
+# F (invented)      Claude Opus 5   Claude Sonnet 5  Claude Haiku 4.5
+#       20,000          1,481,481         3,703,704         7,407,407
+#       40,000          2,962,963         7,407,407        14,814,815
+#       80,000          5,925,926        14,814,815        29,629,630</div>
+      </div>
+      <div class="step">
+        <p><strong>The cached variant, the sentence, and the assertion.</strong> A constructed 1,000 of the 1,200 input tokens served from cache cuts c; the sentence carries the date and the word invented; the assertion proves no hardware price crept into the model.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · say it, and check the file</span>import inspect
+
+c_cached = cost_per_request("Claude Opus 5", IN_TOK, OUT_TOK, cached_tokens=1000)  # 1,000 cached: constructed share
+print(round(c_cached, 4), round(c_cached * REQUESTS))          # 0.009 18000
+# the list also prices cache writes; add that line from the list before counting the saving
+
+sentence = (f"At list prices dated {PRICE_LIST_DATE}, a constructed month of {REQUESTS:,} requests "
+            f"costs {c_opus * REQUESTS:,.0f} to rent on Claude Opus 5; owning beats renting only above "
+            f"{break_even('Claude Opus 5', F):,.0f} requests a month if the fixed cost is {F:,}, "
+            f"which is invented. Re-check the list before you decide.")
+print(sentence)
+
+src = inspect.getsource(cost_per_request) + inspect.getsource(break_even)
+assert "gpu" not in src.lower() and "hour" not in src.lower()   # no hardware price anywhere, on purpose</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the date next to the prices and the word invented next to F.</strong> When the list changes, one constant changes and every number downstream follows. When someone asks where 40,000 came from, the comment answers before you have to. A cost model that cannot say the date of its prices is a cost model nobody should sign.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before deep-dive session 5</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Replace the two constants with two measurements.</strong> Pull the mean and the 95th percentile of input and output tokens for one real feature from its logs and re-run steps 2 and 3. Write one sentence on which half of the request is the dear half.</li>
+      <li><strong>Re-check the list.</strong> Open the current price page, compare it with the constants in step 1, and change the date constant if anything moved. Note how far the break-even moved.</li>
+      <li><strong>Price your own F.</strong> Write every monthly line owning would carry, with the people included, and put the total through step 5. Say which side of N star your measured volume sits on, and by how much.</li>
+      <li><strong>Find the cache share.</strong> Count how many of your input tokens are the same on every request. Re-run step 6 with that number, and add the cache-write line from the list.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and deep-dive session 4 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Why is per-token API pricing described as a pure marginal cost, and why does that matter for the old software story?</p>
+      <button class="qopt" type="button">A · Because the price per token is small</button>
+      <button class="qopt" type="button">B · Because the vendor has no fixed costs</button>
+      <button class="qopt" type="button">C · Because the bill is cost per request times requests with no fixed part, so zero requests cost zero and the thousandth request costs what the first did; software's near-zero marginal cost of a copy does not hold for a prediction, which is produced every time</button>
+      <button class="qopt" type="button">D · Because the bill is paid monthly rather than per request</button>
+      <p class="qwhy">The vendor's fixed cost of training is enormous, but the buyer sees only c. Shapiro and Varian's reported story is half right: expensive to produce, but not cheap to reproduce, because a prediction is not reproduced.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · The constructed month on Claude Opus 5 costs 27,000 dollars: 12,000 for input and 15,000 for output. The input is four times longer than the output. Why is the output the dear half?</p>
+      <button class="qopt" type="button">A · Because output tokens are counted twice by the API</button>
+      <button class="qopt" type="button">B · Because output is priced five times input on the list, 25 against 5 per million, so 300 output tokens at 25 cost more than 1,200 input tokens at 5; a feature that writes long answers is dear even if it reads little</button>
+      <button class="qopt" type="button">C · Because the 2,000,000 requests are mostly output</button>
+      <button class="qopt" type="button">D · Because the cache only applies to output</button>
+      <p class="qwhy">The same ratio holds on all three models named, 10 against 2 and 5 against 1, so the output share of the bill is 56 percent on each at this token mix. The check is step 3: split the bill before the invoice does it for you.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · With c at 0.0135 a request and an invented F of 40,000 dollars a month, which is cheaper for the constructed 2,000,000 requests, and what is the honest way to publish the answer?</p>
+      <button class="qopt" type="button">A · Renting, because 2,000,000 is under the break-even of about 2,962,963 requests, F over c; published as a table over a range of F with the price list's date, since F is invented and the list moves</button>
+      <button class="qopt" type="button">B · Owning, because 40,000 is a fixed cost and fixed costs are always cheaper at scale</button>
+      <button class="qopt" type="button">C · Owning, because a GPU costs less than 27,000 a month</button>
+      <button class="qopt" type="button">D · Renting, and the break-even can be published as a single number because c is known exactly</button>
+      <p class="qwhy">At F of 20,000 the break-even halves to about 1,481,481 and the workload clears it. No GPU price is asserted anywhere, because none is known; the division is the same for whatever F your quotes produce.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Fixed against marginal cost; break-even volume as F over c; utilisation as a fixed cost spread over volume</span><span class="note">Standard economics, no single source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic list prices: Claude Opus 5 5 and 25, Claude Sonnet 5 2 and 10, Claude Haiku 4.5 1 and 5 dollars per million tokens; cache reads about a tenth of input</span><span class="note">List prices as published on 25 September 2026, read live; the list carries more models and the page names only these three; re-check before deciding</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The 2,000,000-request workload at 1,200 in and 300 out; the bills of 27,000, 10,800 and 5,400; N star of about 2,962,963 for Opus 5 at F of 40,000</span><span class="note">Constructed workload and invented F, arithmetic on the list prices; the page varies F and asserts no self-hosting cost</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The near-zero marginal cost of information goods, and why inference does not share it</span><span class="note">Shapiro and Varian 1998, Information Rules, reported; the inference argument is standard cost accounting applied to per-token pricing</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Any GPU hourly price or self-hosting cost</span><span class="note">Not claimed; F is a slider and a labelled variable</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Network effects, data moats and the learning curve that flattens</span><span class="note">Named as deep-dive session 5; not taught here</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Deep-dive session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Rent = c x N</b><span>No fixed part. c = tokens over a million, times the price, input plus output.</span></div>
+      <div class="cheat-item"><b>Output is the dear half</b><span>25 against 5, 10 against 2, 5 against 1. 300 out costs more than 1,200 in.</span></div>
+      <div class="cheat-item"><b>The bill, constructed month</b><span>27,000 Opus 5 · 10,800 Sonnet 5 · 5,400 Haiku 4.5. List dated 25 Sep 2026.</span></div>
+      <div class="cheat-item"><b>Own = F, flat</b><span>F over N per request. Falls as N rises, steps up when the box is full.</span></div>
+      <div class="cheat-item"><b>N* = F / c</b><span>40,000 over 0.0135 is about 2.96M a month. F is invented; publish a range.</span></div>
+      <div class="cheat-item"><b>Caching cuts c, not N</b><span>Cache reads about a tenth of input. Check the write line on the list too.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You now have a cost per prediction and a volume where owning starts to pay. Deep-dive session 5 asks what happens to value, not cost, as volume grows: network effects, direct and indirect, Metcalfe's n squared as a claim and the n log n rebuttal from Briscoe, Odlyzko and Tilly 2006, and the data version of the story, where more data compounds until the learning curve flattens and then it does not. The build-along fits a learning curve to constructed data and reads off where the flattening starts, which is the point at which "we have the data" stops being a moat.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Deep-dive session 4 of 10 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p3-pricing-with-the-number.html">← Prev: Pricing with the number</a> &nbsp;·&nbsp; <a href="p5-network-effects-and-data-moats.html">Next: Network effects and data moats →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Foundations session 4 of 6. Three ways a price stops telling the truth: a cost that lands on someone outside the trade, a quality nobody can see before paying, and a number that was a measure until it became a target. Worked on a data or AI purchase you have seen.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="When markets fail - learn economics with phoebe">
+<meta property="og:description" content="Foundations session 4 of 6. Externalities, Akerlof's lemons and Goodhart's law, and the lemons problem inside every dataset purchase.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a4-when-markets-fail.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="When markets fail - learn economics with phoebe">
+<meta name="twitter:description" content="Foundations session 4 of 6. Externalities, lemons, and the metric that became a target.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-economics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Foundations session 4 · When markets fail - learn economics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-economics-with-phoebe</a> / Foundations session 4 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Economics with Phoebe · Foundations session 4 of 6</div>
+    <h1>When markets <span class="accent">fail</span></h1>
+    <p class="sub">Three sessions in, a price has been a sentence, a response and a fork in the road. Tonight is about the three ways the sentence goes wrong. A price can leave out a cost that lands on somebody who was never in the trade. A price can be paid for a quality that nobody could see until the money had moved, and when that happens the best sellers walk out first. And a number that was a good measure can be turned into a target, at which point it stops measuring anything. None of the three is a story about villains. Each is a mechanism, and each one is running inside the last dataset, model or tool you bought.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Leaders, product and data teams, anyone who buys data or AI</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Three ways a price stops telling the truth</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: run the three failures on a purchase you have seen</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Foundations session 1 made the case that a price is a message a stranger can act on. That case has a condition attached, and the condition is usually left unsaid: the message is only worth acting on when it carries every cost, when the buyer can see what they are paying for, and when the number itself is not being managed. Tonight removes each of those conditions in turn and watches what the price does without it. The three failures have names, externalities, information asymmetry and Goodhart's law, and they are the reason most rules, warranties, audits and benchmarks exist at all.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone works it through</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Three questions you can put to any purchase in under a minute: who is paying a cost they did not choose, which quality could not be seen before the money moved, and which number has quietly become a target. One diagram for each, drawn as the mechanism rather than the slogan. And the finding that every one of the three is live inside a data market, where a dataset's quality is sealed until you have paid for it and the good sellers are the first to leave.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers externalities, public goods</span>
+      <h2>A cost somebody else pays</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">The supply curve from Foundations session 1 was drawn from the seller's costs: what the next unit costs the person making it. That is the private cost. If making the unit also costs somebody outside the trade, a neighbour breathing the smoke, a shared server slowed for every other team, a marketplace's reputation dented by one seller's late parcels, then there is a second, higher cost curve that the price never sees. The gap between the two lines is the externality, and the market settles where the lower line crosses demand, not the higher one.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn demand curve crossed by two cost curves. The lower one is the seller's private cost; the higher one, in amber, adds the cost paid by people outside the trade. A hatched band between the two cost curves is the unpriced cost per unit. The market settles at the lower crossing, marked Qp, which lies to the right of the crossing with the social cost curve, marked Qs. A side panel says the price carries only the private cost, so more units are made than anybody would choose if every cost were counted.">
+        <defs>
+          <filter id="s4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4aH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s4aL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s4aS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s4aB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s4aA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s4aN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s4aH" x="30" y="26">A COST THE TRADE DID NOT PAY</text>
+        <text class="s4aS" x="260" y="26">two cost curves: the seller's, and everybody's</text>
+
+        <g filter="url(#s4aSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M70 280 L70 60" stroke="#1F3A5F" marker-end="url(#s4aAr)"/>
+          <path d="M70 280 L520 280" stroke="#1F3A5F" marker-end="url(#s4aAr)"/>
+          <!-- the unpriced band between the two cost curves -->
+          <path d="M100 262 C210 212 320 152 470 92 L470 56 C320 116 210 176 100 226 Z" fill="url(#s4aHc)" stroke="none"/>
+          <!-- demand -->
+          <path d="M100 100 C210 160 320 220 470 262"/>
+          <!-- private cost -->
+          <path d="M100 262 C210 212 320 152 470 92"/>
+          <!-- social cost, the thing the figure is about -->
+          <path d="M100 226 C210 176 320 116 470 56" stroke="#A8570B" stroke-width="2.6"/>
+          <!-- the two crossings -->
+          <circle cx="286" cy="182" r="6" fill="#FFFFFF"/>
+          <circle cx="246" cy="164" r="8" fill="#A8570B" stroke="#A8570B"/>
+          <!-- guides down to the axis -->
+          <path d="M286 182 L286 280" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M246 164 L246 280" stroke="#4E5A75" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <!-- side panel -->
+          <rect x="580" y="70" width="270" height="200" rx="10" transform="rotate(-0.4 715 170)" fill="#EEF2F8"/>
+          <!-- a chimney doodle -->
+          <path d="M604 66 L604 44 L618 44 L618 66" fill="#FBEEDC" stroke="#A8570B"/>
+          <path d="M611 40 C605 34 617 30 611 24" stroke="#A8570B" stroke-width="1.6"/>
+        </g>
+
+        <text class="s4aA" x="80" y="58">PRICE</text>
+        <text class="s4aA" x="452" y="298">UNITS</text>
+        <text class="s4aL" x="104" y="92">demand</text>
+        <text class="s4aL" x="478" y="96">private cost</text>
+        <text class="s4aB" x="478" y="60">social cost</text>
+        <text class="s4aL" x="478" y="266">demand</text>
+        <text class="s4aS" x="340" y="178">hatched band = the cost paid</text>
+        <text class="s4aS" x="340" y="192">by someone outside the trade</text>
+        <text class="s4aS" x="246" y="298" text-anchor="middle">Qs</text>
+        <text class="s4aS" x="286" y="298" text-anchor="middle">Qp</text>
+
+        <text class="s4aH" x="596" y="96">WHAT THE GAP IS</text>
+        <text class="s4aS" x="596" y="118">1 · the seller pays the private cost</text>
+        <text class="s4aS" x="596" y="138">2 · a neighbour pays the rest</text>
+        <text class="s4aS" x="596" y="158">3 · the price only carries line 1</text>
+        <text class="s4aS" x="596" y="188">so the market sits at Qp, not Qs:</text>
+        <text class="s4aS" x="596" y="204">more units than anybody would</text>
+        <text class="s4aS" x="596" y="220">choose if every cost were counted.</text>
+        <text class="s4aB" x="596" y="250">The hatched band is a bill nobody sent.</text>
+
+        <text class="s4aN" x="30" y="336">Qs: where the trade would stop with every cost on the tag. Qp: where it stops. The band is the bill nobody sent.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the market is not broken at Qp, it is doing exactly what the price told it; the price was just missing a line</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Private cost, social cost, and the wedge between them<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>An <strong>externality</strong> is a cost or a benefit that lands on somebody who was not party to the trade. The seller counts their own costs when they set a price, and the buyer counts their own gain when they pay it; neither has any reason to count the neighbour. So the neighbour's cost is real, and it is nowhere in the price. The market then does exactly what the price tells it, which is to make more units than anybody would choose if the whole bill had been on the tag. That is the hatched band in the figure, and it is the honest definition of "the market failed": not that the mechanism broke, but that the message it was acting on was incomplete.</p>
+        <p>The same thing runs the other way. A <strong>positive externality</strong> is a benefit that lands outside the trade: a vaccine protects the people the patient sits next to, a well-documented internal dataset saves every team that later reuses it. Here the market makes too little, because the person paying for the unit gets only part of its value. Whoever bears the cost or the benefit that the price missed is the person with a claim, and the whole of environmental policy, and most of data-platform policy, is an argument about how to put that missing line back on the tag: a tax, a cap, a chargeback, a rule.</p>
+        <p>The data habit: whenever a decision looks cheap, ask whose cost is not in the number. A query that runs in seconds because it saturates a shared cluster is cheap to the analyst and dear to everyone queued behind it. A model shipped without a monitoring budget is cheap to the team that shipped it and dear to the team that inherits it. Both are the hatched band.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Public goods, the commons, and why regulation exists<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A <strong>public good</strong> is the extreme case of a positive externality: nobody can be excluded from using it, and one person's use does not use it up. A lighthouse, a clean data dictionary, a public benchmark. Because nobody can be excluded, nobody will pay first, since the plan of waiting for somebody else to pay is always cheaper. So the market makes very little of it, and the things that get made are made by whoever is willing to pay for everybody, which is usually a government, a foundation or a platform that benefits indirectly.</p>
+        <p>A <strong>commons</strong> is the mirror image: a shared resource that anybody can use and that does get used up. A fishery, a shared compute pool, an on-call rota. Each user gets the whole benefit of one more unit and pays only their share of the depletion, so each one uses too much, and the resource collapses even though every user could see it coming. The tragedy is not stupidity; it is that the private cost and the social cost are different lines, and each person is reading the lower one.</p>
+        <p>Regulation, in the narrow economic sense, is the set of tools for moving the price back onto the higher line: a tax equal to the missing cost, a cap with tradable permits, a quota, a liability rule that makes the seller pay the neighbour, a chargeback that bills the team for the cluster time it actually used. Each tool has its own failures, but the reason any of them exist is the same hatched band.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Beira Goods and the late parcel, constructed.</strong> Beira, the invented 40-product seller from earlier sessions, saves on a cheaper courier and one parcel in twenty arrives late. Beira's own cost of that is a refund now and then. The marketplace's cost is larger: a buyer who waited two weeks for a Beira parcel trusts the whole platform a little less, and the next seller they see pays for it in a lost sale. Beira set its price on the refund line, not on the trust line, and it was right to, given the price it faced. The fix that platforms reach for is to put the missing line back: a delivery-time rule, a fee, a seller rating that buyers can see. Beira is invented; the mechanism is the reason every marketplace has a seller policy.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers information asymmetry, adverse selection, moral hazard</span>
+      <h2>The market for lemons</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A used car is worth a lot if it is sound and little if it is a lemon, and only the seller knows which. A buyer who cannot tell them apart will pay one price for either, somewhere near the average. But the owner of a sound car will not sell it for an average price, so the sound cars leave the market and the average falls, and the next buyer pays less, and the next sound car leaves. That spiral is Akerlof's, from a 1970 paper short enough to read in an evening, and it is the mechanism behind every warranty, audit, certificate and benchmark you have ever been shown.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four hand-drawn cards arranged in a loop with arrows running clockwise. Card one: quality cannot be seen, so there is one price for all of it. Card two: the price is the average of what buyers expect inside. Card three: owners of the good ones will not sell at an average. Card four: what is left is worse, so buyers expect less and pay less. An arrow from card three passes through a door in a hatched wall on the right, with amber squares beyond it labelled the good ones leave. A magnifier sits between the first two cards. A bottom note cites Akerlof 1970.">
+        <defs>
+          <filter id="s4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s4bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4bH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s4bL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s4bS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s4bB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s4bN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s4bH" x="30" y="26">THE LEMONS SPIRAL</text>
+        <text class="s4bS" x="200" y="26">one price for goods the buyer cannot tell apart</text>
+
+        <g filter="url(#s4bSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- four cards in a loop -->
+          <rect x="40" y="70" width="230" height="56" rx="8" transform="rotate(-0.8 155 98)" fill="#FFFFFF"/>
+          <rect x="330" y="70" width="230" height="56" rx="8" transform="rotate(0.7 445 98)" fill="#FFFFFF"/>
+          <rect x="330" y="200" width="230" height="56" rx="8" transform="rotate(-0.5 445 228)" fill="#FBEEDC" stroke="#A8570B"/>
+          <rect x="40" y="200" width="230" height="56" rx="8" transform="rotate(0.9 155 228)" fill="#EEF2F8"/>
+          <!-- the loop arrows -->
+          <path d="M270 98 L322 98" marker-end="url(#s4bAr)"/>
+          <path d="M445 126 L445 192" marker-end="url(#s4bAr)"/>
+          <path d="M330 228 L278 228" marker-end="url(#s4bAr)"/>
+          <path d="M155 200 L155 134" marker-end="url(#s4bAr)"/>
+          <!-- the exit: from card three through the door -->
+          <path d="M560 228 C600 228 640 228 690 228" stroke="#A8570B" stroke-width="2.4" marker-end="url(#s4bAr)"/>
+          <!-- the wall with a door gap -->
+          <rect x="700" y="60" width="14" height="130" fill="url(#s4bHc)"/>
+          <rect x="700" y="266" width="14" height="14" fill="url(#s4bHc)"/>
+          <!-- the good ones, gone -->
+          <rect x="740" y="216" width="22" height="22" rx="4" transform="rotate(-3 751 227)" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="774" y="220" width="22" height="22" rx="4" transform="rotate(2 785 231)" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="808" y="214" width="22" height="22" rx="4" transform="rotate(-2 819 225)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- a magnifier that cannot see inside -->
+          <circle cx="290" cy="50" r="12" stroke="#A8570B"/>
+          <path d="M299 59 L312 72" stroke="#A8570B" stroke-width="3"/>
+        </g>
+
+        <text class="s4bS" x="52" y="92">1 · quality cannot be seen,</text>
+        <text class="s4bS" x="52" y="110">so one price for all of it</text>
+        <text class="s4bS" x="342" y="92">2 · the price is the average</text>
+        <text class="s4bS" x="342" y="110">of what buyers expect inside</text>
+        <text class="s4bB" x="342" y="222">3 · owners of the good ones</text>
+        <text class="s4bB" x="342" y="240">will not sell at an average</text>
+        <text class="s4bS" x="52" y="222">4 · what is left is worse, so</text>
+        <text class="s4bS" x="52" y="240">buyers expect less and pay less</text>
+        <text class="s4bB" x="300" y="168" text-anchor="middle">and round again, one notch lower</text>
+        <text class="s4bL" x="724" y="176">the good ones leave</text>
+        <text class="s4bS" x="724" y="260">worth more to their owners</text>
+        <text class="s4bS" x="724" y="274">than the average price</text>
+
+        <text class="s4bN" x="30" y="306">Akerlof 1970, QJE 84(3): an average price for unseen quality drives the best goods out, and the market shrinks.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - nobody in the loop is dishonest; the sound cars leave because their owners can count</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the average price drives the best sellers out<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Start with what the buyer can see: the make, the year, the mileage, the paint. Now what they cannot: whether the engine was ever run dry, whether the service history is real. The seller knows both halves. That gap is <strong>information asymmetry</strong>, and its first consequence is that the buyer prices the car as a draw from the pool rather than as the specific car in front of them. The offered price is the average of what the pool is expected to contain.</p>
+        <p>The second consequence is the one that bites. An average price is a good deal for the owner of a lemon and a bad deal for the owner of a sound car, so the sound cars are withdrawn and the lemons are offered. The pool the buyer is drawing from is now worse than the one they priced, so the next offer is lower, which withdraws the next tier of sound cars. <strong>Adverse selection</strong> is the name for a pool that gets worse because of the price you set for it. In the limit the market for sound cars stops existing, not because anybody lied, but because the honest owners could not prove they were honest.</p>
+        <p>Akerlof's paper, "The Market for Lemons", Quarterly Journal of Economics 84(3), 1970, pages 488 to 500, works this through for cars, insurance and credit in developing markets, and its closing sections are about the institutions that stop the spiral: brands, chains, licences and guarantees. Every one of them is a way for a good seller to make quality visible before the money moves.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Before the deal and after it: adverse selection and moral hazard<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Adverse selection happens <strong>before</strong> the trade: the hidden fact is a quality that already exists, and the price sorts who shows up. <strong>Moral hazard</strong> happens <strong>after</strong>: the hidden fact is a choice the other party makes once the deal is signed, and the deal itself changes the choice. A driver with full insurance parks less carefully. A vendor paid a flat fee for a dataset has less reason to keep it clean than one paid per row that passes a check. A team whose model is judged only at launch has less reason to keep monitoring it than one judged at month six.</p>
+        <p>The two need different fixes. Adverse selection is fixed by making quality visible up front: a sample, an audit, a signal. Moral hazard is fixed by keeping some of the payoff tied to behaviour after signing: a deductible, a retention clause, a service level, a payment that follows the metric rather than preceding it. Confusing the two is common, and the usual symptom is a beautifully audited purchase that decays in quality within a quarter because nothing after the signature was tied to keeping it good.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Signalling: how the good sellers get back in<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A <strong>signal</strong> is anything a good seller can do cheaply that a bad seller can only do dearly. A warranty is the classic case: a seller who knows the car is sound can promise to fix it for a year at little expected cost, while a seller of a lemon would face a real bill, so only the sound cars get warranties, and the buyer can read the warranty as a fact about the engine. A brand works the same way, since a brand is a promise that is expensive to break. So does a certificate, a published audit, a money-back sample period, or a benchmark score that the seller did not choose the benchmark for.</p>
+        <p>The test for a signal is cost asymmetry: if the bad seller can send the same signal at the same cost, it is not a signal, it is decoration. A "quality assured" badge that anybody can print is decoration. An independent audit with a named auditor is a signal. A benchmark that the vendor picked, ran and reported is somewhere between, and reading which is the job of the deep-dive track's eighth session, which applies all of this to models and the evals that vouch for them.</p>
+        <p><strong>Screening</strong> is the same trick from the buyer's side: the buyer designs a choice that only the good sellers would accept. A contract that pays per row that passes a check screens out vendors who know their rows will not pass. Insurers, lenders and procurement teams do this all day, and the shape of the contract is itself a statement about what the buyer suspects.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Every marketplace is a lemons problem with a rating system bolted on.</strong> On Olist, the Brazilian marketplace used throughout these sessions, a buyer choosing between two sellers of the same product sees the price and a star rating and almost nothing else; the seller knows how carefully the parcel will be packed and how honest the stock count is. Without the rating, the careful sellers would be paid the same as the careless ones and would have every reason to leave. The rating is a signal that the platform manufactures on the seller's behalf, out of the buyers who came before, and it is the mechanism that keeps the good sellers in the pool. No number is claimed here about how well it works; the point is what it is for.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers Goodhart's law</span>
+      <h2>The metric that became a target</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">A number on a dashboard is a good measure while nobody has a reason to move it. The day it becomes a target, a bonus, a ranking, a launch gate, the people who can move the number directly start doing so, and moving the number is nearly always cheaper than moving the thing the number stood for. From that day the two part company. The popular wording, "when a measure becomes a target, it ceases to be a good measure", is Marilyn Strathern's, from 1997, and it is called Goodhart's law after a 1975 paper that made the same point about monetary targets in more careful language.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 346" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn chart of two lines over time. Before a dashed vertical line labelled the day it became a target, the dashboard number and the thing it stood for rise together. After the line the dashboard number, in amber, climbs steeply to a small dial doodle, while the thing it stood for flattens and then falls. A side panel explains that before the target the number moved only when the thing moved, and after it the number could be moved directly, which is cheaper. A bottom note attributes the popular wording to Strathern 1997.">
+        <defs>
+          <filter id="s4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s4cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4cH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s4cL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s4cS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s4cB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s4cA { font: 700 11px Inter, sans-serif; fill: #1F3A5F; letter-spacing: .05em; }
+          .s4cN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s4cH" x="30" y="26">THE NUMBER AND THE THING IT STOOD FOR</text>
+        <text class="s4cS" x="330" y="26">they track each other right up to the day one of them is rewarded</text>
+
+        <g filter="url(#s4cSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axes -->
+          <path d="M70 270 L70 60" stroke="#1F3A5F" marker-end="url(#s4cAr)"/>
+          <path d="M70 270 L560 270" stroke="#1F3A5F" marker-end="url(#s4cAr)"/>
+          <!-- the day it became a target -->
+          <path d="M300 74 L300 270" stroke="#4E5A75" stroke-dasharray="5 4" stroke-width="1.4"/>
+          <!-- the hatched region of divergence -->
+          <path d="M300 190 L540 90 L540 220 Z" fill="url(#s4cHc)" stroke="none"/>
+          <!-- the thing it stood for -->
+          <path d="M90 232 C160 220 230 204 300 190 C380 176 440 190 540 220"/>
+          <!-- the dashboard number, the thing the figure is about -->
+          <path d="M90 230 C160 218 230 202 300 190 C360 166 450 120 540 90" stroke="#A8570B" stroke-width="2.6"/>
+          <!-- the dial doodle at the end of the number -->
+          <path d="M500 60 A20 20 0 0 1 540 60" fill="#FBEEDC" stroke="#A8570B"/>
+          <path d="M520 60 L534 46" stroke="#A8570B" stroke-width="2.4"/>
+          <!-- side panel -->
+          <rect x="600" y="70" width="250" height="190" rx="10" transform="rotate(0.5 725 165)" fill="#EEF2F8"/>
+        </g>
+
+        <text class="s4cA" x="80" y="58">LEVEL</text>
+        <text class="s4cA" x="530" y="288">TIME</text>
+        <text class="s4cB" x="300" y="56" text-anchor="middle">the day it became a target</text>
+        <text class="s4cS" x="110" y="170">they move together</text>
+        <text class="s4cB" x="440" y="150">the dashboard number</text>
+        <text class="s4cL" x="420" y="244">the thing it stood for</text>
+
+        <text class="s4cH" x="616" y="96">WHY THEY PART</text>
+        <text class="s4cS" x="616" y="118">before: the number moved only</text>
+        <text class="s4cS" x="616" y="134">when the thing moved</text>
+        <text class="s4cS" x="616" y="160">after: the number can be moved</text>
+        <text class="s4cS" x="616" y="176">directly, and moving the number</text>
+        <text class="s4cS" x="616" y="192">is cheaper than moving the thing</text>
+        <text class="s4cB" x="616" y="222">the correlation that made it a</text>
+        <text class="s4cB" x="616" y="238">good measure is the first casualty</text>
+
+        <text class="s4cS" x="30" y="312">The popular wording is Strathern 1997, European Review 5(3) 305-321, not Goodhart 1975.</text>
+        <text class="s4cN" x="30" y="332">"When a measure becomes a target, it ceases to be a good measure." The number stayed on target. The thing did not.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the hatched wedge is the whole law: the number kept its promise and the thing it stood for was left behind</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>A measure and a target are different objects<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A <strong>measure</strong> is a number chosen because it moves when something you care about moves. Ticket resolution time moves when support gets better. Test-set accuracy moves when a model gets better. The number is useful precisely because of that correlation, and the correlation exists because nobody is trying to move the number for its own sake. A <strong>target</strong> is the same number with a reward attached. The reward gives everyone who can touch the number a reason to move it, and the cheapest way to move a number is almost never the way that moves the thing behind it.</p>
+        <p>Resolution time falls when agents close tickets early and reopen them. Test-set accuracy rises when the test set leaks into training, or when the team tunes against it for a year until it is a validation set in all but name. Neither of these is fraud; each is a rational response to the price the target put on the number. And in every case the number keeps rising while the thing it stood for stops moving or falls, which is the hatched wedge in the figure and the most expensive shape in management.</p>
+        <p>Three defences, none of them complete. <strong>Pair the metric with a counter-metric</strong> that the same cheap move would push the wrong way: resolution time with reopen rate, accuracy with a held-out set nobody has seen. <strong>Rotate the measure</strong> before it is fully learned. <strong>Audit the mechanism, not the number:</strong> once a quarter, trace a sample of the units behind the metric back to the thing, and see whether the number still means what it meant when it was chosen.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the phrase came from, and what the 1975 paper was about<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The sentence people quote, "when a measure becomes a target, it ceases to be a good measure", is from Marilyn Strathern's 1997 article in European Review 5(3), pages 305 to 321, on audit in British universities. It is usually attributed to Charles Goodhart, whose 1975 paper on UK monetary policy made the same observation about a statistical relationship collapsing once it was used as a control target, in language aimed at central bankers rather than managers. Both are worth reading; the crisp sentence is hers, the priority is his, and the mechanism is the same in both.</p>
+        <p>The reason the attribution matters beyond tidiness is that the two texts point at different fixes. Goodhart's context says: a relationship that held under one policy will not hold under a policy that leans on it, so do not build the policy on the relationship. Strathern's context says: an audit culture changes the audited, so measure with care about what the measuring does. A data team needs both readings, one for the model that predicts a metric and one for the dashboard that rewards it.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The test set that became a validation set.</strong> A pattern any ML team will recognise, and no figure is claimed for it: a model's held-out accuracy is reported at launch, then used as the gate for every subsequent release. Each release is tuned until it clears the gate. After a year the held-out set has been consulted so many times that it has stopped being held out; the number on the gate is high and the number on real traffic is not. The metric was a measure at launch and a target by the second release, and everything after that is Strathern's sentence playing out in a CI pipeline. The deep-dive track's eighth session does this properly, for public benchmarks and the evals that replace them.</p>
+    </div>
+
+    <div class="tryrow" data-fn="wordcount" data-multiline="1" data-title="Name one number at work that has become a target" data-hint="Write the number, who is rewarded for it, and the cheapest way to move it without moving the thing it stands for. Then write the counter-metric that would catch that move. Three lines." data-seed="" data-cta="Count it"></div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Run the three failures on a data purchase you have seen</h2>
+      <span class="tag demo">★ 22 min · everyone works it through</span>
+    </div>
+    <p class="lede">No code tonight. Pick one purchase you have actually watched happen: a dataset bought from a vendor, a model served through an API, an annotation contract, an analytics tool, a data-quality product. The three failures will each be there, and the worksheet is six questions that find them. The figure draws the middle one, because a dataset is the purest lemon ever sold: its quality is sealed inside until you have paid, and the sellers with the cleanest data are the first to walk away from an average price.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn mechanism. On the left, three dataset boxes labelled A good, B poor and C good, each with a small hatched square standing for quality sealed inside. Arrows run from all three to a buyer holding a magnifier, who sees only the label and the price. Beside the buyer an amber price tag reads one price, set by the average buyers expect. An amber arrow leaves dataset C, passes through an open door on the right, and ends at two amber squares labelled A and C leave first, worth more than the average price. A panel at top right, titled the way out of the spiral, lists a sample before payment, an audit by a third party and a benchmark the seller did not set, each of which opens the seal; a dashed amber arrow runs from the panel to the buyer's magnifier.">
+        <defs>
+          <filter id="s4dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="59" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s4dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1F3A5F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s4dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#16213A" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4dH { font: 800 12px Inter, sans-serif; fill: #16213A; }
+          .s4dL { font: 600 12px Inter, sans-serif; fill: #16213A; }
+          .s4dS { font: 400 11px Inter, sans-serif; fill: #4E5A75; }
+          .s4dB { font: 800 11px Inter, sans-serif; fill: #8A4409; }
+          .s4dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s4dN { font: 400 12px Inter, sans-serif; fill: #4E5A75; }
+        </style>
+
+        <text class="s4dH" x="30" y="26">A DATASET'S QUALITY IS SEALED UNTIL YOU HAVE PAID FOR IT</text>
+        <text class="s4dS" x="40" y="60">what each seller knows</text>
+
+        <g filter="url(#s4dSk)" fill="none" stroke="#16213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- three datasets on offer, quality sealed -->
+          <rect x="40" y="70" width="110" height="46" rx="6" transform="rotate(-0.8 95 93)" fill="#EEF2F8"/>
+          <rect x="52" y="80" width="26" height="26" rx="3" fill="url(#s4dHc)" stroke="none"/>
+          <rect x="40" y="126" width="110" height="46" rx="6" transform="rotate(0.6 95 149)" fill="#EEF2F8"/>
+          <rect x="52" y="136" width="26" height="26" rx="3" fill="url(#s4dHc)" stroke="none"/>
+          <rect x="40" y="182" width="110" height="46" rx="6" transform="rotate(-0.5 95 205)" fill="#EEF2F8"/>
+          <rect x="52" y="192" width="26" height="26" rx="3" fill="url(#s4dHc)" stroke="none"/>
+          <!-- arrows to the buyer's magnifier -->
+          <path d="M150 93 C200 110 250 140 312 148" marker-end="url(#s4dAr)"/>
+          <path d="M150 149 C200 150 250 150 312 152" marker-end="url(#s4dAr)"/>
+          <path d="M150 205 C200 190 250 165 312 156" marker-end="url(#s4dAr)"/>
+          <!-- the buyer and the magnifier -->
+          <circle cx="300" cy="118" r="12"/>
+          <path d="M280 156 C284 136 316 136 320 156"/>
+          <circle cx="332" cy="150" r="10" stroke="#A8570B"/>
+          <path d="M339 157 L350 168" stroke="#A8570B" stroke-width="3"/>
+          <!-- one price tag, the thing the figure is about -->
+          <path d="M380 112 L458 112 L476 130 L458 148 L380 148 Z" transform="rotate(-1.2 428 130)" fill="#A8570B" stroke="#A8570B"/>
+          <circle cx="462" cy="130" r="3" fill="#FFFFFF" stroke="#FFFFFF"/>
+          <!-- the exit of the good ones -->
+          <path d="M150 214 C240 262 400 262 556 246" stroke="#A8570B" stroke-width="2.4" marker-end="url(#s4dAr)"/>
+          <!-- the door, open -->
+          <path d="M560 280 L560 210 L600 210 L600 280"/>
+          <path d="M600 280 L620 268 L620 198 L600 210"/>
+          <rect x="640" y="232" width="22" height="22" rx="4" transform="rotate(-3 651 243)" fill="#A8570B" stroke="#A8570B"/>
+          <rect x="672" y="236" width="22" height="22" rx="4" transform="rotate(2 683 247)" fill="#A8570B" stroke="#A8570B"/>
+          <!-- the bypass panel -->
+          <rect x="600" y="60" width="250" height="120" rx="10" transform="rotate(0.6 725 120)" fill="#FBEEDC" stroke="#A8570B"/>
+          <path d="M600 178 C500 194 420 182 348 160" stroke="#A8570B" stroke-dasharray="5 4" stroke-width="1.8" marker-end="url(#s4dAr)"/>
+        </g>
+
+        <text class="s4dL" x="86" y="98">A · good</text>
+        <text class="s4dL" x="86" y="154">B · poor</text>
+        <text class="s4dL" x="86" y="210">C · good</text>
+        <text class="s4dW" x="419" y="134" text-anchor="middle">one price</text>
+        <text class="s4dB" x="380" y="166">set by the average buyers expect</text>
+        <text class="s4dS" x="300" y="200" text-anchor="middle">the buyer sees the label and the price</text>
+        <text class="s4dB" x="636" y="222">A and C leave first</text>
+        <text class="s4dS" x="636" y="278">worth more than</text>
+        <text class="s4dS" x="636" y="292">the average price</text>
+
+        <text class="s4dH" x="616" y="84">THE WAY OUT OF THE SPIRAL</text>
+        <text class="s4dS" x="616" y="106">a sample before payment</text>
+        <text class="s4dS" x="616" y="124">an audit by a third party</text>
+        <text class="s4dS" x="616" y="142">a benchmark the seller did not set</text>
+        <text class="s4dB" x="616" y="164">each one opens the seal</text>
+
+        <text class="s4dS" x="30" y="318">What stays is B. The next buyer expects B and pays less, so the next good seller leaves too.</text>
+        <text class="s4dN" x="30" y="340">The mechanism is Akerlof's; the goods are datasets. Nothing in the loop needs a dishonest seller, only a sealed box.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the dashed arrow is the entire economics of due diligence: anything that lets the buyer see inside before paying stops the good sellers leaving</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Question 1 · Name the purchase.</strong> One you watched, not one you imagine. What was bought, from whom, for roughly what shape of price (flat, per row, per call, per seat), and who signed. The shape of the price matters for question 4.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · the purchase, on paper</span>What was bought:            ______________________
+Sold by:                    ______________________
+Price shape (flat / per unit / per call / per seat): ______________________
+Who signed, and who uses it: ______________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Question 2 · Which quality was sealed?</strong> List what the buyer could see before paying (a pitch, a schema, a sample of 100 rows, a benchmark score, a logo wall) and what they could not (coverage of your cases, label accuracy on your distribution, freshness, how the score was produced). The second column is where the lemons live.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the sealed box</span>Could be seen before paying:     ______________________
+Could NOT be seen before paying: ______________________
+The one that mattered most:      ______________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Question 3 · Who bore a cost they did not choose?</strong> Every purchase has a neighbour. The team that inherited the pipeline, the on-call engineer paged for a vendor's outage, the people whose records were in the dataset, the other tenants on the cluster. Write the neighbour and the cost, and then whether any of it was on the price tag.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the hatched band</span>Who paid a cost outside the trade: ______________________
+What the cost was:                 ______________________
+Was it on the tag? (yes / partly / no): ______________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Question 4 · Which number became a target?</strong> Somewhere in the deal a metric was rewarded: an accuracy on a benchmark, a row count, a coverage percentage, a response time in a service level, a usage figure in a renewal. Write it, write who could move it directly, and write the cheapest way to move it without moving the thing. That last line is what the vendor, or your own team, will eventually do.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the metric</span>The rewarded number:                 ______________________
+Who can move it directly:            ______________________
+Cheapest way to move it, not the thing: ______________________
+A counter-metric that would catch it:   ______________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Question 5 · What signal would have opened the seal?</strong> For the sealed quality in question 2, name the thing a good seller could have offered cheaply and a bad seller could not: a sample scored on your own cases, a third-party audit, a per-row payment that only pays for rows that pass, a benchmark you chose. If nothing comes to mind, the purchase was made at an average price, and the spiral has already started.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the signal</span>The signal a good seller could send cheaply: ______________________
+Why a bad seller could not:                  ______________________
+Was it asked for? (yes / no):                ______________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Question 6 · The sentence.</strong> Fold the three failures into one line you could say in a procurement review. It should name a sealed quality, a neighbour's cost and a targeted number, and it should end with the one thing you would ask for next time. Deep-dive session 8 runs the same three questions against model markets, where the sealed box is a model card and the signal is an eval.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · the sentence</span>"We paid an average price for ___ because we could not see ___ before paying;
+ ___ bore ___ that was not on the tag; and ___ became a target the moment it was rewarded.
+ Next time we ask for ___ before the money moves."</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the three questions as a standing checklist.</strong> Sealed quality, unpriced neighbour, targeted number. Any purchase that clears all three without a written answer was made on a price that was missing at least one line, and the missing line will be paid by somebody, later, without a receipt.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Foundations session 5</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Finish the six-question worksheet</strong> for the purchase you picked, and then run it a second time on a purchase somebody else made. Note which of the three failures was the hardest to find; it is usually the neighbour.</li>
+      <li><strong>Find one externality in your own work</strong> that lands on a team you do not talk to: a query, a schema change, an alert. Write the private cost, the social cost, and what would put the difference on the tag.</li>
+      <li><strong>Find one signal you have relied on</strong> and test it for cost asymmetry: could a bad seller have sent it at the same cost? If yes, write what would have been a real signal.</li>
+      <li><strong>Bring one price you know well</strong> and the year you first knew it. Foundations session 5 is about what a price means when the money it is written in changes value, and that price will be your worked example.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Foundations session 4 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · A buyer cannot tell a sound used car from a lemon before paying, so they offer one price for either. What does Akerlof's argument say happens next?</p>
+      <button class="qopt" type="button">A · Sellers of lemons leave, because an average price is below what a lemon is worth to them</button>
+      <button class="qopt" type="button">B · Owners of sound cars withdraw, because an average price is below what their car is worth to them; the pool gets worse, the next offer is lower, and the next tier of sound cars leaves, until the market for sound cars can disappear</button>
+      <button class="qopt" type="button">C · The price rises until it matches the sound cars, because buyers learn</button>
+      <button class="qopt" type="button">D · Nothing changes, because the average price is fair to the average seller</button>
+      <p class="qwhy">Adverse selection is a pool that gets worse because of the price set for it. The good sellers leave first, and nobody in the loop has to be dishonest. Akerlof 1970, QJE 84(3) 488-500; the institutions that stop it are warranties, brands, audits and any signal a bad seller cannot send cheaply.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · A shared analytics cluster is free to every team that uses it. One team's heavy nightly job slows everyone else's morning queries. In the private-cost, social-cost picture, what is going on?</p>
+      <button class="qopt" type="button">A · The market has broken and the price mechanism no longer works</button>
+      <button class="qopt" type="button">B · It is a public good, so nobody will ever pay for it</button>
+      <button class="qopt" type="button">C · There is no externality, because the cluster is inside one company</button>
+      <button class="qopt" type="button">D · The team's private cost of the job is near zero and the social cost includes everyone queued behind it; the team is responding correctly to the price it faces, which is missing a line, and a chargeback or a quota is a way to put that line back</button>
+      <p class="qwhy">An externality is a cost that lands outside the trade, and the market, or the team, does exactly what the incomplete price tells it. Nothing broke. The fix is to move the price onto the higher cost line, which is what a chargeback, a cap or a rule does.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A model's held-out accuracy is used as the release gate for a year, and every release is tuned until it clears the gate. The gate number keeps rising and accuracy on real traffic does not. Which statement is right?</p>
+      <button class="qopt" type="button">A · The held-out set stopped being held out once it became a target; the popular sentence for this, "when a measure becomes a target, it ceases to be a good measure", is Strathern 1997, and the fix is a counter-metric or a set nobody has consulted</button>
+      <button class="qopt" type="button">B · Goodhart 1975 wrote that sentence, and the fix is to raise the gate</button>
+      <button class="qopt" type="button">C · The team cheated, and the fix is to punish them</button>
+      <button class="qopt" type="button">D · Held-out accuracy is the wrong metric for any model, and should be replaced by a usage figure</button>
+      <p class="qwhy">The metric was a measure at launch and a target by the second release; each tuning pass was a rational response to the reward. The crisp wording is Strathern 1997, European Review 5(3); Goodhart 1975 made the point earlier, about monetary targets, in different words. Punishment and a higher gate both leave the mechanism in place.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Externalities, private vs social cost, public goods</span><span class="note">Standard economics, no single source; taught as a missing line on the price tag, not as a broken mechanism</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Information asymmetry, adverse selection, the lemons spiral</span><span class="note">Akerlof 1970, "The Market for Lemons", Quarterly Journal of Economics 84(3) 488-500; read at source for these pages</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Moral hazard, before-the-deal vs after-the-deal</span><span class="note">Standard economics, no single source; the distinction is taught, the contract theory behind it is not</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Goodhart's law and its wording</span><span class="note">Popular phrasing is Strathern 1997, European Review 5(3) 305-321, read at source; Goodhart 1975 is named as the earlier statement about monetary targets and is paraphrased, not quoted</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The tragedy of the commons, regulation as a toolkit, signalling and screening</span><span class="note">Named in self-study as standard economics; no paper is cited for any of the three and no empirical figure is claimed</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Beira Goods, the late parcel; the test set that became a validation set</span><span class="note">Constructed cases; the page says so, and no number is attached to either</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Olist seller ratings as a manufactured signal</span><span class="note">Mechanism only; no figure about how well ratings work is claimed, and none was computed</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Foundations session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>An externality is a missing line</b><span>The price carries the seller's cost. Whoever else pays was never in the trade. The market did what the price said.</span></div>
+      <div class="cheat-item"><b>Public good, commons</b><span>Nobody can be excluded, so nobody pays first. Anybody can use it and it runs out, so everybody uses too much.</span></div>
+      <div class="cheat-item"><b>The lemons spiral</b><span>One average price for unseen quality. The good sellers leave first. Akerlof 1970.</span></div>
+      <div class="cheat-item"><b>Before vs after</b><span>Adverse selection: the hidden fact exists before the deal. Moral hazard: the hidden choice is made after it. Different fixes.</span></div>
+      <div class="cheat-item"><b>A signal costs the bad seller more</b><span>Warranty, audit, per-row payment, a benchmark you chose. A badge anybody can print is decoration.</span></div>
+      <div class="cheat-item"><b>Measure vs target</b><span>Reward a number and the cheapest way to move it wins. Strathern 1997 wording. Pair it with a counter-metric.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You can now find the three ways a price stops telling the truth. Foundations session 5 turns to the thing every price is written in: money, and what it is for, why inflation is best read as a change in the price of money rather than a rise in everything else, why the marketplace's prices from 2017 and 2018 are nominal and what it would take to make them real, and why an interest rate is the price of time. It ends with two constructed offers whose order flips depending on the rate, which is the whole of discounting in one worksheet.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Foundations session 4 of 6 · learn-economics-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a3-marginal-thinking.html">← Prev: Marginal thinking and opportunity cost</a> &nbsp;·&nbsp; <a href="a5-money-inflation-and-interest.html">Next: Money, inflation and interest →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>
