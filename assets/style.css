@@ -1263,6 +1263,7 @@ figure.zoomable.can-scroll figcaption::after {
 
 .mb-stage { border: 1px solid var(--hairline); border-radius: 10px; background: var(--paper); overflow-x: auto; }
 .mb-stage svg { display: block; width: 100%; height: auto; min-width: 34rem; }
+@media (max-width: 640px) { .mb-stage svg { min-width: 0; } .mb-range input[type="range"] { width: 140px; } }
 .mb-lab { font: 600 11.5px Inter, sans-serif; }
 .mb-root { font: 800 13px Inter, sans-serif; fill: #FFFFFF; }
 .mb-edge { fill: none; stroke-linecap: round; }
